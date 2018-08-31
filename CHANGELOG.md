@@ -10,4 +10,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ### Added
 
-- basic features, see README
+- all basic initial features
+- capture the version's branch
+- view the file generated
+- tag, tags the version and the codename on git
+- see README

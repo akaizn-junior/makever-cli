@@ -1,0 +1,12 @@
+{
+    "raw": "v0.1.0",
+    "major": "0",
+    "minor": "1",
+    "patch": "0",
+    "codeName": "gen",
+    "full": "0.1.0",
+    "engines": {
+        "node": "10.2.1",
+        "npm:": "6.4.0"
+    }
+}

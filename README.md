@@ -22,14 +22,13 @@ makever [-h] [-c=codename] [-o=filename] [-v=npm-version-options] [-m=commit-mes
 makever --codename <vCodename>
 ```
 
-## Options
-
-|makever -h||
+|Options||
 |--|--|
 | Config | |
 | -c, --codename   | Set this version's code name |
 | -o | The name of the version file. Default version.json |
 | -v, --version | same options as npm version |
+| --no-tag | Disable tagging|
 | Output | |
 |--std | Output content on the standard output |
 | --view | View the version file content's in the stdout |
@@ -68,6 +67,11 @@ And, makever will use it to properly update the version file while npm version d
 Pass a commit message to stamp your new release using the -m option, of course following the -v option
 as you would do with npm version. See: [npm version](https://docs.npmjs.com/cli/version). Everytime you use the -v
 or --version option always remember to pass the codename before it, as shown above.
+
+* ```makever -c=codename --no-tag```
+
+All the options that write to the version file, tag the version and the codename on git.
+To disable this behavior and take control when tagging happens. use --no-tag
 
 ## License
 

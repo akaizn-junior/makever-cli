@@ -32,7 +32,8 @@ const errors = {
 
 let STDOUT = false;
 let WRITE = false;
-let vCodename;
+let TAG = true;
+
 //get the branch from the stored version if it exists
 //this approach helps still watch the branch even if the version
 //is changed manually in package.json
@@ -56,10 +57,13 @@ let vBranch = (() => {
     return Store.get().items[2];
 })();
 
+let vCodename;
 //the name of the version file default or a stored name
 let vFilename = Store.get().items[0] || 'version.json';
-//store the initial name
+
+//store some initial data
 storeData[0] = vFilename;
+storeData[1] = config.version;
 Store.save(storeData);
 
 //***************
@@ -135,6 +139,7 @@ function showHelp() {
     console.log('-o                         The name of the version file. Default version.json');
     console.log('-v, --version              [<newversion> | major | minor | patch | premajor |');
     console.log('                               preminor | prepatch | prerelease [--preid=<prerelease-id>] | from-git]');
+    console.log('--no-tag                 Disable tagging');
     console.log('                               see: (https://docs.npmjs.com/cli/version)');
     console.log('\nOutput:');
     console.log('--std                      Output content on the standard output');
@@ -207,7 +212,8 @@ async function validateArgs(){
         '--view',
         '-h',
         '--help',
-        '-m'
+        '-m',
+        '--no-tag'
     ];
 
     if(process.argv[2] && definedArgs.includes(process.argv[2])) {
@@ -221,6 +227,7 @@ async function validateArgs(){
             case '--view':              viewVersionFile(); break;
             case '-h':                  showHelp(); break;
             case '--help':              showHelp(); break;
+            case '--no-tag':            TAG = false; break;
             case '-o':                  storeData[0] = getFilename(rhs, vFilename);
                                         Store.save(storeData); break;
             case '-v':                  await runNpmVersion(rhs); break;
@@ -242,6 +249,16 @@ async function validateArgs(){
         Print.tip('see accepted arguments: "makever -h"');
         process.exit(1);
     }
+}
+
+/**
+ * tag
+ * Tags the version on git
+ * @param version The version to tag
+ * @param codename The version's codename
+ */
+async function tag(version, codename) {
+    await exec(`git tag -a ${version} -m "${codename}"`);
 }
 
 /**
@@ -297,6 +314,8 @@ async function writeToFile(filename) {
         //@success
         Print.success(`${config.name}@${currentVersion} Codename ${vCodename}`);
     });
+
+    return { rawV: `v${currentVersion}`, codename: vCodename }
 }
 
 //******************
@@ -307,6 +326,13 @@ async function writeToFile(filename) {
     //validate arguments
     validateArgs()
     .then(() => {
-        if(WRITE) writeToFile(Store.get().items[0]);
+        if(WRITE) {
+            writeToFile(Store.get().items[0])
+            .then(data => {
+                //finally tag the version, if allowed
+                if(TAG) tag(data.rawV, data.codename);
+            })
+            .catch(err => Print.error(err));
+        }
     }).catch(err => Print.error(err));
 })();
