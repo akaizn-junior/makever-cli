@@ -270,6 +270,14 @@ function isARepo() {
 async function tag(version, codename) {
     if(isARepo()) {
         await exec(`git tag -f -a ${version} -m "Codename ${codename}"`);
+        Print.ask('Push tag', async ans => {
+            if(ans === 'y') {
+                await exec('git push --tags');
+            } else {
+                process.exit();
+            }
+            process.exit();
+        });
     }
 }
 

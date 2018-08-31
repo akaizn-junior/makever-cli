@@ -45,6 +45,23 @@ function pretty(toolName, msg, colors = '') {
 }
 
 /**
+ * scan
+ * Scans user input and pass it to a callback
+ * @param {string} msg The message to print
+ * @param {Function} cb A callback
+ */
+function scan(msg, cb) {
+    //resume the standard input to take inputs
+    process.stdin.resume();
+    //print the question
+    process.stdout.write(`${msg} (y/n)? `);
+    //read input and pass it to the callback
+    process.stdin.on('data', data => {
+        cb(data);
+    });
+}
+
+/**
  * Print
  * Print to the terminal with colors
  * @see {@link https://en.wikipedia.org/wiki/ANSI_escape_code | ANSI escape code }
@@ -90,6 +107,17 @@ const Print = {
      */
     log: (msg, colors) => {
         pretty('', msg, colors);
+    },
+    /**
+     * ask
+     * pretty question
+     * @param {string} msg The message to write
+     * @param {Function} cb A callback function
+     */
+    ask: (msg, cb) => {
+        scan(msg, ans => {
+            cb(ans.toString());
+        });
     }
 };
 
