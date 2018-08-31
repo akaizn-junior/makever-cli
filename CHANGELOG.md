@@ -15,3 +15,9 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - view the file generated
 - tag, tags the version and the codename on git
 - see README
+
+## [0.1.1] - 2018-08-31
+
+### Added
+
+- prompt user for git push --tags
