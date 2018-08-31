@@ -1,0 +1,25 @@
+{
+  "name": "makever",
+  "version": "0.1.0",
+  "description": "Create a more descriptive file based on the version of your package",
+  "main": "src/makever.js",
+  "bin": {
+    "makever": "src/makever.js"
+  },
+  "scripts": {
+    "lint": "eslint ."
+  },
+  "keywords": [
+    "make",
+    "version",
+    "package.json",
+    "package",
+    "file",
+    "codename"
+  ],
+  "author": "Simao Nziaka",
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "^5.4.0"
+  }
+}
