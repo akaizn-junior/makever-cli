@@ -14,7 +14,7 @@ npm i --save-dev makever
 
 ## Synopsis
 
-makever [-h] [-c=codename] [-o=filename] [-v=npm-version-options] [-m=commit-message] [--std] [--view]
+makever [-h] [-c=codename] [-o=filename] [-v=npm-version-options] [-m=commit-message] [--std] [--view] [--no-tag]
 
 ## Quick use
 

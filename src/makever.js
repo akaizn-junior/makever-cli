@@ -237,7 +237,12 @@ async function validateArgs(){
                                             Print.error('argument before -m is not a valid argument for npm version');
                                             Print.tip('pass one of the following [ major | minor | patch ]');
                                             Print.tip('see "makever -h"');
-                                            process.exit();
+                                            process.exit(1);
+                                        }
+                                        if(rhs === '') {
+                                            Print.error('no message');
+                                            Print.tip('always provide a message when using -m');
+                                            process.exit(1);
                                         }
                                         await runNpmVersion(`${lhs} -m "${rhs}"`);
                                         break;
@@ -251,6 +256,11 @@ async function validateArgs(){
     }
 }
 
+//checks if the current folder is a git repository
+function isARepo() {
+    return fs.existsSync(path.join(process.env.PWD, '.git'));
+}
+
 /**
  * tag
  * Tags the version on git
@@ -258,7 +268,9 @@ async function validateArgs(){
  * @param codename The version's codename
  */
 async function tag(version, codename) {
-    await exec(`git tag -a ${version} -m "${codename}"`);
+    if(isARepo()) {
+        await exec(`git tag -f -a ${version} -m "Codename ${codename}"`);
+    }
 }
 
 /**
@@ -323,7 +335,7 @@ async function writeToFile(filename) {
 //******************
 
 (function() {
-    //validate arguments
+    // validate arguments
     validateArgs()
     .then(() => {
         if(WRITE) {
