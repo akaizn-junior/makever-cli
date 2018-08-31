@@ -116,7 +116,7 @@ const Print = {
      */
     ask: (msg, cb) => {
         scan(msg, ans => {
-            cb(ans.toString());
+            cb(ans.toString().trim());
         });
     }
 };
