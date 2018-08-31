@@ -73,6 +73,11 @@ or --version option always remember to pass the codename before it, as shown abo
 All the options that write to the version file, tag the version and the codename on git.
 To disable this behavior and take control when tagging happens. use --no-tag
 
+* [npx](https://www.npmjs.com/package/npx)
+
+After installing makever you could access the command through the boring way ```node_modules/bin/makever```
+or just use npx and access it by ```npx makever ...``` both ways work fine. But I would recommend npx for easy use of locally installed commands.
+
 ## License
 
 ISC License [ISC](https://opensource.org/licenses/ISC)

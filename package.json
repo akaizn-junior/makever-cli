@@ -6,6 +6,14 @@
   "bin": {
     "makever": "src/makever.js"
   },
+  "author": {
+    "name": "Simao Nziaka",
+    "email": "sdnziaka@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/akaizn-junior/makever-cli"
+  },
   "scripts": {
     "lint": "eslint ."
   },
@@ -15,9 +23,10 @@
     "package.json",
     "package",
     "file",
-    "codename"
+    "codename",
+    "tag",
+    "git"
   ],
-  "author": "Simao Nziaka",
   "license": "ISC",
   "devDependencies": {
     "eslint": "^5.4.0"
