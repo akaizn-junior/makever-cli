@@ -24,19 +24,16 @@ makever --codename <vCodename>
 
 ## Options
 
+|||
+|--|--|
 | Config | |
-| -- | -- |
 | -c, --codename   | Set this version's code name |
 | -o | The name of the version file. Default version.json |
 | -v, --version | same options as npm version |
-
 | Output | |
-| -- | -- |
 |--std | Output content on the standard output |
 | --view | View the version file content's in the stdout |
-
 | Misc | |
-| -- | -- |
 | -h, --help | Show help |
 | -m | npm version's commit message |
 
