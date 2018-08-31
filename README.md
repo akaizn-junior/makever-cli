@@ -28,7 +28,7 @@ makever --codename <vCodename>
 | -- | -- |
 | -c, --codename   | Set this version's code name |
 | -o | The name of the version file. Default version.json |
-| -v, --version | ```[<newversion> | major | minor | patch | premajor | preminor | prepatch | prerelease [--preid=<prerelease-id>] | from-git]``` |
+| -v, --version | same options as npm version |
 
 | Output | |
 | -- | -- |
@@ -72,10 +72,10 @@ Pass a commit message to stamp your new release using the -m option, of course f
 as you would do with npm version. See: [npm version](https://docs.npmjs.com/cli/version). Everytime you use the -v
 or --version option always remember to pass the codename before it, as shown above.
 
-## LICENSE
+## License
 
 ISC License [ISC](https://opensource.org/licenses/ISC)
 
-## AUTHOR
+## Author
 
 &copy; 2018 [Simao Nziaka](https://simaonziaka.com/)
