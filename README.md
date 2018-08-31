@@ -24,7 +24,7 @@ makever --codename <vCodename>
 
 ## Options
 
-|||
+|makever -h||
 |--|--|
 | Config | |
 | -c, --codename   | Set this version's code name |
@@ -37,7 +37,7 @@ makever --codename <vCodename>
 | -h, --help | Show help |
 | -m | npm version's commit message |
 
-## More details
+## More detail
 
 * ```makever -c=codename```
 
