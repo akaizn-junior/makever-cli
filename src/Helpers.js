@@ -200,11 +200,15 @@ function is_valid_version_file(version_file) {
  * @param {object} cache_data Current saved data in store
  */
 function get_current_version_file(cache_data) {
-    return (
-        cache_data
-        && cache_data.filename
-        && require(path.join(process.env.PWD, cache_data.directory, cache_data.filename))
-    );
+    try {
+        return (
+            cache_data
+            && cache_data.filename
+            && require(path.join(process.env.PWD, cache_data.directory, cache_data.filename))
+        );
+    } catch {
+        return false;
+    }
 }
 
 /**
