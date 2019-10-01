@@ -1,104 +1,135 @@
 .\" Manpage for makever.
 .\" Contact simao.nziaka@outlook.com to correct errors or typos.
-.TH makever 1 "24 Aug 2018" "v0.1.1" "Makever Manual"
+.TH makever 1 "28 Sep 2019" "v1.0.0" "Makever Manual"
 
 .SH NAME
 .B   makever
-\- create a more descriptive file based on the version of your package
+\- creates a file with more descriptive information based on the version of your package
 
 .SH SYNOPSIS
 .B   makever
-[-h] [-c=<codename>] [-o=filename] [-v=npm-version-options] [-m=commit-message]
-[--std] [--view] [--no-tag]
+[-h] [--dry-run] [-c=<codename>] [-o=<file>] [-v=<npm-version-options>] [-m=<npm-version-commit-message>]
+[--std] [--dump] [--tag] [--quiet] [--force]
 
 .SH DESCRIPTION
 .B   makever
-is a shell program that uses node's package.json version to create a more descriptive version file accompanying the version with a codename.
+is a shell program that uses node's package.json version to create a more descriptive version file with a codename.
 
 .SH OPTIONS
 .B   makever
 takes a few options, as shown here:
 
 \-c, \-\-codename
-Set this version's code name
+Set the a codename for the current version
 
-\-o
-The name of the version file.
+\-o, \-\-output
+Set the file to write data to
 
 \-v, \-\-version
 [<newversion> | major | minor | patch | premajor | preminor | prepatch | prerelease [--preid=<prerelease-id>] | from-git]
 
-\-\-no\-tag
-Disable tagging
+\-m
+npm version\'s commit message
+
+\-\-tag
+Enable git tagging
 
 \-\-std
 Output content on the standard output
 
-\-\-view
-View the version file content's in the stdout
+\-d, \-\-dump
+Dump the current version file to stdout
 
 \-h, \-\-help
 Show help
 
-\-m
-npm version\'s commit message
+\-q, \-\-quiet
+Run without printing to stdout. Shh mode
+
+\-t, \-\-dry\-run
+Mock the behaviour of the command wihtout side effects
+
+\-f, \-\-force
+Force certain operations to run "dangerously"
 
 .SH MORE DETAILS
 1.
 .B  makever
-\-c <codename>
 
-makever will generate the version file with the default name "version.json".
-The file will contain the data about your package's version and it's codename along side some other metadata.
+makever will generate a version file named "version.json" by default with an auto generated codename.
 
 2.
 .B  makever
-\-o <filename> \-c <codename>
+\-c <codename>
 
-The version file will be created using the filename given \-o. The version file is a json file
-but here we can omit the file extension, so both ways <verfilename> and <verfilename.json> work just fine.
+makever will generate a version file named "version.json" by default with a custom codename given by -\c.
+Input to \-c must be more than 3 characters.
 
 3.
 .B  makever
-\-o <filename> \-c <codename> \-\-std
+\-o <file> \-c <codename>
 
-For any option that actually writes to the version file the \-\-std option can be used to output its data to the stdout
-right after the file has been written to.
+The version file will be created using the filename given by \-o with a custom codename. The extension of the filename can me omitted, it defaults to .json.
+\-o can read just the following: 'filename', 'file.json', 'path/to/file', 'path/file.json'. Input to \-o must be more than 3 characters.
 
 4.
 .B  makever
-\-\-view
+\-c <codename> \-\-std
 
-This option allows you to see the contents of an existing version file.
+Ouput generated data to standard output, wihtout writing to a file. \-\-std cannot be combined with \-o.
 
 5.
-.B makever
-\-c <codename> \-v [<newversion> | major | minor | patch | ...]
+.B  makever
+\-\-dump
 
-makever uses the power of npm version under the hood to actually manage your package's version and generate its version file.
-So, all the possible options given to npm version can be passed to makever using the \-v or \-\-version options.
-And, makever will use it to properly update the version file while npm version does its magic.
+Dumps the contents of the current version file to stdout.
 
 6.
 .B makever
-\-c <codename> -v patch -m "Upddate to version %s"
+\-c <codename> \-v [<newversion> | major | minor | patch | ...]
 
-Pass a commit message to stamp your new release using the -m option, of course following the -v option
-as you would do with npm version. See: (https://docs.npmjs.com/cli/version). Everytime you use the \-v
-or \-\-version option always remember to pass the codename before it, as shown above.
+makever uses the power of npm version under the hood to actually manage your package's version and generate a version file.
+So, all the possible options given to npm version can be passed to makever using the \-v or \-\-version options.
+And, makever will use it to properly update the version file while npm version does its magic.
 
 7.
 .B makever
-\-c <codename> --no-tag
+\-c <codename> \-v patch \-m "Upddate to version %s"
 
-All the options that write to the version file, tag the version and the codename on git.
-To disable this behavior and take control when tagging happens. use --no-tag
+Pass a commit message to stamp your new release using the -m option, of course following the -v option
+as you would do with npm version. See: (https://docs.npmjs.com/cli/version).
+
+8.
+.B makever
+\-c <codename> \-\-tag
+
+\-\-tag allows tagging changes made my makever. For example, when a new codename is generated \-\-tag can be use to create an annotaded tag with the current version and the codename.
+
+9.
+.B makever
+\-c <codename> \-\-quiet
+
+Run makever in Shh mode.
+
+10.
+.B makever
+[options] \-\-dry\-run
+
+\-\-dry-run can be combined with other options except \-\-dump because an actual version file will not be created.
+\-dry\-run runs makever in test mode, it mocks all options and reports their results as if they have actually ran.
+Allows the command to be tested and show how it behaves without side effects.
+
+11.
+.B makever
+\-f, \-\-force
+
+Force runs an operation, it is ignored any time is not relevant.
 
 .SH BUGS
-    See: (https://github.com/akaizn-junior/makever-cli/issues)
+    See: (https://github.com/verdebydesign/makever-cli/issues)
 
 .SH AUTHOR & COPYRIGHT
-    (c) 2018 Simao Nziaka (https://simaonziaka.com/)
+    (c) 2018-2019 Simao Nziaka (https://simaonziaka.com/)
 
 .SH LICENSE
     ISC License (ISC) (https://opensource.org/licenses/ISC)

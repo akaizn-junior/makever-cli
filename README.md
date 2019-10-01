@@ -1,82 +1,100 @@
 # Makever
 
-## A cli tool that uses a package's version to create a more descriptive version file, accompanying the version with a codename
+## Creates a file with more descriptive information based on the version of your package
 
-Add a code-name to your package's current version without hassle.
-makever forces you to remember to attach a code-name to your package's current version.
-Uses "npm version [options]" to perform any update you need to your version requiring you to tie in a code-name.
+Add a codename to a release of your project based on the current version without hassle.
+makever stamps an auto generated or custom codename to your project for a memorable release.
+Uses "npm version [options]" to perform any update you need to your version directly with makever, tying in a codename in the process.
 
 ## Install
 
 ```js
-npm i --save-dev makever
+npm i -D makever
 ```
 
 ## Synopsis
 
-makever [-h] [-c=codename] [-o=filename] [-v=npm-version-options] [-m=commit-message] [--std] [--view] [--no-tag]
+makever [-h] [--dump] [-c=codename] [-o=file] [-v=npm-version-options] [-m=npm-version-commit-message] [--std] [--tag] [--dry-run] [--quiet] [--force]
 
 ## Quick use
 
 ```bash
-makever --codename <vCodename>
+makever # auto generates a codename
 ```
 
 |Options||
 |--|--|
 | Config | |
-| -c, --codename   | Set this version's code name |
-| -o | The name of the version file. Default version.json |
+| -c, --codename   | Set the codename. The Codename must contain only letters, underscode and numbers |
+| -o, --output | The name of the version file. Supports for '.json' file only |
+| --tag | Enable git annotated tagging |
 | -v, --version | same options as npm version |
-| --no-tag | Disable tagging|
+| -m | npm version's commit message |
 | Output | |
-|--std | Output content on the standard output |
-| --view | View the version file content's in the stdout |
+| --std | Output content on the standard output |
+| -d, --dump | Dump the version file contents to stdout |
+| -t, --dry-run | Test mode. Mock the command behaviour and output to stdout |
 | Misc | |
 | -h, --help | Show help |
-| -m | npm version's commit message |
+| -q, --quiet | Shh mode |
+| -f, --force | Force an action that would not otherwise run without this flag |
 
 ## More detail
 
-* ```makever -c=codename```
+* ```makever -c=<codename>```
 
-makever will generate the version file with the default name "version.json".
-The file will contain the data about your package's version and it's codename along side some other metadata.
+makever will generate a version file with a default name of "version.json".
+The file will contain data about your package's version and it's codename along side some other metadata.
 
-* ```makever -c=codename -o=filename```
+* ```makever -c=<codename> -o=<file>```
 
-The version file will be created using the filename passed to -o. The version file is a json file but here we can omit the file extension, so both ways "filename" and "filename.json" work just fine.
+The version file will be created using the filename passed to the -o cmd arg. The version file is a json file, the extension can omitted.
 
-* ```makever -c=codename -o=filename --std```
+* ```makever -c=<codename> --std```
 
-For any option that actually writes to the version file, the --std option can be used to output its data to the stdout
-right after the file has been written to.
+dump generated data to stdout instead of writing to a file. --std and -o options will not work combined.
 
-* ```makever --view```
+* ```makever --dump```
 
-This option allows you to see the contents of an existing version file.
+Dumps the contents of an existing version file to stdout.
 
-* ```makever -c=codename -v [ <newversion> | major | minor | patch | ...]```
+* ```makever -c=<codename> -v [ <newversion> | major | minor | patch | ...]```
 
-makever uses the power of npm version under the hood to actually manage your package's version and generate its version file.
-So, all the possible options given to npm version can be passed to makever using the \-v or \-\-version options.
-And, makever will use it to properly update the version file while npm version does its magic.
+makever uses the power of npm version under the hood to actually manage your package's version and generate its version file. So, all the possible options given to npm version can be passed to makever using the \-v or \-\-version args.
 
-* ```makever -c=codename -v patch -m "Upddate to version %s"```
+* ```makever -c=<codename> -v patch -m "Upddate to version %s"```
 
-Pass a commit message to stamp your new release using the -m option, of course following the -v option
-as you would do with npm version. See: [npm version](https://docs.npmjs.com/cli/version). Everytime you use the -v
-or --version option always remember to pass the codename before it, as shown above.
+Pass a commit message to stamp your new release using the -m option. See: [npm version](https://docs.npmjs.com/cli/version).
 
-* ```makever -c=codename --no-tag```
+* ```makever -c=<codename> --tag```
 
-All the options that write to the version file, tag the version and the codename on git.
-To disable this behavior and take control when tagging happens. use --no-tag
+Verifies if the current project is a git repository with a clean tree, tags and pushes an annotated tag.
 
-* [npx](https://www.npmjs.com/package/npx)
+* ```makever -c=<codename> --dry-run ...```
 
-After installing makever you could access the command through the boring way ```node_modules/bin/makever```
-or just use npx and access it by ```npx makever ...``` both ways work fine. But I would recommend npx for easy use of locally installed commands.
+Take makever for a test drive. Run with no side effects before committing to generating an actual version file.
+
+* ```makever -c=<codename> -o=<file> --quiet```
+
+Run in Shh mode, and perform a silent run.
+
+* ```makever -c=<codename>```
+
+This operations will fail if a version file already exists. option ```-f``` may be used to run the command dangerously, by overwriting the current version file. ```-f``` may be used for other operations but it will silently be ignored everytime is does not apply.
+
+### [npx](https://www.npmjs.com/package/npx)
+
+After installing makever you could access the command by
+
+* ```node_modules/bin/makever :(```
+
+I recommend using npx instead. npx will use a local installation of a package or download it, in order to run it.
+
+* ```npx makever [options] :)```
+
+## man page
+
+To read the man page run ```man ./makever.1```
 
 ## License
 
@@ -84,4 +102,4 @@ ISC License [ISC](https://opensource.org/licenses/ISC)
 
 ## Author
 
-&copy; 2018 [Simao Nziaka](https://simaonziaka.com/)
+&copy; 2018-2019 Verdexdesign

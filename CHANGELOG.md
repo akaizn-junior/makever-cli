@@ -21,3 +21,27 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ### Added
 
 - prompt user for git push --tags
+
+## [1.0.0] - 2019-09-27
+
+### Added
+
+- complete rewrite
+- some support for old features and breaking changes
+- --dry-run options for testing
+- support for auto generated codenames
+- --dump option for dumping current version file to stdout
+- logic to handle multiple options together
+- support for options that take value with '=' and no '='
+- support for long form and short form options
+- better support for verifying if user's project is a git repository and run commands accordingly
+- --tag for creating an annotated git tag with the version and codename
+
+### Removed
+
+- --view. Renamed to --dump
+- --no-tag, makever will not tag a project by default so that this option is needed to prevent tagging. Use --tag instead
+
+### Changed
+
+- The version file's structure, keys are ordered differently

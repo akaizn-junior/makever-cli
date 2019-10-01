@@ -1,34 +1,24 @@
 {
-  "name": "makever",
-  "version": "0.1.1",
-  "description": "Create a more descriptive file based on the version of your package",
-  "main": "src/makever.js",
-  "bin": {
-    "makever": "src/makever.js"
-  },
-  "author": {
-    "name": "Simao Nziaka",
-    "email": "sdnziaka@gmail.com"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/akaizn-junior/makever-cli"
-  },
-  "scripts": {
-    "lint": "eslint ."
-  },
-  "keywords": [
-    "make",
-    "version",
-    "package.json",
-    "package",
-    "file",
-    "codename",
-    "tag",
-    "git"
-  ],
-  "license": "ISC",
-  "devDependencies": {
-    "eslint": "^5.4.0"
-  }
+    "name": "makever",
+    "version": "1.0.0",
+    "description": "Creates a file with more descriptive information based on the version of your package",
+    "main": "lib/CLI.js",
+    "bin": {
+        "makever": "lib/CLI.js"
+    },
+    "author": {
+        "name": "Simao Nziaka",
+        "email": "sdnziaka@gmail.com"
+    },
+    "license": "ISC",
+    "keywords": [
+        "make",
+        "version",
+        "package.json",
+        "package",
+        "file",
+        "codename",
+        "tag",
+        "git"
+    ]
 }
