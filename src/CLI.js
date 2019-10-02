@@ -64,8 +64,9 @@ const DEFINED_ARGS = {
     '-m': {
         var: true
     },
-    '--tag': {
-        flag: true
+    '-r': {
+        flag: true,
+        combine: false
     },
     '-t': {
         flag: true
@@ -84,7 +85,8 @@ const LONG_FORM_ARGS_MAP = {
     '--view': '-d',
     '--quiet': '-q',
     '--dry-run': '-t',
-    '--force': '-f'
+    '--force': '-f',
+    '--tag': '-r'
 };
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++
@@ -198,8 +200,8 @@ function run_dry(args) {
 // +++++++++++++++++++++++++++++++++++++
 
 (function makever(args) {
-    !args['-v'] && !args['-t'] && !args['--tag'] && run(args);
-    args['-v'] && !args['-t'] && !args['--tag'] && run_npm_version(args);
-    !args['-v'] && !args['-t'] && args['--tag'] && run_tag(args);
+    !args['-v'] && !args['-t'] && !args['-r'] && run(args);
+    args['-v'] && !args['-t'] && !args['-r'] && run_npm_version(args);
+    !args['-v'] && !args['-t'] && args['-r'] && run_tag(args);
     args['-t'] && run_dry(args);
 }(ARGUMENTS_DATA));
