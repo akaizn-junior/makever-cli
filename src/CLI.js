@@ -198,8 +198,8 @@ function run_dry(args) {
 // +++++++++++++++++++++++++++++++++++++
 
 (function makever(args) {
-    !args['-v'] && !args['-t'] && run(args);
-    args['-v'] && !args['-t'] && run_npm_version(args);
-    !args['-t'] && args['--tag'] && run_tag(args);
+    !args['-v'] && !args['-t'] && !args['--tag'] && run(args);
+    args['-v'] && !args['-t'] && !args['--tag'] && run_npm_version(args);
+    !args['-v'] && !args['-t'] && args['--tag'] && run_tag(args);
     args['-t'] && run_dry(args);
 }(ARGUMENTS_DATA));

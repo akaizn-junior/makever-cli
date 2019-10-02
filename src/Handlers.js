@@ -95,7 +95,7 @@ function is_clean_repo_handler(data) {
             end();
         }
 
-        console.log(result.stdout);
+        console.log(result);
 
         if (result && result.stdout.length) {
             Print.info('Cannot tag a repo with current changes');
