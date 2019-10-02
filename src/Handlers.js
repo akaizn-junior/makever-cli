@@ -91,7 +91,7 @@ function is_clean_repo_handler(data) {
         }
 
         if (result && result.stderr.length) {
-            Print.log('Something went wrong. Could not tag the repo');
+            Print.log('Something went wrong. Could not tag last commit');
             console.error(result.stderr);
             end();
         }
