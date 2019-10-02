@@ -122,7 +122,8 @@ function run(args) {
 function run_tag(args) {
     const cache_data = cache.read();
     const version = cache_data && cache_data.version.join('.') || pkg.version;
-    const codename = cache_data && cache_data.codename || is_valid_codename(args['-c']);
+    const codename = !args['-c'] ? cache_data && cache_data.codename : is_valid_codename(args['-c']);
+
     // verify if the current repo has a clean tree
     is_clean_repo(is_a_repo(), is_clean_repo_handler({ version, codename }));
 }

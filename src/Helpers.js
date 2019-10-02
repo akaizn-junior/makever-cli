@@ -338,5 +338,6 @@ module.exports = {
     is_clean_repo,
     cache: Store,
     dry_run_messages,
+    is_valid_codename,
     Print
 };
