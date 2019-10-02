@@ -3,7 +3,8 @@
 // +++++++++++++++++++++++++++++++++++++
 
 const fs = require('fs');
-const execute = require('util').promisify(require('child_process').exec);
+const exec = require('child_process').exec;
+const execute = require('util').promisify(exec);
 const { done, end } = require('./Globals');
 
 // need helpers for cache init
@@ -94,8 +95,6 @@ function is_clean_repo_handler(data) {
             console.error(result.stderr);
             end();
         }
-
-        console.log(result);
 
         if (result && result.stdout.length) {
             Print.info('Cannot tag a repo with current changes');
