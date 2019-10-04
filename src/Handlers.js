@@ -80,8 +80,9 @@ function is_clean_repo_handler(data) {
                             exec('git push --tags');
                             Print.log('Tag pushed');
                             done();
-                        } catch {
+                        } catch (err) {
                             Print.log('Something went wrong. Could not push tag');
+                            console.error(err);
                             end();
                         }
                     } else {

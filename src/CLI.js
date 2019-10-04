@@ -166,7 +166,7 @@ async function run_npm_version(args) {
     } catch (err) {
         const { cmd, stderr } = err && 'cmd' in err && 'stderr' in err ? err : { cmd: '', stderr: '' };
         Print.error(`"${cmd}" failed`);
-        console.error(stderr)
+        console.error(stderr);
         Print.tip('see "makever -h"');
         Print.tip('see (https://docs.npmjs.com/cli/version)');
         end();

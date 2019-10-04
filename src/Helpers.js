@@ -38,8 +38,9 @@ async function is_clean_repo(cb) {
         try {
             const { stderr, stdout } = await execute('git status --porcelain; git clean -nd');
             return (typeof cb === 'function') && cb({ stdout, stderr });
-        } catch {
+        } catch (err) {
             Print.log('Something went wrong. Could not verify repo');
+            console.error(err);
             end();
         }
     }
@@ -212,7 +213,8 @@ function get_current_version_file(cache_data) {
             && cache_data.filename
             && require(path.join(process.env.PWD, cache_data.directory, cache_data.filename))
         );
-    } catch {
+    } catch (err) {
+        console.error(err);
         return false;
     }
 }
