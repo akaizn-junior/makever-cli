@@ -89,8 +89,9 @@ function is_clean_repo_handler(data) {
                         done();
                     }
                 }, '(Y/n)');
-            } catch {
+            } catch (err) {
                 Print.log('Something went wrong. Could not tag the repo');
+                console.error(err);
                 end();
             }
         }

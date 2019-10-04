@@ -163,9 +163,10 @@ async function run_npm_version(args) {
 
         // generate version file
         write_to(dir, file, contents, args['--std']);
-    } catch(e) {
-        const cmd = e && 'cmd' in e && e.cmd || '';
-        Print.error(`Invalid 'npm version' option. "${cmd}" failed`);
+    } catch (err) {
+        const { cmd, stderr } = err && 'cmd' in err && 'stderr' in err ? err : { cmd: '', stderr: '' };
+        Print.error(`"${cmd}" failed`);
+        console.error(stderr)
         Print.tip('see "makever -h"');
         Print.tip('see (https://docs.npmjs.com/cli/version)');
         end();
