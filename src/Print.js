@@ -107,14 +107,14 @@ const Print = (label, tipDisplayFreq, quiet = false) => ({
      * @param {string} msg The message to write
      */
     success: msg => {
-        Pretty(`SUCCESS!${RESET_COLOR} ${msg}`, 'black.green', label);
+        Pretty(`success!${RESET_COLOR} ${msg}`, 'black.green', label);
     },
     /**
      * @description pretty info
      * @param {string} msg The message to write
      */
     info: msg => {
-        Pretty(`INFO!${RESET_COLOR} ${msg}`, 'blue.black', label, 'info', tipDisplayFreq);
+        Pretty(`info${RESET_COLOR} ${msg}`, 'blue.black', label, 'info', tipDisplayFreq);
     },
     /**
      * @description pretty log
@@ -131,6 +131,7 @@ const Print = (label, tipDisplayFreq, quiet = false) => ({
      * @param {string} opts Options for answers; default: '(y/n)'
      */
     ask: (msg, cb, opts = '(y/n)') => {
+        Pretty('', 'yellow.black', 'makever');
         Scan(msg, opts, ans => {
             cb(ans.toString().trim());
         });
@@ -144,6 +145,5 @@ const Print = (label, tipDisplayFreq, quiet = false) => ({
         ADDONS[k] = v;
     }
 });
-
 
 module.exports = Print;
