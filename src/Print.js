@@ -114,7 +114,7 @@ const Print = (label, tipDisplayFreq, quiet = false) => ({
      * @param {string} msg The message to write
      */
     info: msg => {
-        Pretty(`INFO!${RESET_COLOR} ${msg}`, 'blue.black', label, 'info');
+        Pretty(`INFO!${RESET_COLOR} ${msg}`, 'blue.black', label, 'info', tipDisplayFreq);
     },
     /**
      * @description pretty log
