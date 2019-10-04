@@ -266,7 +266,7 @@ function get_contents(args) {
 
     // blows up if version file exists
     if (is_valid_version_file(get_current_version_file(cache_data)) && !args['-f'] && is_same_o) {
-        Print.info('A version file already exists for this version');
+        Print.log('A version file already exists for this version');
         Print.log('Use "-f" to overwrite the existing version file or "-o" to write to a new file');
         Print.tip('see "makever -h" for command options');
         done();
