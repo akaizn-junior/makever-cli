@@ -84,13 +84,13 @@ Run in Shh mode, and perform a silent run.
 
 This operations will fail if a version file already exists. option ```-f``` may be used to run the command dangerously, by overwriting the current version file. ```-f``` may be used for other operations but it will silently be ignored everytime is does not apply.
 
-### [npx](https://www.npmjs.com/package/npx)
+### Run
 
 After installing makever you could access the command by
 
 * ```node_modules/bin/makever [options] :(```
 
-I recommend using npx instead. npx will use a local installation of a package or download it, in order to run it.
+I recommend using [npx](https://www.npmjs.com/package/npx) instead. npx will use a local installation of a package or download it, in order to run it.
 
 * ```npx makever [options] :)```
 
