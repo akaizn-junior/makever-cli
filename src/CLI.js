@@ -1,3 +1,5 @@
+#! /usr/bin/env node
+
 /*!
  * Makever
  * Creates a file with more descriptive information based on the version of your package
