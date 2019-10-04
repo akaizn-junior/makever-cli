@@ -10,7 +10,7 @@ const { done, end } = require('./Globals');
 // need helpers for cache init
 const {
     cache,
-    Print
+    print: Print
 } = require('./Helpers');
 
 /**
