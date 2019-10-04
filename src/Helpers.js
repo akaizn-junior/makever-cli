@@ -325,7 +325,7 @@ function get_contents(args) {
 function dry_run_messages(args, data) {
     const { dir, file, contents } = data;
     // a correct label for the value of 'dir'
-    const curr_dir = dir === '.' ? 'current directory' : 'directory "./' + dir + '"';
+    const curr_dir = dir === '.' ? 'current directory' : 'directory "' + dir + '"';
 
     // verifies if the output is not quiet and data is not being dumped to stdout
     // to mock a version file has been written

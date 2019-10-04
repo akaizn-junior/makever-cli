@@ -198,9 +198,8 @@ function run_dry(args) {
     }
 
     dry_run_messages(args, { dir, file, contents });
-
     // done
-    Print.info('Dry run complete');
+    Print.success('Dry run complete');
 }
 
 // +++++++++++++++++++++++++++++++++++++
