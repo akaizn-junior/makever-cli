@@ -26,12 +26,17 @@ const ADDONS = {
  */
 function Pretty(msg, colors = 'white.black', label = '', type = 'log', displayFreq = 0) {
     const [fg, bg] = colors.split('.');
+
     // random number to compare to 'displayFreq'
     // a smaller number of course will hit more often than a larger number
     // so lets set a cut-off at 5, were the frequency of printing will be a satisfiable small amount
     const rand = displayFreq <= 5 ? getRandomInt(0, displayFreq + 1) : 0;
+
     // verify if it can print message
     const canDisplay = rand === displayFreq && !ADDONS['quiet'];
+
+    // don't use colors
+    const isTransparent = colors === 'transparent';
 
     const fgColors = {
         'black': '\33[30;',
@@ -59,10 +64,10 @@ function Pretty(msg, colors = 'white.black', label = '', type = 'log', displayFr
         !label.length && canDisplay
             && console[type]('%s%s%s %s', fgColors[fg], bgColors[bg], msg, RESET_COLOR);
     } else {
-        label.length && colors === 'transparent' && canDisplay
+        label.length && isTransparent && canDisplay
             && console[type]('%s %s %s', label, msg, RESET_COLOR);
-        !label.length && colors === 'transparent'
-            && canDisplay && console[type]('%s %s', msg, RESET_COLOR);
+        !label.length && isTransparent && canDisplay
+            && console[type]('%s %s', msg, RESET_COLOR);
     }
 }
 
@@ -135,7 +140,7 @@ const Print = (label, tipDisplayFreq) => ({
      * @param {string} opts Options for answers; default: '(y/n)'
      */
     ask: (msg, cb, opts = '(y/n)') => {
-        process.stdout.write(label + RESET_COLOR);
+        process.stdout.write(label + ' ' + RESET_COLOR);
         Scan(msg, opts, ans => {
             cb(ans.toString().trim());
         });
