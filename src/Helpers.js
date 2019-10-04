@@ -31,18 +31,19 @@ function is_a_repo() {
 
 /**
  * @description Verifies if the repo has a clean git tree
+ * @param {function} cb Respond to the caller
  */
-async function is_clean_repo(isarepo, cb = () => { }) {
-    if (isarepo) {
+async function is_clean_repo(cb) {
+    if (is_a_repo()) {
         try {
             const { stderr, stdout } = await execute('git status --porcelain; git clean -nd');
-            return cb({ stdout, stderr });
+            return (typeof cb === 'function') && cb({ stdout, stderr });
         } catch {
             Print.log('Something went wrong. Could not verify repo');
             end();
         }
     }
-    return cb(null);
+    return (typeof cb === 'function') && cb(null);
 }
 
 /**
@@ -336,7 +337,6 @@ function dry_run_messages(args, data) {
 }
 
 module.exports = {
-    is_a_repo,
     infer_branch,
     write_to,
     get_contents,
