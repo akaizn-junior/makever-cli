@@ -54,11 +54,15 @@ function Pretty(msg, colors = 'white.black', label = '', type = 'log', displayFr
     };
 
     if (fgColors[fg] && bgColors[bg]) {
-        label.length && canDisplay && console[type]('%s %s%s%s %s', label, fgColors[fg], bgColors[bg], msg, RESET_COLOR);
-        !label.length && canDisplay && console[type]('%s%s%s %s', fgColors[fg], bgColors[bg], msg, RESET_COLOR);
+        label.length && canDisplay
+            && console[type]('%s %s%s%s %s', label, fgColors[fg], bgColors[bg], msg, RESET_COLOR);
+        !label.length && canDisplay
+            && console[type]('%s%s%s %s', fgColors[fg], bgColors[bg], msg, RESET_COLOR);
     } else {
-        label.length && colors === 'transparent' && canDisplay && console[type]('%s %s %s', label, msg, RESET_COLOR);
-        !label.length && colors === 'transparent' && canDisplay && console[type]('%s %s', msg, RESET_COLOR);
+        label.length && colors === 'transparent' && canDisplay
+            && console[type]('%s %s %s', label, msg, RESET_COLOR);
+        !label.length && colors === 'transparent'
+            && canDisplay && console[type]('%s %s', msg, RESET_COLOR);
     }
 }
 
@@ -131,7 +135,7 @@ const Print = (label, tipDisplayFreq) => ({
      * @param {string} opts Options for answers; default: '(y/n)'
      */
     ask: (msg, cb, opts = '(y/n)') => {
-        process.stdout.write(label);
+        process.stdout.write(label + RESET_COLOR);
         Scan(msg, opts, ans => {
             cb(ans.toString().trim());
         });
