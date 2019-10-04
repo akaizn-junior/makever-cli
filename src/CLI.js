@@ -141,28 +141,36 @@ async function run_npm_version(args) {
     // commit message for the version upgrade
     const new_version_commit_m = args['-m'] || '';
 
-    const { stderr, stdout } = await execute('npm version ' + args['-v'] + ' -m ' + new_version_commit_m);
+    try {
+        const { stderr, stdout } = await execute('npm version ' + args['-v'] + ' -m "' + new_version_commit_m + '"');
 
-    if (stderr) {
-        Print.error(`"${cmd_args}" is not a valid option for 'npm version'`);
+        if (stderr.length) {
+            Print.error(`"${cmd_args}" is not a valid option for 'npm version'`);
+            Print.tip('see "makever -h"');
+            Print.tip('see (https://docs.npmjs.com/cli/version)');
+            end();
+        }
+
+        const semver = stdout.trim().split('v')[1].split('.');
+        const branch = infer_branch(semver);
+
+        // edit contents
+        contents.full = semver.join('.');
+        contents.raw = 'v' + contents.full;
+        contents.major = semver[0];
+        contents.minor = semver[1];
+        contents.patch = semver[2];
+        contents.branch = branch;
+
+        // generate version file
+        write_to(dir, file, contents, args['--std']);
+    } catch(e) {
+        const cmd = e && 'cmd' in e && e.cmd || '';
+        Print.error(`Invalid 'npm version' option. "${cmd}" failed`);
         Print.tip('see "makever -h"');
-        Print.tip('also (https://docs.npmjs.com/cli/version)');
+        Print.tip('see (https://docs.npmjs.com/cli/version)');
         end();
     }
-
-    const semver = stdout.trim().split('v')[1].split('.');
-    const branch = infer_branch(semver);
-
-    // edit contents
-    contents.full = semver.join('.');
-    contents.raw = 'v' + contents.full;
-    contents.major = semver[0];
-    contents.minor = semver[1];
-    contents.patch = semver[2];
-    contents.branch = branch;
-
-    // generate version file
-    write_to(dir, file, contents, args['--std']);
 }
 
 /**

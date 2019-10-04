@@ -34,8 +34,13 @@ function is_a_repo() {
  */
 async function is_clean_repo(isarepo, cb = () => { }) {
     if (isarepo) {
-        const { stderr, stdout } = await execute('git status --porcelain; git clean -nd');
-        return cb({ stdout, stderr });
+        try {
+            const { stderr, stdout } = await execute('git status --porcelain; git clean -nd');
+            return cb({ stdout, stderr });
+        } catch {
+            Print.log('Something went wrong. Could not verify repo');
+            end();
+        }
     }
     return cb(null);
 }
@@ -212,7 +217,7 @@ function get_current_version_file(cache_data) {
 }
 
 /**
- * @description Verifies if input output is the same as any existing version file
+ * @description Verifies if input output file is the same as any existing version file
  * @param {object} args Command line arguments data
  * @param {object} cache_data Stored generated data
  */

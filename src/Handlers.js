@@ -61,28 +61,38 @@ function is_clean_repo_handler(data) {
 
     return async (result) => {
         if (result && !result.stderr.length && !result.stdout.length) {
-            const { stdout, stderr } = await execute(`git tag -f -a "v${version}" -m "Codename ${codename}"`);
+            try {
+                const { stdout, stderr } = await execute(`git tag -f -a "v${version}" -m "Codename ${codename}"`);
 
-            if (stderr) {
+                if (stderr.length) {
+                    Print.log('Something went wrong. Could not tag the repo');
+                    console.error(stderr);
+                    end();
+                }
+
+                if (stdout.length) {
+                    Print.info('Last commit tagged');
+                }
+
+                Print.ask('Push tag', ans => {
+                    if (ans === 'Y' || ans === 'y') {
+                        try {
+                            exec('git push --tags');
+                            Print.log('Tag pushed');
+                            done();
+                        } catch {
+                            Print.log('Something went wrong. Could not push tag');
+                            end();
+                        }
+                    } else {
+                        Print.log('Tag not pushed');
+                        done();
+                    }
+                }, '(Y/n)');
+            } catch {
                 Print.log('Something went wrong. Could not tag the repo');
-                console.error(stderr);
                 end();
             }
-
-            if (stdout.length) {
-                Print.info('Last commit tagged');
-            }
-
-            Print.ask('Push tag', ans => {
-                if (ans === 'Y' || ans === 'y') {
-                    exec('git push --tags');
-                    Print.log('Tag pushed');
-                    done();
-                } else {
-                    Print.log('Tag not pushed');
-                    done();
-                }
-            }, '(Y/n)');
         }
 
         if (!result) {
