@@ -131,6 +131,7 @@ const Print = (label, tipDisplayFreq) => ({
      * @param {string} opts Options for answers; default: '(y/n)'
      */
     ask: (msg, cb, opts = '(y/n)') => {
+        process.stdout.write(label);
         Scan(msg, opts, ans => {
             cb(ans.toString().trim());
         });
