@@ -92,7 +92,7 @@ I recommend using npx instead. npx will use a local installation of a package or
 
 * ```npx makever [options] :)```
 
-## man page
+## Man page
 
 To read the man page run ```man ./makever.1```
 
