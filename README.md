@@ -86,7 +86,7 @@ This operations will fail if a version file already exists. option ```-f``` may 
 
 After installing makever you could access the command by
 
-* ```node_modules/bin/makever :(```
+* ```node_modules/bin/makever [options] :(```
 
 I recommend using npx instead. npx will use a local installation of a package or download it, in order to run it.
 
