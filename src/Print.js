@@ -87,7 +87,7 @@ function Scan(msg, opts, cb) {
  * @param {string} label A label to show before every message
  * @param {object} tipDisplayFreq How frequently should 'tips' be displayed; Range 0-5, from always to less often
  */
-const Print = (label, tipDisplayFreq, quiet = false) => ({
+const Print = (label, tipDisplayFreq) => ({
     /**
      * @description writes an error message
      * @param {string} msg The message to write
@@ -131,7 +131,6 @@ const Print = (label, tipDisplayFreq, quiet = false) => ({
      * @param {string} opts Options for answers; default: '(y/n)'
      */
     ask: (msg, cb, opts = '(y/n)') => {
-        Pretty('', 'yellow.black', 'makever');
         Scan(msg, opts, ans => {
             cb(ans.toString().trim());
         });
