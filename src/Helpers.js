@@ -48,6 +48,25 @@ async function is_clean_repo(cb) {
 }
 
 /**
+ * @description Validates JSON read from a local package.json file
+ * @param {JSON} pkg_obj JSON read from local package.json file
+ */
+function get_valid_pkg_version(pkg_obj) {
+    if (
+        pkg_obj // common sense
+        && 'version' in pkg_obj // it may not exist in a package.json?
+        && typeof pkg_obj.version === 'string' // maybe redudant but hey!
+        && pkg_obj.version.split('.').length === 3 // verify if version is valid semver
+    ) {
+        return pkg_obj.version.split('.');
+    } else {
+        Print.error('command Failed. Invalid package.json version');
+        Print.tip('see https://docs.npmjs.com/files/package.json for help');
+        end();
+    }
+}
+
+/**
  * @description Tries to get the current version branch.
  * A version branch indicates what type of update was made to the project version.
  * Checks for '0's on other branches to infer the current branch, or calculate ir from saved data.
@@ -138,7 +157,7 @@ function is_valid_codename(codename) {
     const test = RegExp(/([\w\-]){3,50}/);
 
     if (!codename) {
-        Print.tip('Makever will generate a Random codename if none provided');
+        Print.info('Makever will generate a Random codename if none provided');
         return Sentence('-');
     }
 
@@ -249,7 +268,7 @@ function get_contents(args) {
     if (is_valid_version_file(get_current_version_file(cache_data)) && !args['-f'] && is_same_o) {
         Print.info('A version file already exists for this version');
         Print.log('Use "-f" to overwrite the existing version file or "-o" to write to a new file');
-        Print.tip('See "makever -h" for command options');
+        Print.tip('see "makever -h" for command options');
         done();
     }
 
@@ -264,13 +283,13 @@ function get_contents(args) {
     let codename = is_valid_codename(args['-c']);
 
     // the version as an array of its semver parts
-    const semver = cache_data && cache_data.version || pkg.version.split('.');
+    const semver = get_valid_pkg_version(pkg) || cache_data && cache_data.version;
 
     // current version branch
     const branch = infer_branch(semver);
 
-    // the version as read
-    const full = cache_data && cache_data.version.join('.') || pkg.version;
+    // the version as a string
+    const full = semver.join('.');
 
     // structure data
     const contents = {
@@ -343,8 +362,9 @@ module.exports = {
     write_to,
     get_contents,
     is_clean_repo,
-    cache: Store,
     dry_run_messages,
     is_valid_codename,
-    Print
+    cache: Store,
+    print: Print,
+    valid_pkg_version: get_valid_pkg_version(pkg)
 };

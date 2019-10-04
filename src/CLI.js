@@ -4,11 +4,7 @@
  * (c) 2018 Verdexdesign
  */
 
-const path = require('path');
 const execute = require('util').promisify(require('child_process').exec);
-
-// project package.json
-const pkg = require(path.join(process.env.PWD, 'package.json'));
 
 // local
 const { end } = require('./Globals');
@@ -28,7 +24,8 @@ const {
     is_clean_repo,
     dry_run_messages,
     is_valid_codename,
-    Print
+    valid_pkg_version,
+    print: Print,
 } = require('./Helpers');
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++
@@ -120,7 +117,7 @@ function run(args) {
  */
 function run_tag(args) {
     const cache_data = cache.read();
-    const version = cache_data && cache_data.version.join('.') || pkg.version;
+    const version = cache_data && cache_data.version.join('.') || valid_pkg_version;
     const codename = !args['-c'] ? cache_data && cache_data.codename : is_valid_codename(args['-c']);
 
     // verify if the current repo has a clean tree
@@ -146,7 +143,7 @@ async function run_npm_version(args) {
         if (stderr.length) {
             Print.error(`"${cmd_args}" is not a valid option for 'npm version'`);
             Print.tip('see "makever -h"');
-            Print.tip('see (https://docs.npmjs.com/cli/version)');
+            Print.tip('see https://docs.npmjs.com/cli/version');
             end();
         }
 
@@ -168,7 +165,7 @@ async function run_npm_version(args) {
         Print.error(`"${cmd}" failed`);
         console.error(stderr);
         Print.tip('see "makever -h"');
-        Print.tip('see (https://docs.npmjs.com/cli/version)');
+        Print.tip('see https://docs.npmjs.com/cli/version');
         end();
     }
 }
