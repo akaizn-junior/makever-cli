@@ -233,7 +233,7 @@ function get_current_version_file(cache_data) {
             && require(path.join(process.env.PWD, cache_data.directory, cache_data.filename))
         );
     } catch (err) {
-        console.error(err);
+        Print.error(err);
         return false;
     }
 }
