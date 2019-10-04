@@ -324,6 +324,8 @@ function get_contents(args) {
  */
 function dry_run_messages(args, data) {
     const { dir, file, contents } = data;
+    // a correct label for the value of 'dir'
+    const curr_dir = dir === '.' ? 'current directory' : 'directory "./' + dir + '"';
 
     // verifies if the output is not quiet and data is not being dumped to stdout
     // to mock a version file has been written
@@ -338,7 +340,7 @@ function dry_run_messages(args, data) {
     // verifies if the output is not quiet, data is not being dumped to stdout
     // and a file has be provided to mock writing a version file by a custom name
     !args['-q'] && !args['--std'] && args['-o']
-        && Print.log('The file "' + file + '" was written to the directory "' + dir + '"');
+        && Print.log('The file "' + file + '" was written to the ' + curr_dir);
 
     // verifies if the output is not quiet, data is not being dumped to stdout and not custom file is given
     // to mock writing a version file on the current directory with a default name
