@@ -20,10 +20,11 @@ const ADDONS = {
  * @param {string} msg The message to write
  * @param {string} colors The foreground and the background colors separated by a "."
  * @param {string} label A label to write before the message
+ * @param {string} type The console method to use
  * @param {object} displayFreq How frequently should messages be displayed;
  * Range 0-5, from display always to less often; default: 0
  */
-function Pretty(msg, colors = 'white.black', label = '', displayFreq = 0) {
+function Pretty(msg, colors = 'white.black', label = '', type = 'log', displayFreq = 0) {
     const [fg, bg] = colors.split('.');
     // random number to compare to 'displayFreq'
     // a smaller number of course will hit more often than a larger number
@@ -53,11 +54,11 @@ function Pretty(msg, colors = 'white.black', label = '', displayFreq = 0) {
     };
 
     if (fgColors[fg] && bgColors[bg]) {
-        label.length && canDisplay && console.log('%s %s%s%s %s', label, fgColors[fg], bgColors[bg], msg, RESET_COLOR);
-        !label.length && canDisplay && console.log('%s%s%s %s', fgColors[fg], bgColors[bg], msg, RESET_COLOR);
+        label.length && canDisplay && console[type]('%s %s%s%s %s', label, fgColors[fg], bgColors[bg], msg, RESET_COLOR);
+        !label.length && canDisplay && console[type]('%s%s%s %s', fgColors[fg], bgColors[bg], msg, RESET_COLOR);
     } else {
-        label.length && colors === 'transparent' && canDisplay && console.log('%s %s %s', label, msg, RESET_COLOR);
-        !label.length && colors === 'transparent' && canDisplay && console.log('%s %s', msg, RESET_COLOR);
+        label.length && colors === 'transparent' && canDisplay && console[type]('%s %s %s', label, msg, RESET_COLOR);
+        !label.length && colors === 'transparent' && canDisplay && console[type]('%s %s', msg, RESET_COLOR);
     }
 }
 
@@ -92,14 +93,14 @@ const Print = (label, tipDisplayFreq, quiet = false) => ({
      * @param {string} msg The message to write
      */
     error: msg => {
-        Pretty(`ERR!${RESET_COLOR} ${msg}`, 'red.black', label);
+        Pretty(`ERR!${RESET_COLOR} ${msg}`, 'red.black', label, 'error');
     },
     /**
      * @description pretty tip
      * @param {string} msg The message to write
      */
     tip: msg => {
-        Pretty(`TIP!${RESET_COLOR} ${msg}`, 'green.black', label, tipDisplayFreq);
+        Pretty(`TIP!${RESET_COLOR} ${msg}`, 'green.black', label, 'log', tipDisplayFreq);
     },
     /**
      * @description pretty success message
@@ -113,7 +114,7 @@ const Print = (label, tipDisplayFreq, quiet = false) => ({
      * @param {string} msg The message to write
      */
     info: msg => {
-        Pretty(`INFO!${RESET_COLOR} ${msg}`, 'blue.black', label);
+        Pretty(`INFO!${RESET_COLOR} ${msg}`, 'blue.black', label, 'info');
     },
     /**
      * @description pretty log
