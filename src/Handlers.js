@@ -25,7 +25,7 @@ function show_help() {
     console.log('-v, --version          [<newversion> | major | minor | patch | premajor |');
     console.log('                         preminor | prepatch | prerelease [--preid=<prerelease-id>] | from-git]');
     console.log('-m                     "npm version" commit message\n');
-    console.log('                               see: (https://docs.npmjs.com/cli/version)');
+    console.log('                               see: https://docs.npmjs.com/cli/version');
     console.log('\nOutput:');
     console.log('--std                  Write to standard output instead of a file');
     console.log('-d, --dump             Dump the version file contents to stdout');
@@ -34,7 +34,7 @@ function show_help() {
     console.log('-h, --help             Show help');
     console.log('-q, --quiet            "Shh mode" Silent run');
     console.log('-f, --force            Force an action that would not otherwise run without this flag');
-    Print.info('Get involved at (https://github.com/akaizn-junior/makever-cli)');
+    Print.info('Get involved at https://github.com/verdebydesign/makever-cli');
 }
 
 /**
