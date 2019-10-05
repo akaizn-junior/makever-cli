@@ -5,7 +5,7 @@
  */
 
 const { errors, done, end } = require('./Globals');
-const { Print } = require('./Helpers');
+const { print: Print } = require('./Helpers');
 const ARGUMENTS_DATA = {};
 
 // Interface
@@ -24,16 +24,39 @@ function cmd_args_reader(definedArgs, longFormArgs = []) {
 // Helpers
 
 /**
+ * @description Verifies if arguments include the append operator;
+ * and reduce all the values after it.
+ * @param {array} __args__ process arguments
+ */
+function get_data_to_append(__args__) {
+    const appendOpIndex = __args__.indexOf('--');
+    let result = '';
+
+    if (appendOpIndex !== -1) {
+        result = __args__.reduce((acc = '', value, i) => {
+            if (i > appendOpIndex) {
+                return acc + ' ' + value;
+            }
+        });
+    }
+
+    return result.trim();
+}
+
+/**
  * @description Validates cmd args
- * @param {object} __args__ process arguments
+ * @param {array} __args__ process arguments
  */
 function validate_args(__args__, definedArgs, longFormArgs) {
     const len = __args__.length;
     // when too start counting possible valid arguments
     const POS_0 = 2;
+    const operators = ['--'];
+    const data_to_append = get_data_to_append(__args__);
 
     for (let i = POS_0; i < len; i++) {
         let cmd_arg = __args__[i];
+
         let possible_value = cmd_arg.split('=')[1];
         let actual_arg = cmd_arg.split('=')[0];
 
@@ -42,16 +65,21 @@ function validate_args(__args__, definedArgs, longFormArgs) {
 
         // allow to combine with other args by default
         let combine = getValueOrDefault(definedArgs[actual_arg], 'combine', true);
-
         // a callback to run if the argument is valid
         let callback = getValueOrDefault(definedArgs[actual_arg], 'cb', function () { });
 
         if (actual_arg && definedArgs[actual_arg]) {
             switch (true) {
                 case definedArgs[actual_arg].var:
-                    read_value(__args__, i, possible_value, longFormArgs, callback);
-                    // skip the index of a possible value if 'var' is not assigned using '='
-                    if (!possible_value) i++;
+                    if (!data_to_append.length) {
+                        read_value(__args__, i, possible_value, longFormArgs, callback);
+                        // skip the index of a possible value if 'var' is not assigned using '='
+                        if (!possible_value) i++;
+                    } else {
+                        read_value(__args__, i, data_to_append, longFormArgs, callback);
+                        // end loop
+                        i = len;
+                    }
                     break;
                 case definedArgs[actual_arg].flag && combine:
                     add_arg(actual_arg, true, callback);
@@ -62,7 +90,7 @@ function validate_args(__args__, definedArgs, longFormArgs) {
                     done();
                     break;
             }
-        } else {
+        } else if (!operators.includes(actual_arg)) {
             Print.error(errors.und_arg.concat(': "', __args__[i], '"'));
             Print.tip('see accepted arguments by: "makever -h"');
             end();
