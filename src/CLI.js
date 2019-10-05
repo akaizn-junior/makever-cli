@@ -134,10 +134,10 @@ function run_tag(args) {
  * @param {object} args command arguments
  */
 async function run_npm_version(args) {
-    const { dir, file, contents } = get_contents(args);
+    const { dir, file, contents, cached_codename } = get_contents(args);
 
     // commit message for the version upgrade
-    const new_version_commit_m = args['-m'] || '';
+    const new_version_commit_m = args['-m'] || cached_codename && 'Upgrade to %s, codename ' + cached_codename;
 
     try {
         const { stderr, stdout } = await execute('npm version ' + args['-v'] + ' -m "' + new_version_commit_m + '"');

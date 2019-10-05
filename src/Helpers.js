@@ -315,7 +315,7 @@ function get_contents(args) {
     // update dir if path has nested directories
     let dir = path.join(...nested);
 
-    return { dir, file, contents };
+    return { dir, file, contents, cached_codename: cache_data && cache_data.codename };
 }
 
 /**
