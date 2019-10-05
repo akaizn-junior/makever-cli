@@ -10,7 +10,7 @@ const execute = require('util').promisify(require('child_process').exec);
 
 // local
 const { end } = require('./Globals');
-const CAR = require('./CmdArgsReader').CmdArgsReader; // 🚗
+const CAR = require('./CmdArgsReader'); // 🚗
 
 const {
     show_help,
@@ -92,7 +92,10 @@ const LONG_FORM_ARGS_MAP = {
 // Evaluate command line arguments
 // ++++++++++++++++++++++++++++++++++++++++++++++++
 
-const ARGUMENTS_DATA = CAR(DEFINED_ARGS, LONG_FORM_ARGS_MAP);
+const ARGUMENTS_DATA = CAR(DEFINED_ARGS, LONG_FORM_ARGS_MAP, (err) => {
+    Print.error(err);
+    Print.tip('see accepted arguments by: "makever -h"');
+});
 
 // +++++++++++++++++++++++++++++++++++++
 // extend Print functionality

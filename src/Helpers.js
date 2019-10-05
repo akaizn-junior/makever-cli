@@ -8,10 +8,10 @@ const exec = require('child_process').exec;
 const execute = require('util').promisify(exec);
 
 // local
-const { errors, done, end } = require('./Globals');
+const { labelWColors, errors, done, end } = require('./Globals');
 const Store = require('./Store');
 const Sentence = require('./Rand').RandomSentence;
-const Print = require('./Print')('\33[33;40m makever \33[0m', 5);
+const Print = require('./Print')(labelWColors, 5);
 
 // project package.json
 const pkg = require(path.join(process.env.PWD, 'package.json'));
