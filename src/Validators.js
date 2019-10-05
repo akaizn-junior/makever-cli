@@ -1,7 +1,7 @@
 const path = require('path');
 const execute = require('util').promisify(require('child_process').exec);
 
-const { labelWColors, printDisplayFreq, errors } = require('./Globals');
+const { labelWColors, printDisplayFreq, errors, end } = require('./Globals');
 const Sentence = require('./Rand').RandomSentence;
 const Print = require('./Print')(labelWColors, printDisplayFreq);
 
@@ -18,7 +18,7 @@ function is_valid_filename(args, filename) {
     const [name, ext] = possible_name.split('.');
 
     if (args['-o'] && args['--std']) {
-        Print.error('Bad combination: do not combine "--std" and "-o"');
+        Print.error('Invalid operation: cannot combine "--std" and "-o"');
         Print.info('Makever will not write to file and stdout at the same time');
         end();
     }
