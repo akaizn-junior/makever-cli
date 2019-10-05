@@ -182,11 +182,17 @@ function run_dry(args) {
     // mock npm verison run
     if (args['-v']) {
         const version_upgrade = args['-v'];
-        let semver = contents.full.split('.');
+        const semver = contents.full.split('.');
 
-        if (version_upgrade === 'major') { ++semver[0]; };
-        if (version_upgrade === 'minor') { ++semver[1]; };
-        if (version_upgrade === 'patch') { ++semver[2]; };
+        switch (true) {
+            case (version_upgrade === 'major'): ++semver[0]; break;
+            case (version_upgrade === 'minor'): ++semver[1]; break;
+            case (version_upgrade === 'patch'): ++semver[2]; break;
+            default:
+                Print.error('Invalid "npm version" option');
+                Print.tip('see https://docs.npmjs.com/cli/version')
+                end();
+        }
 
         // edit contents
         contents.full = semver.join('.');
