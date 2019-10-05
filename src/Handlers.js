@@ -74,9 +74,11 @@ function is_clean_repo_handler(data) {
                     Print.info('Last commit tagged');
                 }
 
-                Print.ask('Push tag', ans => {
+                Print.ask('commit and push annonated tag', ans => {
                     if (ans === 'Y' || ans === 'y') {
                         try {
+                            exec('git add .');
+                            exec(`git commit -m "v${version} - ${codename}"`);
                             exec('git push --tags');
                             Print.log('Tag pushed');
                             done();
