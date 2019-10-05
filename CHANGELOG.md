@@ -36,6 +36,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - support for long form and short form options
 - better support for verifying if user's project is a git repository and run commands accordingly
 - --tag for creating an annotated git tag with the version and codename
+- validating package.json version before running
 
 ### Removed
 
