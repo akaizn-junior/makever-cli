@@ -140,7 +140,8 @@ async function run_npm_version(args) {
     const new_version_commit_m = args['-m'] || cached_codename && 'Upgrade to %s, codename ' + cached_codename;
 
     try {
-        const { stderr, stdout } = await execute('npm version ' + args['-v'] + ' -m "' + new_version_commit_m + '"');
+        console.log(args['-v']);
+        // const { stderr, stdout } = await execute('npm version ' + args['-v'] + ' -m "' + new_version_commit_m + '"');
 
         if (stderr.length) {
             Print.error(`"${cmd_args}" is not a valid option for 'npm version'`);
