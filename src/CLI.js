@@ -149,6 +149,8 @@ async function run_npm_version(args) {
             end();
         }
 
+        console.log(stdout);
+
         const semver = stdout.trim().split('v')[1].split('.');
         const branch = infer_branch(semver);
 
@@ -161,7 +163,7 @@ async function run_npm_version(args) {
         contents.branch = branch;
 
         // generate version file
-        write_to(dir, file, contents, args['--std']);
+        // write_to(dir, file, contents, args['--std']);
     } catch (err) {
         const { cmd, stderr } = err && 'cmd' in err && 'stderr' in err ? err : { cmd: '', stderr: '' };
         Print.error(`"${cmd}" failed`);
