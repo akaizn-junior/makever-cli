@@ -56,8 +56,8 @@ function get_valid_pkg_version(pkg_obj) {
         pkg_obj // common sense
         && 'version' in pkg_obj // it may not exist in a package.json?
         && typeof pkg_obj.version === 'string' // maybe redudant but hey!
-        && pkg_obj.version.split('.').length === 3 // verify if version is valid semver
-        || pkg_obj.version.split('-').length === 2 // in case the version has a prerelease attached to it
+        && pkg_obj.version.split('.').length >= 3 // verify if version is valid semver
+        || pkg_obj.version.split('-').length >= 2 // in case the version has a prerelease attached to it
     ) {
         return pkg_obj.version.split('.');
     } else {
