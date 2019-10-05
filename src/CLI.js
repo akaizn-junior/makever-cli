@@ -27,6 +27,7 @@ const {
     dry_run_messages,
     is_valid_codename,
     valid_pkg_version,
+    parse_npmv_string,
     print: Print,
 } = require('./Helpers');
 
@@ -134,14 +135,14 @@ function run_tag(args) {
  * @param {object} args command arguments
  */
 async function run_npm_version(args) {
-    const { dir, file, contents, cached_codename } = get_contents(args);
+    const { dir, file, contents } = get_contents(args);
 
     // commit message for the version upgrade
-    const new_version_commit_m = args['-m'] || cached_codename && 'Upgrade to %s, codename ' + cached_codename;
+    const new_version_commit_m = args['-m'] || 'Upgrade to %s, codename ' + contents.codename;
 
     try {
-        console.log(args['-v']);
-        // const { stderr, stdout } = await execute('npm version ' + args['-v'] + ' -m "' + new_version_commit_m + '"');
+        const parsed = parse_npmv_string(args['-v'], [contents.codename]);
+        const { stderr, stdout } = await execute('npm version ' + parsed + ' -m "' + new_version_commit_m + '"');
 
         if (stderr.length) {
             Print.error(`"${cmd_args}" is not a valid option for 'npm version'`);
@@ -164,7 +165,7 @@ async function run_npm_version(args) {
         contents.branch = branch;
 
         // generate version file
-        // write_to(dir, file, contents, args['--std']);
+        write_to(dir, file, contents, args['--std']);
     } catch (err) {
         const { cmd, stderr } = err && 'cmd' in err && 'stderr' in err ? err : { cmd: '', stderr: '' };
         Print.error(`"${cmd}" failed`);

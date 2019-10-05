@@ -315,7 +315,7 @@ function get_contents(args) {
     // update dir if path has nested directories
     let dir = path.join(...nested);
 
-    return { dir, file, contents, cached_codename: cache_data && cache_data.codename };
+    return { dir, file, contents };
 }
 
 /**
@@ -360,6 +360,17 @@ function dry_run_messages(args, data) {
     !args['-q'] && console.log(contents);
 }
 
+/**
+ * @description Parses the string of arguments for npm version
+ * @param {string} str npm version arguments to parse
+ * @param {array} replacers Values to replace placeholders in the string to parse
+ */
+function parse_npmv_string(str, replacers) {
+    const [codename] = replacers;
+    let parsed = str.replace('%codename', codename);
+    return parsed;
+}
+
 module.exports = {
     infer_branch,
     write_to,
@@ -367,6 +378,7 @@ module.exports = {
     is_clean_repo,
     dry_run_messages,
     is_valid_codename,
+    parse_npmv_string,
     cache: Store,
     print: Print,
     valid_pkg_version: get_valid_pkg_version(pkg)
