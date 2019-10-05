@@ -1,6 +1,6 @@
 .\" Manpage for makever.
 .\" Contact simao.nziaka@outlook.com to correct errors or typos.
-.TH makever 1 "28 Sep 2019" "v1.0.0" "Makever Manual"
+.TH makever 1 "05 Oct 2019" "v1.0.0" "Makever Manual"
 
 .SH NAME
 .B   makever
@@ -90,11 +90,14 @@ Dumps the contents of the current version file to stdout.
 
 makever uses the power of npm version under the hood to actually manage your package's version and generate a version file.
 So, all the possible options given to npm version can be passed to makever using the \-v or \-\-version options.
-And, makever will use it to properly update the version file while npm version does its magic.
+And, makever will use it to properly update the version file while npm version does its magic. Additionally, npm version reads
+a "prerelease" option, which makever can use to pass a generated codename to, using the '%codename' placeholder.
+For example: running ```makever -v "prerelease --preid=%codename"``` for a codename such as "A-stark", the generated pre-release
+version would be "v1.0.1-A-stark.0".
 
 7.
 .B makever
-\-c <codename> \-v patch \-m "Upddate to version %s"
+\-c <codename> \-v patch \-m "Upddate to version %version"
 
 Pass a commit message to stamp your new release using the -m option, of course following the -v option
 as you would do with npm version. See: (https://docs.npmjs.com/cli/version).

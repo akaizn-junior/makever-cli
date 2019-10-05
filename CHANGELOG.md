@@ -37,7 +37,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - better support for verifying if user's project is a git repository and run commands accordingly
 - --tag for creating an annotated git tag with the version and codename
 - validating package.json version before running
--- append operator "--" to CAR. Pass arguments to underline script
+- append operator "--" to CAR. Pass arguments to underline script
+- placeholders for the npm version arguments string for codename
 
 ### Removed
 

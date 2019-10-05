@@ -62,11 +62,13 @@ Dumps the contents of an existing version file to stdout.
 
 * ```makever -c=<codename> -v [ <newversion> | major | minor | patch | ...]```
 
-makever uses the power of npm version under the hood to actually manage your package's version and generate its version file. So, all the possible options given to npm version can be passed to makever using the \-v or \-\-version args.
+makever uses the power of npm version under the hood to actually manage your package's version and generate its version file. So, all the possible options given to npm version can be passed to makever using the -v or --version args. npm version reads a "prerelease" option, which ```makever``` can use to pass a generated codename to, using the '%codename' placeholder.
+For example: running ```makever -v "prerelease --preid=%codename"``` for a codename such as "A-stark", the generated pre-release version would be "v1.0.1-A-stark.0".
 
-* ```makever -c=<codename> -v patch -m "Upddate to version %s"```
+* ```makever -c=<codename> -v patch -m "Update to version %version"```
 
 Pass a commit message to stamp your new release using the -m option. See: [npm version](https://docs.npmjs.com/cli/version).
+A default message of 'Update to %version, codename %codename' would be generated if no message is passed by the user.
 
 * ```makever -c=<codename> --tag```
 
@@ -83,6 +85,15 @@ Run in Shh mode, and perform a silent run.
 * ```makever -c=<codename>```
 
 This operations will fail if a version file already exists. option ```-f``` may be used to run the command dangerously, by overwriting the current version file. ```-f``` may be used for other operations but it will silently be ignored everytime is does not apply.
+
+### Placeholders
+
+```makever``` uses placeholders for generated values to create proper messages
+
+- %s, %v, %version for the generated version
+
+- %c, %codename for the generated codename
+
 
 ### Run
 
