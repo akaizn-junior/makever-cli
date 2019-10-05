@@ -90,10 +90,9 @@ This operations will fail if a version file already exists. option ```-f``` may 
 
 ```makever``` uses placeholders for generated values to create proper messages
 
-- %s, %v, %version for the generated version
+* %s, %v, %version for the generated version
 
-- %c, %codename for the generated codename
-
+* %c, %codename for the generated codename
 
 ### Run
 
