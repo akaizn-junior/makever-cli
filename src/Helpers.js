@@ -363,11 +363,14 @@ function dry_run_messages(args, data) {
 /**
  * @description Parses the string of arguments for npm version
  * @param {string} str npm version arguments to parse
- * @param {array} replacers Values to replace placeholders in the string to parse
+ * @param {object} replacers Values to replace placeholders in the string to parse
  */
-function parse_npmv_string(str, replacers) {
-    const [codename] = replacers;
-    let parsed = str.replace('%codename', codename);
+function parse_npmv_string(str, replacers = {}) {
+    const codename = replacers && replacers.codename || '';
+    // replace version placeholders with '%s' and let npm version do the rest
+    let parsed = str.replace('%codename', codename)
+        .str.replace('%v', '%s')
+        .str.replace('%version', '%s');
     return parsed;
 }
 

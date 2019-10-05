@@ -137,12 +137,12 @@ function run_tag(args) {
 async function run_npm_version(args) {
     const { dir, file, contents } = get_contents(args);
 
-    // commit message for the version upgrade
-    const new_version_commit_m = args['-m'] || 'Upgrade to %s, codename ' + contents.codename;
+    // commit message for the version update
+    const version_m = parse_npmv_string(args['-m']) || 'Update to %s, codename ' + contents.codename;
 
     try {
-        const parsed = parse_npmv_string(args['-v'], [contents.codename]);
-        const { stderr, stdout } = await execute('npm version ' + parsed + ' -m "' + new_version_commit_m + '"');
+        const parsed = parse_npmv_string(args['-v'], { codename: contents.codename });
+        const { stderr, stdout } = await execute('npm version ' + parsed + ' -m "' + version_m + '"');
 
         if (stderr.length) {
             Print.error(`"${cmd_args}" is not a valid option for 'npm version'`);
@@ -150,8 +150,6 @@ async function run_npm_version(args) {
             Print.tip('see https://docs.npmjs.com/cli/version');
             end();
         }
-
-        console.log(stdout);
 
         const semver = stdout.trim().split('v')[1].split('.');
         const branch = infer_branch(semver);
