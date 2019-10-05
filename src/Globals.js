@@ -34,4 +34,11 @@ function get_random_int(min = 0, max = 1) {
     return Math.floor(Math.random() * (max - min)) + min;
 }
 
-module.exports = { errors, done, end, getRandomInt: get_random_int, labelWColors: '\33[33;40m makever \33[0m' };
+module.exports = {
+    errors,
+    done,
+    end,
+    getRandomInt: get_random_int,
+    labelWColors: '\33[33;40m makever \33[0m',
+    printDisplayFreq: 5
+};

@@ -5,13 +5,12 @@
 const fs = require('fs');
 const exec = require('child_process').exec;
 const execute = require('util').promisify(exec);
-const { done, end } = require('./Globals');
 
-// need helpers for cache init
-const {
-    cache,
-    print: Print
-} = require('./Helpers');
+const { labelWColors, printDisplayFreq, done, end } = require('./Globals');
+const Print = require('./Print')(labelWColors, printDisplayFreq);
+
+// import Helpers for initialized cache
+const { cache } = require('./Helpers');
 
 /**
  * @description Help
@@ -56,7 +55,7 @@ function dump_contents() {
  * is a repo and has a clean tree.
  * @param {object} data Generated data needed by the handler
  */
-function is_clean_repo_handler(data) {
+function tag_clean_repo(data) {
     const { version, codename } = data;
 
     return async (result) => {
@@ -121,5 +120,5 @@ function is_clean_repo_handler(data) {
 module.exports = {
     show_help,
     dump_contents,
-    is_clean_repo_handler
+    tag_clean_repo
 };

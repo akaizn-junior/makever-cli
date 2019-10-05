@@ -9,12 +9,18 @@
 const execute = require('util').promisify(require('child_process').exec);
 
 // local
-const { end } = require('./Globals');
+const { labelWColors, printDisplayFreq, end } = require('./Globals');
 const CAR = require('./CmdArgsReader'); // 🚗
+const Print = require('./Print')(labelWColors, printDisplayFreq);
+
+const {
+    is_valid_codename,
+    is_clean_repo,
+} = require('./Validators');
 
 const {
     show_help,
-    is_clean_repo_handler,
+    tag_clean_repo,
     dump_contents
 } = require('./Handlers');
 
@@ -23,12 +29,9 @@ const {
     write_to,
     get_contents,
     cache,
-    is_clean_repo,
     dry_run_messages,
-    is_valid_codename,
     valid_pkg_version,
-    parse_npmv_string,
-    print: Print,
+    parse_npmv_string
 } = require('./Helpers');
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++
@@ -127,7 +130,7 @@ function run_tag(args) {
     const codename = !args['-c'] ? cache_data && cache_data.codename : is_valid_codename(args['-c']);
 
     // verify if the current repo has a clean tree
-    is_clean_repo(is_clean_repo_handler({ version, codename }));
+    is_clean_repo(tag_clean_repo({ version, codename }));
 }
 
 /**
