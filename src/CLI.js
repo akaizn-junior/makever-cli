@@ -146,7 +146,7 @@ async function run_npm_version(args) {
 
     // commit message for the version update
     const version_m = (
-        replace_placeholders(args['-m'], { codename: contents.codename })
+        replace_placeholders(args['-m'] || '', { codename: contents.codename })
         || 'Update to %s, codename ' + contents.codename
     );
 
