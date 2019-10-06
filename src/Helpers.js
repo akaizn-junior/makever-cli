@@ -224,16 +224,21 @@ function dry_run_messages(args, data) {
 }
 
 /**
- * @description Parses the string of arguments for npm version
- * @param {string} str npm version arguments to parse
- * @param {object} replacers Values to replace placeholders in the string to parse
+ * @description Parses a string with value placeholders
+ * @param {string} str the string to parse
+ * @param {object} replacers Values to replace the placeholders with
  */
-function parse_npmv_string(str, replacers = {}) {
+function replace_placeholders(str, replacers = {}) {
+    // '%s' is the default placeholder for version for npm version
+    // otherwise just use the current version
+    const version = replacers && replacers.version || '%s';
     const codename = replacers && replacers.codename || '';
     // replace version placeholders with '%s' and let npm version do the rest
-    let parsed = str.replace('%codename', codename)
-        .str.replace('%v', '%s')
-        .str.replace('%version', '%s');
+    let parsed = str
+        .replace('%codename', codename)
+        .replace('%c', codename)
+        .replace('%v', version)
+        .replace('%version', version);
     return parsed;
 }
 
@@ -242,7 +247,7 @@ module.exports = {
     write_to,
     get_contents,
     dry_run_messages,
-    parse_npmv_string,
+    replace_placeholders,
     cache: Store,
     valid_pkg_version: get_valid_pkg_version(pkg)
 };

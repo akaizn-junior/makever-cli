@@ -10,7 +10,7 @@ const { labelWColors, printDisplayFreq, done, end } = require('./Globals');
 const Print = require('./Print')(labelWColors, printDisplayFreq);
 
 // import Helpers for initialized cache
-const { cache } = require('./Helpers');
+const { cache, replace_placeholders } = require('./Helpers');
 
 /**
  * @description Help
@@ -61,17 +61,16 @@ function tag_clean_repo(data) {
     return async (result) => {
         if (result && !result.stderr.length && !result.stdout.length) {
             try {
-                const tag_msg = tag_m || `Codename ${codename}`;
-                const { stdout, stderr } = await execute(`git tag -f -a "v${version}" -m ${tag_msg}`);
+                const tag_msg = (
+                    replace_placeholders(tag_m, { codename, version })
+                    || `Codename ${codename}`
+                );
+                const { stdout, stderr } = await execute(`git tag -f -a "v${version}" -m "${tag_msg}"`);
 
                 if (stderr.length) {
                     Print.log('Something went wrong. Could not tag the repo');
                     console.error(stderr);
                     end();
-                }
-
-                if (stdout.length) {
-                    Print.log(stdout);
                 }
 
                 Print.ask('commit and push annonated tag', ans => {

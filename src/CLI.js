@@ -31,7 +31,7 @@ const {
     cache,
     dry_run_messages,
     valid_pkg_version,
-    parse_npmv_string
+    replace_placeholders
 } = require('./Helpers');
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++
@@ -144,10 +144,13 @@ async function run_npm_version(args) {
     const { dir, file, contents } = get_contents(args);
 
     // commit message for the version update
-    const version_m = parse_npmv_string(args['-m']) || 'Update to %s, codename ' + contents.codename;
+    const version_m = (
+        replace_placeholders(args['-m'], { codename: contents.codename })
+        || 'Update to %s, codename ' + contents.codename
+    );
 
     try {
-        const parsed = parse_npmv_string(args['-v'], { codename: contents.codename });
+        const parsed = replace_placeholders(args['-v'], { codename: contents.codename });
         const { stderr, stdout } = await execute('npm version ' + parsed + ' -m "' + version_m + '"');
 
         if (stderr.length) {
