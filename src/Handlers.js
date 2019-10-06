@@ -80,7 +80,7 @@ function tag_clean_repo(data) {
                             exec('git add .');
                             exec(`git commit -m "v${version} - ${codename}"`);
                             exec('git push origin ' + 'v' + version);
-                            Print.log('annotated tag v' + version + ' was pushed with message ' + tag_msg);
+                            Print.log('annotated tag "v' + version + '" was pushed with message "' + tag_msg + '"');
                             done();
                         } catch (err) {
                             Print.log('Something went wrong. Could not push tag');
