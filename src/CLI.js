@@ -195,11 +195,29 @@ function run_dry(args) {
     if (args['-v']) {
         const version_upgrade = args['-v'];
         const semver = contents.full.split('.');
+        let prerelease = args['-v'] && args['-v'].includes('--preid=') && args['-v'].split('--preid=')[1] || '';
+        prerelease = replace_placeholders(prerelease, { codename: contents.codename });
 
         switch (true) {
             case (version_upgrade === 'major'): ++semver[0]; break;
             case (version_upgrade === 'minor'): ++semver[1]; break;
             case (version_upgrade === 'patch'): ++semver[2]; break;
+            case (version_upgrade === 'premajor'):
+                ++semver[0];
+                semver[2] += '.0';
+                break;
+            case (version_upgrade === 'preminor'):
+                ++semver[1];
+                semver[2] += '.0';
+                break;
+            case (version_upgrade === 'prepatch'):
+                ++semver[2];
+                semver[2] += '.0';
+                break;
+            case (Boolean(prerelease.length)):
+                ++semver[2];
+                semver[2] += '-' + prerelease + '.0';
+                break;
             default:
                 Print.error('Invalid "npm version" option');
                 Print.tip('see https://docs.npmjs.com/cli/version')

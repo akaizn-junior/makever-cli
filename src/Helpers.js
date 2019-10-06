@@ -155,6 +155,9 @@ function get_contents(args) {
     // the version as a string
     const full = semver.join('.');
 
+    // correct patch
+    const patch = semver[3] && semver[2] + '.' + semver[3] || semver[2];
+
     // structure data
     const contents = {
         codename,
@@ -163,7 +166,7 @@ function get_contents(args) {
         raw: 'v' + full,
         major: semver[0],
         minor: semver[1],
-        patch: semver[2]
+        patch
     };
 
     // verify if the user passed a diretory or just a filename
