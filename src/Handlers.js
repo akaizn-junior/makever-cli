@@ -71,7 +71,7 @@ function tag_clean_repo(data) {
                 }
 
                 if (stdout.length) {
-                    Print.info('Last commit tagged');
+                    Print.log(stdout);
                 }
 
                 Print.ask('commit and push annonated tag', ans => {
@@ -79,7 +79,7 @@ function tag_clean_repo(data) {
                         try {
                             exec('git add .');
                             exec(`git commit -m "v${version} - ${codename}"`);
-                            exec('git push origin ' + 'v' + version);
+                            exec('git push origin ' + 'v' + version); // only push this specific tag
                             Print.log('annotated tag "v' + version + '" was pushed with message "' + tag_msg + '"');
                             done();
                         } catch (err) {
@@ -111,7 +111,7 @@ function tag_clean_repo(data) {
         }
 
         if (result && result.stdout.length) {
-            Print.info('Cannot tag a repo with current changes');
+            Print.log('Cannot tag a repo with current changes');
             Print.log('Please commit or stash your current changes before tagging');
             done();
         }
