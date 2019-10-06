@@ -56,12 +56,13 @@ function dump_contents() {
  * @param {object} data Generated data needed by the handler
  */
 function tag_clean_repo(data) {
-    const { version, codename } = data;
+    const { version, codename, tag_m } = data;
 
     return async (result) => {
         if (result && !result.stderr.length && !result.stdout.length) {
             try {
-                const { stdout, stderr } = await execute(`git tag -f -a "v${version}" -m "Codename ${codename}"`);
+                const tag_msg = tag_m || `Codename ${codename}`;
+                const { stdout, stderr } = await execute(`git tag -f -a "v${version}" -m ${tag_msg}`);
 
                 if (stderr.length) {
                     Print.log('Something went wrong. Could not tag the repo');
@@ -79,7 +80,7 @@ function tag_clean_repo(data) {
                             exec('git add .');
                             exec(`git commit -m "v${version} - ${codename}"`);
                             exec('git push origin ' + 'v' + version);
-                            Print.log('Tag pushed');
+                            Print.log('annotated tag v' + version + ' was pushed with message ' + tag_msg);
                             done();
                         } catch (err) {
                             Print.log('Something went wrong. Could not push tag');

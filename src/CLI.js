@@ -130,7 +130,7 @@ function run_tag(args) {
     const codename = !args['-c'] ? cache_data && cache_data.codename : is_valid_codename(args['-c']);
 
     // verify if the current repo has a clean tree
-    is_clean_repo(tag_clean_repo({ version, codename }));
+    is_clean_repo(tag_clean_repo({ version, codename, tag_m: args['-m'] }));
 }
 
 /**
