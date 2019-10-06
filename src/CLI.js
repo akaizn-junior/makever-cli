@@ -163,13 +163,15 @@ async function run_npm_version(args) {
 
         const semver = stdout.trim().split('v')[1].split('.');
         const branch = infer_branch(semver);
+        // correct patch
+        const patch = semver[3] && semver[2] + '.' + semver[3] || semver[2];
 
         // edit contents
         contents.full = semver.join('.');
         contents.raw = 'v' + contents.full;
         contents.major = semver[0];
         contents.minor = semver[1];
-        contents.patch = semver[2];
+        contents.patch = patch;
         contents.branch = branch;
 
         // generate version file
