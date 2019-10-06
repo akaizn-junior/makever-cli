@@ -134,6 +134,15 @@ function run_tag(args) {
     is_clean_repo(tag_clean_repo({ version, codename, tag_m: args['-m'] }));
 }
 
+function get_prerelease(version) {
+    switch(true) {
+        case version.includes('prepatch'): return 'prepatch';
+        case version.includes('preminor'): return 'preminor';
+        case version.includes('premajor'): return 'premajor';
+    }
+    return 'prerelease';
+}
+
 /**
  * @description Spawn a child_process to run 'npm version [options]'.
  * Saves new version data to the store for later usage.
@@ -163,13 +172,19 @@ async function run_npm_version(args) {
 
         const semver = stdout.trim().split('v')[1].split('.');
         const branch = infer_branch(semver);
+
         // correct patch
-        const patch = semver[3] && semver[2] + '.' + semver[3] || semver[2];
+        let patch = semver[3] && semver[2] + '.' + semver[3] || semver[2];
 
-        // verify a pre-release attached to the patch section of the version
-        const release = patch.split(/-(.+)/);
+        // get the prerelease string on the version, by splitting just the first '-' char if it exisits
+        const possible_prerelease = patch.split(/-(.+)/);
 
-        console.log(release);
+        if(possible_prerelease && possible_prerelease[1] && possible_prerelease[1].length) {
+            contents[get_prerelease(args['-v'])] = possible_prerelease[1];
+            patch = possible_prerelease[0];
+        }
+
+        console.log(possible_prerelease);
 
         // edit contents
         contents.full = semver.join('.');
