@@ -88,7 +88,8 @@ const LONG_FORM_ARGS_MAP = {
     '--quiet': '-q',
     '--dry-run': '-t',
     '--force': '-f',
-    '--tag': '-r'
+    '--tag': '-r',
+    '--message': '-m'
 };
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++
