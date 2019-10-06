@@ -166,6 +166,11 @@ async function run_npm_version(args) {
         // correct patch
         const patch = semver[3] && semver[2] + '.' + semver[3] || semver[2];
 
+        // verify a pre-release attached to the patch section of the version
+        const release = patch.split(/\-(.+)/);
+
+        console.log(release);
+
         // edit contents
         contents.full = semver.join('.');
         contents.raw = 'v' + contents.full;
