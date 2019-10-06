@@ -16,7 +16,7 @@ npm i -D makever
 
 ## Synopsis
 
-makever [-h] [--dump] [-c=codename] [-o=file] [-v=npm-version-options] [-m=npm-version-commit-message] [--std] [--tag] [--dry-run] [--quiet] [--force]
+makever [-h] [--dump] [-c=codename] [-o=file] [-v=npm-version-options] [-m=tag-message] [--std] [--tag] [--dry-run] [--quiet] [--force]
 
 ## Quick use
 
@@ -31,7 +31,7 @@ makever # auto generates a codename
 | -o, --output | The name of the version file. Supports for '.json' file only |
 | --tag | Enable git annotated tagging |
 | -v, --version | same options as npm version |
-| -m | npm version's commit message |
+| -m | Tag message. Combine with --tag and -v |
 | Output | |
 | --std | Output content on the standard output |
 | -d, --dump | Dump the version file contents to stdout |
@@ -50,11 +50,11 @@ The file will contain data about your package's version and it's codename along 
 
 * ```makever -c=<codename> -o=<file>```
 
-The version file will be created using the filename passed to the -o cmd arg. The version file is a json file, the extension can omitted.
+The version file will be created using the filename passed to the ```-o``` cmd arg. The version file is a json file, the extension can omitted.
 
 * ```makever -c=<codename> --std```
 
-dump generated data to stdout instead of writing to a file. --std and -o options will not work combined.
+dump generated data to stdout instead of writing to a file. ```--std``` and ```-o``` options will not work combined.
 
 * ```makever --dump```
 
@@ -65,10 +65,11 @@ Dumps the contents of an existing version file to stdout.
 makever uses the power of npm version under the hood to actually manage your package's version and generate its version file. So, all the possible options given to npm version can be passed to makever using the -v or --version args. npm version reads a "prerelease" option, which ```makever``` can use to pass a generated codename to, using the '%codename' placeholder.
 For example: running ```makever -v "prerelease --preid=%codename"``` for a codename such as "A-stark", the generated pre-release version would be "v1.0.1-A-stark.0".
 
-* ```makever -c=<codename> -v patch -m "Update to version %version"```
+* ```makever -c=<codename> -v patch -m "Update to version %v Codename %c"```
 
-Pass a commit message to stamp your new release using the -m option. See: [npm version](https://docs.npmjs.com/cli/version).
-A default message of 'Update to %version, codename %codename' would be generated if no message is passed by the user.
+Pass a message to stamp your new release using the ```-m``` option. Combined with ```--tag``` and ```-v```. For npm version, a default message of 'Update to %version, codename %codename'
+would be generated if no message is passed by the user. See [npm version](https://docs.npmjs.com/cli/version).
+For makever ```--tag``` a default message of 'Codename %c' is used if no message passed.
 
 * ```makever -c=<codename> --tag```
 

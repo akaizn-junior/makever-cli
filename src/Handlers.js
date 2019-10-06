@@ -23,7 +23,7 @@ function show_help() {
     console.log('--tag                  Tags the last commit with the an annotated tag with the current version and codename');
     console.log('-v, --version          [<newversion> | major | minor | patch | premajor |');
     console.log('                         preminor | prepatch | prerelease [--preid=<prerelease-id>] | from-git]');
-    console.log('-m                     "npm version" commit message\n');
+    console.log('-m                     Tag message. Combine with --tag and -v\n');
     console.log('                               see: https://docs.npmjs.com/cli/version');
     console.log('\nOutput:');
     console.log('--std                  Write to standard output instead of a file');

@@ -8,7 +8,7 @@
 
 .SH SYNOPSIS
 .B   makever
-[-h] [--dry-run] [-c=<codename>] [-o=<file>] [-v=<npm-version-options>] [-m=<npm-version-commit-message>]
+[-h] [--dry-run] [-c=<codename>] [-o=<file>] [-v=<npm-version-options>] [-m=<tag-message>]
 [--std] [--dump] [--tag] [--quiet] [--force]
 
 .SH DESCRIPTION
@@ -29,7 +29,7 @@ Set the file to write data to
 [<newversion> | major | minor | patch | premajor | preminor | prepatch | prerelease [--preid=<prerelease-id>] | from-git]
 
 \-m
-npm version\'s commit message
+Tag message. Combine with \-\-tag and \-v
 
 \-\-tag
 Enable git tagging
@@ -62,7 +62,7 @@ makever will generate a version file named "version.json" by default with an aut
 .B  makever
 \-c <codename>
 
-makever will generate a version file named "version.json" by default with a custom codename given by -\c.
+makever will generate a version file named "version.json" by default with a custom codename given by \-c.
 Input to \-c must be more than 3 characters.
 
 3.
@@ -97,16 +97,17 @@ version would be "v1.0.1-A-stark.0".
 
 7.
 .B makever
-\-c <codename> \-v patch \-m "Upddate to version %version"
+\-c <codename> \-v patch \-m "Upddate to version %v Codename %c"
 
-Pass a commit message to stamp your new release using the -m option, of course following the -v option
-as you would do with npm version. See: (https://docs.npmjs.com/cli/version).
+Pass a commit message to stamp your new release using the \-m option, use it as you would with npm version.
+See: (https://docs.npmjs.com/cli/version).
 
 8.
 .B makever
-\-c <codename> \-\-tag
+\-c <codename> \-\-tag [\-m "Version %version. Codename %codename"]
 
 \-\-tag allows tagging changes made my makever. For example, when a new codename is generated \-\-tag can be use to create an annotaded tag with the current version and the codename.
+Combine \-\-tag with \-m for a tag message. The default tag message for \-\-tag is 'Codename %c'.
 
 9.
 .B makever

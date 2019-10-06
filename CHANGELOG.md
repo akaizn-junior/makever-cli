@@ -38,7 +38,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - --tag for creating an annotated git tag with the version and codename
 - validating package.json version before running
 - append operator "--" to CAR. Pass arguments to underline script
-- placeholders for the npm version arguments string for codename
+- placeholders for tag messages used by --tag and -v
+- -m option for --tag and -v
 
 ### Removed
 
