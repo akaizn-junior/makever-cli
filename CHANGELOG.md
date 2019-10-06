@@ -31,11 +31,15 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - --dry-run options for testing
 - support for auto generated codenames
 - --dump option for dumping current version file to stdout
-- logic to handle multiple options together
+- logic to handle multiple options together (CAR - CmdArgsReader)
 - support for options that take value with '=' and no '='
 - support for long form and short form options
 - better support for verifying if user's project is a git repository and run commands accordingly
 - --tag for creating an annotated git tag with the version and codename
+- validating package.json version before running
+- append operator "--" to CAR. Pass arguments to underline script
+- placeholders for tag messages used by --tag and -v
+- -m option for --tag and -v
 
 ### Removed
 

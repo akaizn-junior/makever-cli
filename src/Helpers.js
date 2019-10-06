@@ -4,41 +4,29 @@
 
 const fs = require('fs');
 const path = require('path');
-const exec = require('child_process').exec;
-const execute = require('util').promisify(exec);
 
 // local
-const { errors, done, end } = require('./Globals');
+const { labelWColors, printDisplayFreq, done, end } = require('./Globals');
 const Store = require('./Store');
-const Sentence = require('./Rand').RandomSentence;
-const Print = require('./Print')('\33[33;40m makever \33[0m', 5);
+const Print = require('./Print')(labelWColors, printDisplayFreq);
 
 // project package.json
 const pkg = require(path.join(process.env.PWD, 'package.json'));
+
+// validators
+const {
+    is_valid_filename,
+    is_valid_codename,
+    is_valid_version_file,
+    is_existing_file,
+    get_valid_pkg_version
+} = require('./Validators');
 
 // +++++++++++++++++++++++++++++++++++++++++
 // initialize a 'cache' for makever
 // +++++++++++++++++++++++++++++++++++++++++
 
 Store.init();
-
-/**
- * @description Verifies if the project running is a git repository
- */
-function is_a_repo() {
-    return fs.existsSync(path.join(process.env.PWD, '.git'));
-}
-
-/**
- * @description Verifies if the repo has a clean git tree
- */
-async function is_clean_repo(isarepo, cb = () => { }) {
-    if (isarepo) {
-        const { stderr, stdout } = await execute('git status --porcelain; git clean -nd');
-        return cb({ stdout, stderr });
-    }
-    return cb(null);
-}
 
 /**
  * @description Tries to get the current version branch.
@@ -84,69 +72,6 @@ function infer_branch(version) {
 }
 
 /**
- * @description Validates input for filename
- * @param {object} args Data from arguments read from the command line
- * @param {string} filename The name of the file to generate
- */
-function is_valid_filename(args, filename) {
-    let possible_name = args['-o'] || filename;
-
-    const test = RegExp(/([\w|\w\/]){3,}/);
-
-    const [name, ext] = possible_name.split('.');
-
-    if (args['-o'] && args['--std']) {
-        Print.error('Bad combination: do not combine "--std" and "-o"');
-        Print.info('Makever will not write to file and stdout at the same time');
-        end();
-    }
-
-    if (name && name.length && test.test(name)) {
-        // only allow 'json' as an extension
-        if (ext && ext !== 'json') {
-            Print.error('Generated file must be a json file');
-            Print.tip('"makever -h" or "man makever"');
-            end();
-        }
-
-        if (!ext) {
-            // no extension on the name, slpa a '.json' on it
-            let name_json = name + '.json';
-            return name_json;
-        }
-
-        return possible_name;
-    } else {
-        Print.error(errors.bad_filename);
-        Print.info('Filename must be a valid word with a minimum of 3 chars');
-        end();
-    }
-}
-
-/**
- * @description Validates input for codename
- * @param {string} codename The version's codename
- */
-function is_valid_codename(codename) {
-    const test = RegExp(/([\w\-]){3,50}/);
-
-    if (!codename) {
-        Print.tip('Makever will generate a Random codename if none provided');
-        return Sentence('-');
-    }
-
-    if (test.test(codename)) {
-        return test.exec(codename)[0];
-    } else {
-        Print.error(errors.und_codename(codename));
-        Print.info("Codename may be similar to: 'baby-face', '123Super', 'Marine44', 'AQUA'");
-        Print.info("and be on the range of 3-50 chars");
-        Print.tip('"makever -h" or "man makever"');
-        end();
-    }
-}
-
-/**
  * @description Writes to/Creates the version file or dumps to stdout
  * @param {string} directory The file's location
  * @param {string} filename The file to write to
@@ -176,50 +101,20 @@ function write_to(directory, filename, data, dump = false) {
 }
 
 /**
- * @description Validates the current version file.
- * Returns data from the file or false if the data is not valid.
- * @param {object} version_file Existing version file data
- */
-function is_valid_version_file(version_file) {
-    const valid_version_file = (
-        version_file
-        && Object.prototype.toString.call(version_file).includes('Object')
-        && 'codename' in version_file
-        && 'branch' in version_file
-        && 'full' in version_file
-        && 'raw' in version_file
-        && 'major' in version_file
-        && 'minor' in version_file
-        && 'patch' in version_file
-    );
-    return valid_version_file && version_file;
-}
-
-/**
  * @description Require the current version file if cache data exists
  * @param {object} cache_data Current saved data in store
  */
 function get_current_version_file(cache_data) {
-    return (
-        cache_data
-        && cache_data.filename
-        && require(path.join(process.env.PWD, cache_data.directory, cache_data.filename))
-    );
-}
-
-/**
- * @description Verifies if input output is the same as any existing version file
- * @param {object} args Command line arguments data
- * @param {object} cache_data Stored generated data
- */
-function is_existing_file(args, cache_data) {
-    const input_o = is_valid_filename(
-        args,
-        cache_data && cache_data.filename
-        || 'version.json'
-    );
-    const saved_o = cache_data && path.join(cache_data.directory, cache_data.filename);
-    return input_o && saved_o && input_o === saved_o;
+    try {
+        return (
+            cache_data
+            && cache_data.filename
+            && require(path.join(process.env.PWD, cache_data.directory, cache_data.filename))
+        );
+    } catch (err) {
+        Print.error(err);
+        return false;
+    }
 }
 
 /**
@@ -235,9 +130,9 @@ function get_contents(args) {
 
     // blows up if version file exists
     if (is_valid_version_file(get_current_version_file(cache_data)) && !args['-f'] && is_same_o) {
-        Print.info('A version file already exists for this version');
+        Print.log('A version file already exists for this version');
         Print.log('Use "-f" to overwrite the existing version file or "-o" to write to a new file');
-        Print.tip('See "makever -h" for command options');
+        Print.tip('see "makever -h" for command options');
         done();
     }
 
@@ -252,13 +147,16 @@ function get_contents(args) {
     let codename = is_valid_codename(args['-c']);
 
     // the version as an array of its semver parts
-    const semver = cache_data && cache_data.version || pkg.version.split('.');
+    const semver = get_valid_pkg_version(pkg) || cache_data && cache_data.version;
 
     // current version branch
     const branch = infer_branch(semver);
 
-    // the version as read
-    const full = cache_data && cache_data.version.join('.') || pkg.version;
+    // the version as a string
+    const full = semver.join('.');
+
+    // correct patch
+    const patch = semver[3] && semver[2] + '.' + semver[3] || semver[2];
 
     // structure data
     const contents = {
@@ -268,7 +166,7 @@ function get_contents(args) {
         raw: 'v' + full,
         major: semver[0],
         minor: semver[1],
-        patch: semver[2]
+        patch
     };
 
     // verify if the user passed a diretory or just a filename
@@ -293,6 +191,8 @@ function get_contents(args) {
  */
 function dry_run_messages(args, data) {
     const { dir, file, contents } = data;
+    // a correct label for the value of 'dir'
+    const curr_dir = dir === '.' ? 'current directory' : 'directory "' + dir + '"';
 
     // verifies if the output is not quiet and data is not being dumped to stdout
     // to mock a version file has been written
@@ -307,7 +207,7 @@ function dry_run_messages(args, data) {
     // verifies if the output is not quiet, data is not being dumped to stdout
     // and a file has be provided to mock writing a version file by a custom name
     !args['-q'] && !args['--std'] && args['-o']
-        && Print.log('The file "' + file + '" was written to the directory "' + dir + '"');
+        && Print.log('The file "' + file + '" was written to the ' + curr_dir);
 
     // verifies if the output is not quiet, data is not being dumped to stdout and not custom file is given
     // to mock writing a version file on the current directory with a default name
@@ -326,13 +226,31 @@ function dry_run_messages(args, data) {
     !args['-q'] && console.log(contents);
 }
 
+/**
+ * @description Parses a string with value placeholders
+ * @param {string} str the string to parse
+ * @param {object} replacers Values to replace the placeholders with
+ */
+function replace_placeholders(str, replacers = {}) {
+    // '%s' is the default placeholder for version for npm version
+    // otherwise just use the current version
+    const version = replacers && replacers.version || '%s';
+    const codename = replacers && replacers.codename || '';
+    // replace version placeholders with '%s' and let npm version do the rest
+    let parsed = str
+        .replace('%codename', codename)
+        .replace('%c', codename)
+        .replace('%v', version)
+        .replace('%version', version);
+    return parsed;
+}
+
 module.exports = {
-    is_a_repo,
     infer_branch,
     write_to,
     get_contents,
-    is_clean_repo,
-    cache: Store,
     dry_run_messages,
-    Print
+    replace_placeholders,
+    cache: Store,
+    valid_pkg_version: get_valid_pkg_version(pkg)
 };

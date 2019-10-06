@@ -20,17 +20,23 @@ const ADDONS = {
  * @param {string} msg The message to write
  * @param {string} colors The foreground and the background colors separated by a "."
  * @param {string} label A label to write before the message
+ * @param {string} type The console method to use
  * @param {object} displayFreq How frequently should messages be displayed;
  * Range 0-5, from display always to less often; default: 0
  */
-function Pretty(msg, colors = 'white.black', label = '', displayFreq = 0) {
+function Pretty(msg, colors = 'white.black', label = '', type = 'log', displayFreq = 0) {
     const [fg, bg] = colors.split('.');
+
     // random number to compare to 'displayFreq'
     // a smaller number of course will hit more often than a larger number
     // so lets set a cut-off at 5, were the frequency of printing will be a satisfiable small amount
     const rand = displayFreq <= 5 ? getRandomInt(0, displayFreq + 1) : 0;
+
     // verify if it can print message
     const canDisplay = rand === displayFreq && !ADDONS['quiet'];
+
+    // don't use colors
+    const isTransparent = colors === 'transparent';
 
     const fgColors = {
         'black': '\33[30;',
@@ -53,11 +59,15 @@ function Pretty(msg, colors = 'white.black', label = '', displayFreq = 0) {
     };
 
     if (fgColors[fg] && bgColors[bg]) {
-        label.length && canDisplay && console.log('%s %s%s%s %s', label, fgColors[fg], bgColors[bg], msg, RESET_COLOR);
-        !label.length && canDisplay && console.log('%s%s%s %s', fgColors[fg], bgColors[bg], msg, RESET_COLOR);
+        label.length && canDisplay
+            && console[type]('%s %s%s%s %s', label, fgColors[fg], bgColors[bg], msg, RESET_COLOR);
+        !label.length && canDisplay
+            && console[type]('%s%s%s %s', fgColors[fg], bgColors[bg], msg, RESET_COLOR);
     } else {
-        label.length && colors === 'transparent' && canDisplay && console.log('%s %s %s', label, msg, RESET_COLOR);
-        !label.length && colors === 'transparent' && canDisplay && console.log('%s %s', msg, RESET_COLOR);
+        label.length && isTransparent && canDisplay
+            && console[type]('%s %s %s', label, msg, RESET_COLOR);
+        !label.length && isTransparent && canDisplay
+            && console[type]('%s %s', msg, RESET_COLOR);
     }
 }
 
@@ -86,34 +96,34 @@ function Scan(msg, opts, cb) {
  * @param {string} label A label to show before every message
  * @param {object} tipDisplayFreq How frequently should 'tips' be displayed; Range 0-5, from always to less often
  */
-const Print = (label, tipDisplayFreq, quiet = false) => ({
+const Print = (label, tipDisplayFreq) => ({
     /**
      * @description writes an error message
      * @param {string} msg The message to write
      */
     error: msg => {
-        Pretty(`ERR!${RESET_COLOR} ${msg}`, 'red.black', label);
+        Pretty(`ERR!${RESET_COLOR} ${msg}`, 'red.black', label, 'error');
     },
     /**
      * @description pretty tip
      * @param {string} msg The message to write
      */
     tip: msg => {
-        Pretty(`TIP!${RESET_COLOR} ${msg}`, 'green.black', label, tipDisplayFreq);
+        Pretty(`TIP!${RESET_COLOR} ${msg}`, 'green.black', label, 'log', tipDisplayFreq);
     },
     /**
      * @description pretty success message
      * @param {string} msg The message to write
      */
     success: msg => {
-        Pretty(`SUCCESS!${RESET_COLOR} ${msg}`, 'black.green', label);
+        Pretty(`success!${RESET_COLOR} ${msg}`, 'black.green', label);
     },
     /**
      * @description pretty info
      * @param {string} msg The message to write
      */
     info: msg => {
-        Pretty(`INFO!${RESET_COLOR} ${msg}`, 'blue.black', label);
+        Pretty(`info${RESET_COLOR} ${msg}`, 'blue.black', label, 'info', tipDisplayFreq);
     },
     /**
      * @description pretty log
@@ -130,6 +140,7 @@ const Print = (label, tipDisplayFreq, quiet = false) => ({
      * @param {string} opts Options for answers; default: '(y/n)'
      */
     ask: (msg, cb, opts = '(y/n)') => {
+        process.stdout.write(label + ' ' + RESET_COLOR);
         Scan(msg, opts, ans => {
             cb(ans.toString().trim());
         });
@@ -143,6 +154,5 @@ const Print = (label, tipDisplayFreq, quiet = false) => ({
         ADDONS[k] = v;
     }
 });
-
 
 module.exports = Print;

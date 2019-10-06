@@ -1,34 +1,37 @@
+#! /usr/bin/env node
+
 /*!
  * Makever
  * Creates a file with more descriptive information based on the version of your package
  * (c) 2018 Verdexdesign
  */
 
-const path = require('path');
 const execute = require('util').promisify(require('child_process').exec);
 
-// project package.json
-const pkg = require(path.join(process.env.PWD, 'package.json'));
-
 // local
-const { end } = require('./Globals');
-const CAR = require('./CmdArgsReader').CmdArgsReader; // 🚗
+const { labelWColors, printDisplayFreq, end } = require('./Globals');
+const CAR = require('./CmdArgsReader'); // 🚗
+const Print = require('./Print')(labelWColors, printDisplayFreq);
+
+const {
+    is_valid_codename,
+    is_clean_repo,
+} = require('./Validators');
 
 const {
     show_help,
-    is_clean_repo_handler,
+    tag_clean_repo,
     dump_contents
 } = require('./Handlers');
 
 const {
-    is_a_repo,
     infer_branch,
     write_to,
     get_contents,
     cache,
-    is_clean_repo,
     dry_run_messages,
-    Print
+    valid_pkg_version,
+    replace_placeholders
 } = require('./Helpers');
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++
@@ -64,7 +67,7 @@ const DEFINED_ARGS = {
     '-m': {
         var: true
     },
-    '--tag': {
+    '-r': {
         flag: true
     },
     '-t': {
@@ -84,14 +87,19 @@ const LONG_FORM_ARGS_MAP = {
     '--view': '-d',
     '--quiet': '-q',
     '--dry-run': '-t',
-    '--force': '-f'
+    '--force': '-f',
+    '--tag': '-r',
+    '--message': '-m'
 };
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++
 // Evaluate command line arguments
 // ++++++++++++++++++++++++++++++++++++++++++++++++
 
-const ARGUMENTS_DATA = CAR(DEFINED_ARGS, LONG_FORM_ARGS_MAP);
+const ARGUMENTS_DATA = CAR(DEFINED_ARGS, LONG_FORM_ARGS_MAP, (err) => {
+    Print.error(err);
+    Print.tip('see accepted arguments by: "makever -h"');
+});
 
 // +++++++++++++++++++++++++++++++++++++
 // extend Print functionality
@@ -119,10 +127,11 @@ function run(args) {
  */
 function run_tag(args) {
     const cache_data = cache.read();
-    const version = cache_data && cache_data.version.join('.') || pkg.version;
-    const codename = cache_data && cache_data.codename || args['-c'];
+    const version = cache_data && cache_data.version.join('.') || valid_pkg_version;
+    const codename = !args['-c'] ? cache_data && cache_data.codename : is_valid_codename(args['-c']);
+
     // verify if the current repo has a clean tree
-    is_clean_repo(is_a_repo(), is_clean_repo_handler({version, codename}));
+    is_clean_repo(tag_clean_repo({ version, codename, tag_m: args['-m'] }));
 }
 
 /**
@@ -135,31 +144,44 @@ function run_tag(args) {
 async function run_npm_version(args) {
     const { dir, file, contents } = get_contents(args);
 
-    // commit message for the version upgrade
-    const new_version_commit_m = args['-m'] || '';
+    // commit message for the version update
+    const version_m = (
+        replace_placeholders(args['-m'] || '', { codename: contents.codename })
+        || 'Update to %s, codename ' + contents.codename
+    );
 
-    const { stderr, stdout } = await execute('npm version ' + args['-v'] + ' -m ' + new_version_commit_m);
+    try {
+        const parsed = replace_placeholders(args['-v'], { codename: contents.codename });
+        const { stderr, stdout } = await execute('npm version ' + parsed + ' -m "' + version_m + '"');
 
-    if (stderr) {
-        Print.error(`"${cmd_args}" is not a valid option for 'npm version'`);
+        if (stderr.length) {
+            Print.error(`"${cmd_args}" is not a valid option for 'npm version'`);
+            Print.tip('see "makever -h"');
+            Print.tip('see https://docs.npmjs.com/cli/version');
+            end();
+        }
+
+        const semver = stdout.trim().split('v')[1].split('.');
+        const branch = infer_branch(semver);
+
+        // edit contents
+        contents.full = semver.join('.');
+        contents.raw = 'v' + contents.full;
+        contents.major = semver[0];
+        contents.minor = semver[1];
+        contents.patch = semver[2];
+        contents.branch = branch;
+
+        // generate version file
+        write_to(dir, file, contents, args['--std']);
+    } catch (err) {
+        const { cmd, stderr } = err && 'cmd' in err && 'stderr' in err ? err : { cmd: '', stderr: '' };
+        Print.error(`"${cmd}" failed`);
+        console.error(stderr);
         Print.tip('see "makever -h"');
-        Print.tip('also (https://docs.npmjs.com/cli/version)');
+        Print.tip('see https://docs.npmjs.com/cli/version');
         end();
     }
-
-    const semver = stdout.trim().split('v')[1].split('.');
-    const branch = infer_branch(semver);
-
-    // edit contents
-    contents.full = semver.join('.');
-    contents.raw = 'v' + contents.full;
-    contents.major = semver[0];
-    contents.minor = semver[1];
-    contents.patch = semver[2];
-    contents.branch = branch;
-
-    // generate version file
-    write_to(dir, file, contents, args['--std']);
 }
 
 /**
@@ -172,11 +194,35 @@ function run_dry(args) {
     // mock npm verison run
     if (args['-v']) {
         const version_upgrade = args['-v'];
-        let semver = contents.full.split('.');
+        const semver = contents.full.split('.');
+        let prerelease = args['-v'] && args['-v'].includes('--preid=') && args['-v'].split('--preid=')[1] || '';
+        prerelease = replace_placeholders(prerelease, { codename: contents.codename });
 
-        if (version_upgrade === 'major') { ++semver[0]; };
-        if (version_upgrade === 'minor') { ++semver[1]; };
-        if (version_upgrade === 'patch') { ++semver[2]; };
+        switch (true) {
+            case (version_upgrade === 'major'): ++semver[0]; break;
+            case (version_upgrade === 'minor'): ++semver[1]; break;
+            case (version_upgrade === 'patch'): ++semver[2]; break;
+            case (version_upgrade === 'premajor'):
+                ++semver[0];
+                semver[2] += '.0';
+                break;
+            case (version_upgrade === 'preminor'):
+                ++semver[1];
+                semver[2] += '.0';
+                break;
+            case (version_upgrade === 'prepatch'):
+                ++semver[2];
+                semver[2] += '.0';
+                break;
+            case (Boolean(prerelease.length)):
+                ++semver[2];
+                semver[2] += '-' + prerelease + '.0';
+                break;
+            default:
+                Print.error('Invalid "npm version" option');
+                Print.tip('see https://docs.npmjs.com/cli/version')
+                end();
+        }
 
         // edit contents
         contents.full = semver.join('.');
@@ -188,9 +234,8 @@ function run_dry(args) {
     }
 
     dry_run_messages(args, { dir, file, contents });
-
     // done
-    Print.info('Dry run complete');
+    Print.success('Dry run complete');
 }
 
 // +++++++++++++++++++++++++++++++++++++
@@ -198,8 +243,12 @@ function run_dry(args) {
 // +++++++++++++++++++++++++++++++++++++
 
 (function makever(args) {
-    !args['-v'] && !args['-t'] && run(args);
-    args['-v'] && !args['-t'] && run_npm_version(args);
-    !args['-t'] && args['--tag'] && run_tag(args);
-    args['-t'] && run_dry(args);
+    !args['-v'] && !args['-t'] && !args['-r']
+        && run(args);
+    args['-v'] && !args['-t'] && !args['-r']
+        && run_npm_version(args);
+    !args['-v'] && !args['-t'] && args['-r']
+        && run_tag(args);
+    args['-t']
+        && run_dry(args);
 }(ARGUMENTS_DATA));

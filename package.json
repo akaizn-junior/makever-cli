@@ -2,9 +2,9 @@
     "name": "makever",
     "version": "1.0.0",
     "description": "Creates a file with more descriptive information based on the version of your package",
-    "main": "lib/CLI.js",
+    "main": "src/CLI.js",
     "bin": {
-        "makever": "lib/CLI.js"
+        "makever": "src/CLI.js"
     },
     "author": {
         "name": "Simao Nziaka",
@@ -19,6 +19,7 @@
         "file",
         "codename",
         "tag",
-        "git"
+        "git",
+        "makever"
     ]
 }

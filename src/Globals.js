@@ -9,9 +9,17 @@ const errors = {
     bad_codename: 'codename must be a valid value, an argument passed'
 };
 
-// process exit syntatic sugar
-const done = () => process.exit(0);
-const end = () => process.exit(1);
+/**
+ * @description When something succeeds, run some callback then exit with 0
+ * @param {functin} cb Run when something succeeds
+ */
+const done = (cb = () => {}) => { cb(); process.exit(0); };
+
+/**
+ * @description When something fails, run some callback then exit with 1
+ * @param {functin} cb Run when something fails
+ */
+const end = (cb = () => {}) => { cb(); process.exit(1); };
 
 /**
  * @description Generates random integers between min and max
@@ -26,4 +34,11 @@ function get_random_int(min = 0, max = 1) {
     return Math.floor(Math.random() * (max - min)) + min;
 }
 
-module.exports = { errors, done, end, getRandomInt: get_random_int };
+module.exports = {
+    errors,
+    done,
+    end,
+    getRandomInt: get_random_int,
+    labelWColors: '\33[33;40m makever \33[0m',
+    printDisplayFreq: 5
+};

@@ -3,14 +3,14 @@
 // +++++++++++++++++++++++++++++++++++++
 
 const fs = require('fs');
-const execute = require('util').promisify(require('child_process').exec);
-const { done, end } = require('./Globals');
+const exec = require('child_process').exec;
+const execute = require('util').promisify(exec);
 
-// need helpers for cache init
-const {
-    cache,
-    Print
-} = require('./Helpers');
+const { labelWColors, printDisplayFreq, done, end } = require('./Globals');
+const Print = require('./Print')(labelWColors, printDisplayFreq);
+
+// import Helpers for initialized cache
+const { cache, replace_placeholders } = require('./Helpers');
 
 /**
  * @description Help
@@ -23,8 +23,8 @@ function show_help() {
     console.log('--tag                  Tags the last commit with the an annotated tag with the current version and codename');
     console.log('-v, --version          [<newversion> | major | minor | patch | premajor |');
     console.log('                         preminor | prepatch | prerelease [--preid=<prerelease-id>] | from-git]');
-    console.log('-m                     "npm version" commit message\n');
-    console.log('                               see: (https://docs.npmjs.com/cli/version)');
+    console.log('-m                     Tag message. Combine with --tag and -v\n');
+    console.log('                               see: https://docs.npmjs.com/cli/version');
     console.log('\nOutput:');
     console.log('--std                  Write to standard output instead of a file');
     console.log('-d, --dump             Dump the version file contents to stdout');
@@ -33,7 +33,7 @@ function show_help() {
     console.log('-h, --help             Show help');
     console.log('-q, --quiet            "Shh mode" Silent run');
     console.log('-f, --force            Force an action that would not otherwise run without this flag');
-    Print.info('Get involved at (https://github.com/akaizn-junior/makever-cli)');
+    Print.info('Get involved at https://github.com/verdebydesign/makever-cli');
 }
 
 /**
@@ -55,33 +55,47 @@ function dump_contents() {
  * is a repo and has a clean tree.
  * @param {object} data Generated data needed by the handler
  */
-function is_clean_repo_handler(data) {
-    const { version, codename } = data;
+function tag_clean_repo(data) {
+    const { version, codename, tag_m } = data;
 
     return async (result) => {
         if (result && !result.stderr.length && !result.stdout.length) {
-            const { stdout, stderr } = await execute(`git tag -f -a "v${version}" -m "Codename ${codename}"`);
+            try {
+                const tag_msg = (
+                    replace_placeholders(tag_m, { codename, version })
+                    || `Codename ${codename}`
+                );
+                const { stdout, stderr } = await execute(`git tag -f -a "v${version}" -m "${tag_msg}"`);
 
-            if (stderr) {
+                if (stderr.length) {
+                    Print.log('Something went wrong. Could not tag the repo');
+                    console.error(stderr);
+                    end();
+                }
+
+                Print.ask('commit and push annonated tag', ans => {
+                    if (ans === 'Y' || ans === 'y') {
+                        try {
+                            exec('git add .');
+                            exec(`git commit -m "v${version} - ${codename}"`);
+                            exec('git push origin ' + 'v' + version); // only push this specific tag
+                            Print.log('annotated tag "v' + version + '" was pushed with message "' + tag_msg + '"');
+                            done();
+                        } catch (err) {
+                            Print.log('Something went wrong. Could not push tag');
+                            console.error(err);
+                            end();
+                        }
+                    } else {
+                        Print.log('Tag not pushed');
+                        done();
+                    }
+                }, '(Y/n)');
+            } catch (err) {
                 Print.log('Something went wrong. Could not tag the repo');
-                console.error(stderr);
+                console.error(err);
                 end();
             }
-
-            if (stdout.length) {
-                Print.info('Last commit tagged');
-            }
-
-            Print.ask('Push tag', ans => {
-                if (ans === 'Y' || ans === 'y') {
-                    exec('git push --tags');
-                    Print.log('Tag pushed');
-                    done();
-                } else {
-                    Print.log('Tag not pushed');
-                    done();
-                }
-            }, '(Y/n)');
         }
 
         if (!result) {
@@ -90,13 +104,13 @@ function is_clean_repo_handler(data) {
         }
 
         if (result && result.stderr.length) {
-            Print.log('Something went wrong. Could not tag the repo');
+            Print.log('Something went wrong. Could not tag last commit');
             console.error(result.stderr);
             end();
         }
 
         if (result && result.stdout.length) {
-            Print.info('Cannot tag a repo with current changes');
+            Print.log('Cannot tag a repo with current changes');
             Print.log('Please commit or stash your current changes before tagging');
             done();
         }
@@ -106,5 +120,5 @@ function is_clean_repo_handler(data) {
 module.exports = {
     show_help,
     dump_contents,
-    is_clean_repo_handler
+    tag_clean_repo
 };
