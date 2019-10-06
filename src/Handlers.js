@@ -78,7 +78,7 @@ function tag_clean_repo(data) {
                         try {
                             exec('git add .');
                             exec(`git commit -m "v${version} - ${codename}"`);
-                            exec('git push --tags');
+                            exec('git push origin ' + 'v' + version);
                             Print.log('Tag pushed');
                             done();
                         } catch (err) {
