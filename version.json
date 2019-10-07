@@ -1,11 +1,11 @@
 {
-    "codename": "petite-guitar",
+    "codename": "adhesive-boundary",
     "branch": "",
-    "full": "11.2.0-1",
-    "raw": "v11.2.0-1",
+    "full": "11.2.1-0",
+    "raw": "v11.2.1-0",
     "major": "11",
     "minor": "2",
-    "patch": "0",
-    "prerelease": "1",
-    "premajor": true
+    "patch": "1",
+    "prerelease": "0",
+    "prepatch": true
 }
