@@ -1,6 +1,6 @@
 {
     "name": "makever",
-    "version": "1.3.3",
+    "version": "1.4.0-thirsty-license.0",
     "description": "Creates a file with more descriptive information based on the version of your package",
     "main": "src/CLI.js",
     "bin": {
