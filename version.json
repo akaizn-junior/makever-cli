@@ -1,11 +1,11 @@
 {
-    "codename": "relieved-security",
+    "codename": "petite-guitar",
     "branch": "",
-    "full": "11.2.0-0",
-    "raw": "v11.2.0-0",
+    "full": "11.2.0-1",
+    "raw": "v11.2.0-1",
     "major": "11",
     "minor": "2",
     "patch": "0",
-    "prerelease": "0",
-    "preminor": true
+    "prerelease": "1",
+    "premajor": true
 }
