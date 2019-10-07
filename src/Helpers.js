@@ -284,6 +284,8 @@ function get_prerelease(semver, arg_v = '') {
         patch = possible_prerelease[0];
     }
 
+    console.log(prerelease_label);
+
     !prerelease_value.length && cache_data && 'prerelease' in cache_data && (prerelease_value = cache_data.prerelease);
     !prerelease_label.length && cache_data && 'premajor' in cache_data && (prerelease_label = cache_data.premajor);
     !prerelease_label.length && cache_data && 'preminor' in cache_data && (prerelease_label = cache_data.preminor);
