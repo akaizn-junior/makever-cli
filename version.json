@@ -1,10 +1,10 @@
 {
-    "codename": "callous-hyacinth",
+    "codename": "tested-vest",
     "branch": "",
-    "full": "9.13.0-sore-diamond.1",
-    "raw": "v9.13.0-sore-diamond.1",
+    "full": "9.13.0-sore-diamond.2",
+    "raw": "v9.13.0-sore-diamond.2",
     "major": "9",
     "minor": "13",
     "patch": "0",
-    "prerelease": "sore-diamond.1"
+    "prerelease": "sore-diamond.2"
 }
