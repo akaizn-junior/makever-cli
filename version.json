@@ -1,10 +1,11 @@
 {
-    "codename": "tasty-bridge",
+    "codename": "relieved-mailman",
     "branch": "",
-    "full": "11.4.0-3",
-    "raw": "v11.4.0-3",
+    "full": "11.5.0-0",
+    "raw": "v11.5.0-0",
     "major": "11",
-    "minor": "4",
+    "minor": "5",
     "patch": "0",
-    "prerelease": "3"
+    "prerelease": "0",
+    "preminor": true
 }
