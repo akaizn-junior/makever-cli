@@ -1,11 +1,11 @@
 {
-    "codename": "sparkling-tire",
-    "branch": "",
-    "full": "9.22.0-2",
-    "raw": "v9.22.0-2",
-    "major": "9",
-    "minor": "22",
+    "codename": "dysfunctional-british",
+    "branch": "x.0.0",
+    "full": "11.0.0-0",
+    "raw": "v11.0.0-0",
+    "major": "11",
+    "minor": "0",
     "patch": "0",
-    "prerelease": "2",
-    "preminor": true
+    "prerelease": "0",
+    "premajor": true
 }
