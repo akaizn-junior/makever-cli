@@ -1,11 +1,11 @@
 {
-    "codename": "foregoing-beat",
+    "codename": "whispering-fat",
     "branch": "",
-    "full": "11.3.0-0",
-    "raw": "v11.3.0-0",
+    "full": "11.3.0-1",
+    "raw": "v11.3.0-1",
     "major": "11",
     "minor": "3",
     "patch": "0",
-    "prerelease": "0",
-    "preminor": true
+    "prerelease": "1",
+    "premajor": true
 }

@@ -256,8 +256,8 @@ function replace_placeholders(str, replacers = {}) {
 }
 
 /**
- * @description Verifies if the -v argument includes prerelease options.
- * And separate the prerelease values from the regular semver value.
+ * @description Verifies if the -v argument or cache includes prerelease data.
+ * And separates the prerelease values from the regular semver value.
  * @param {array} semver The current semver version
  * @param {string} arg_v Value read for '-v' option
  */
@@ -269,9 +269,11 @@ function get_prerelease(semver, arg_v = '') {
 
     // in case a prerelease option other than 'prerelease' was used
     // add it should be added to contents as a boolean to indicate the type of the prerelease
-    arg_v.includes('prepatch') && (prerelease_label = 'prepatch');
-    arg_v.includes('preminor') && (prerelease_label = 'preminor');
-    arg_v.includes('premajor') && (prerelease_label = 'premajor');
+    switch(true) {
+        case arg_v.includes('prepatch'): prerelease_label = 'prepatch'; break;
+        case arg_v.includes('preminor'): prerelease_label = 'preminor'; break;
+        case arg_v.includes('premajor'): prerelease_label = 'premajor'; break;
+    }
 
     // get the prerelease string on the version, by splitting just the first '-' char if it exisits
     let possible_prerelease = semver[3] && patch + '.' + semver[3] || patch;
