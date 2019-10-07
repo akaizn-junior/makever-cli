@@ -1,11 +1,11 @@
 {
-    "codename": "literate-lyocell",
+    "codename": "elderly-child",
     "branch": "",
-    "full": "11.4.0-0",
-    "raw": "v11.4.0-0",
+    "full": "11.4.0-1",
+    "raw": "v11.4.0-1",
     "major": "11",
     "minor": "4",
     "patch": "0",
-    "prerelease": "0",
-    "preminor": true
+    "prerelease": "1",
+    "premajor": true
 }
