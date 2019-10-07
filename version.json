@@ -1,10 +1,11 @@
 {
-    "codename": "nasty-luttuce",
+    "codename": "solid-latency",
     "branch": "",
-    "full": "9.19.0-0",
-    "raw": "v9.19.0-0",
+    "full": "9.20.0-0",
+    "raw": "v9.20.0-0",
     "major": "9",
-    "minor": "19",
+    "minor": "20",
     "patch": "0",
-    "prerelease": "0"
+    "prerelease": "0",
+    "preminor": true
 }
