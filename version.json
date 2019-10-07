@@ -1,9 +1,10 @@
 {
-    "codename": "prime",
-    "branch": "x.0.0",
-    "full": "1.0.0",
-    "raw": "v1.0.0",
-    "major": "1",
-    "minor": "0",
-    "patch": "0"
+    "codename": "ugly-malaysia",
+    "branch": "",
+    "full": "9.13.1-1",
+    "raw": "v9.13.1-1",
+    "major": "9",
+    "minor": "13",
+    "patch": "1",
+    "prerelease": "1"
 }
