@@ -1,10 +1,10 @@
 {
-    "codename": "relieved-mailman",
+    "codename": "cumbersome-sneeze",
     "branch": "",
-    "full": "11.5.0-0",
-    "raw": "v11.5.0-0",
+    "full": "11.6.0-0",
+    "raw": "v11.6.0-0",
     "major": "11",
-    "minor": "5",
+    "minor": "6",
     "patch": "0",
     "prerelease": "0",
     "preminor": true
