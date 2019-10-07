@@ -176,11 +176,13 @@ async function run_npm_version(args) {
         // correct patch
         let patch = semver[3] && semver[2] + '.' + semver[3] || semver[2];
 
+        console.log(patch);
+
         // get the prerelease string on the version, by splitting just the first '-' char if it exisits
         const possible_prerelease = patch.split(/-(.+)/);
 
         if(possible_prerelease && possible_prerelease[1] && possible_prerelease[1].length) {
-            contents[get_prerelease(args['-v'])] = possible_prerelease[1];
+            contents['prerelease'] = possible_prerelease[1];
             patch = possible_prerelease[0];
         }
 
