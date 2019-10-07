@@ -177,7 +177,11 @@ async function run_npm_version(args) {
         contents.patch = patch;
         contents.branch = branch;
         contents['prerelease'] = prerelease_value;
-        cache_data && prerelease_label in cache_data || prerelease_label.length
+
+        cache_data && prerelease_label.length && prerelease_label in cache_data
+            && (contents[prerelease_label] = true);
+
+        prerelease_label.length
             && (contents[prerelease_label] = true);
 
         // generate version file
