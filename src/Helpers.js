@@ -283,6 +283,9 @@ function get_prerelease(semver, arg_v = '') {
         patch = possible_prerelease[0];
     }
 
+    console.log(prerelease_label);
+    console.log(prerelease_value);
+
     // check the cache for this data if none was generated
     !prerelease_value.length && cache_data && 'prerelease' in cache_data
         && (prerelease_value = cache_data.prerelease);
@@ -292,6 +295,9 @@ function get_prerelease(semver, arg_v = '') {
         && (prerelease_label = 'preminor');
     !prerelease_label.length && cache_data && 'prepatch' in cache_data
         && (prerelease_label = 'prepatch');
+
+        console.log(prerelease_label);
+        console.log(prerelease_value);
 
     return { patch, prerelease_value, prerelease_label };
 }
