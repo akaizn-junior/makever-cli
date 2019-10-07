@@ -252,7 +252,7 @@ function replace_placeholders(str, replacers = {}) {
  * @param {string} arg_v Value read for '-v' option
  */
 function get_prerelease(semver, arg_v) {
-    const patch = semver[2];
+    let patch = semver[2];
     let prerelease_label = '';
     let prerelease_value = '';
 
