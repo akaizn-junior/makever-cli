@@ -176,7 +176,8 @@ function get_contents(args) {
 
     // prerelease data
     prerelease_value.length && (contents['prerelease'] = prerelease_value);
-    prerelease_label.length && (contents[prerelease_label] = true);
+    // only get the prerelease label at this stage if option -v is not used
+    !args['-v'] && prerelease_label.length && (contents[prerelease_label] = true);
 
     // verify if the user passed a diretory or just a filename
     let [...nested] = filename.includes('/') ? filename.split('/') : ['', filename];
