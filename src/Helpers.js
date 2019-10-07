@@ -160,8 +160,8 @@ function get_contents(args) {
     // the version as a string
     const full = semver.join('.');
 
-    // correct patch
-    const patch = semver[3] && semver[2] + '.' + semver[3] || semver[2];
+    // correct patch?
+    const { patch, prerelease_value, prerelease_label } = get_prerelease(semver);
 
     // structure data
     const contents = {
@@ -173,6 +173,10 @@ function get_contents(args) {
         minor: semver[1],
         patch
     };
+
+    // prerelease data
+    prerelease_value.length && (contents['prerelease'] = prerelease_value);
+    prerelease_label.length && (contents[prerelease_label] = true);
 
     // verify if the user passed a diretory or just a filename
     let [...nested] = filename.includes('/') ? filename.split('/') : ['', filename];
@@ -257,17 +261,16 @@ function replace_placeholders(str, replacers = {}) {
  * @param {string} arg_v Value read for '-v' option
  */
 function get_prerelease(semver, arg_v) {
+    const cache_data = Store.read();
     let patch = semver[2];
     let prerelease_label = '';
     let prerelease_value = '';
 
     // in case a prerelease option other than 'prerelease' was used
     // add it should be added to contents as a boolean to indicate the type of the prerelease
-    switch (true) {
-        case arg_v.includes('prepatch'): prerelease_label = 'prepatch'; break;
-        case arg_v.includes('preminor'): prerelease_label = 'preminor'; break;
-        case arg_v.includes('premajor'): prerelease_label = 'premajor'; break;
-    }
+    arg_v.includes('prepatch') && (prerelease_label = 'prepatch');
+    arg_v.includes('preminor') && (prerelease_label = 'preminor');
+    arg_v.includes('premajor') && (prerelease_label = 'premajor');
 
     // get the prerelease string on the version, by splitting just the first '-' char if it exisits
     let possible_prerelease = semver[3] && patch + '.' + semver[3] || patch;
@@ -278,6 +281,16 @@ function get_prerelease(semver, arg_v) {
         // update patch number
         patch = possible_prerelease[0];
     }
+
+    // check the cache for this data if none was generated
+    !prerelease_value.length && cache_data && 'prerelease' in cache_data
+        && (prerelease_value = cache_data.prerelease);
+    !prerelease_label.length && cache_data && 'premajor' in cache_data
+        && (prerelease_label = 'premajor');
+    !prerelease_label.length && cache_data && 'preminor' in cache_data
+        && (prerelease_label = 'preminor');
+    !prerelease_label.length && cache_data && 'prepatch' in cache_data
+        && (prerelease_label = 'prepatch');
 
     return { patch, prerelease_value, prerelease_label };
 }
