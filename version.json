@@ -1,10 +1,11 @@
 {
-    "codename": "tested-vest",
+    "codename": "madly-toothpaste",
     "branch": "",
-    "full": "9.13.0-sore-diamond.2",
-    "raw": "v9.13.0-sore-diamond.2",
+    "full": "9.13.1-0",
+    "raw": "v9.13.1-0",
     "major": "9",
     "minor": "13",
-    "patch": "0",
-    "prerelease": "sore-diamond.2"
+    "patch": "1",
+    "prerelease": "0",
+    "prepatch": true
 }
