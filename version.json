@@ -1,11 +1,11 @@
 {
-    "codename": "receptive-beach",
+    "codename": "relieved-security",
     "branch": "",
-    "full": "11.1.0-2",
-    "raw": "v11.1.0-2",
+    "full": "11.2.0-0",
+    "raw": "v11.2.0-0",
     "major": "11",
-    "minor": "1",
+    "minor": "2",
     "patch": "0",
-    "prerelease": "2",
-    "premajor": true
+    "prerelease": "0",
+    "preminor": true
 }
