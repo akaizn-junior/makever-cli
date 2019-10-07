@@ -296,8 +296,8 @@ function get_prerelease(semver, arg_v = '') {
     !prerelease_label.length && cache_data && 'prepatch' in cache_data
         && (prerelease_label = 'prepatch');
 
-        console.log(prerelease_label);
-        console.log(prerelease_value);
+    console.log(prerelease_label);
+    console.log(prerelease_value);
 
     return { patch, prerelease_value, prerelease_label };
 }
