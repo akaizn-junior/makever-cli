@@ -174,12 +174,11 @@ async function run_npm_version(args) {
         const branch = infer_branch(semver);
 
         // correct patch
-        let patch = semver[3] && semver[2] + '.' + semver[3] || semver[2];
-
-        console.log(patch);
+        let patch = semver[2];
 
         // get the prerelease string on the version, by splitting just the first '-' char if it exisits
-        const possible_prerelease = patch.split(/-(.+)/);
+        let possible_prerelease = semver[3] && patch + '.' + semver[3];
+        possible_prerelease = possible_prerelease && possible_prerelease.split(/-(.+)/);
 
         if(possible_prerelease && possible_prerelease[1] && possible_prerelease[1].length) {
             contents['prerelease'] = possible_prerelease[1];
