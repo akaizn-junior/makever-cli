@@ -245,12 +245,26 @@ function replace_placeholders(str, replacers = {}) {
     return parsed;
 }
 
+/**
+ * @description Verifies if the -v argument includes prerelease options
+ * @param {string} arg_v -v option value
+ */
+function get_prerelease(arg_v) {
+    switch (true) {
+        case arg_v.includes('prepatch'): return 'prepatch';
+        case arg_v.includes('preminor'): return 'preminor';
+        case arg_v.includes('premajor'): return 'premajor';
+    }
+    return '';
+}
+
 module.exports = {
     infer_branch,
     write_to,
     get_contents,
     dry_run_messages,
     replace_placeholders,
+    get_prerelease,
     cache: Store,
     valid_pkg_version: get_valid_pkg_version(pkg)
 };

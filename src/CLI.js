@@ -31,7 +31,8 @@ const {
     cache,
     dry_run_messages,
     valid_pkg_version,
-    replace_placeholders
+    replace_placeholders,
+    get_prerelease
 } = require('./Helpers');
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++
@@ -164,12 +165,31 @@ async function run_npm_version(args) {
         const semver = stdout.trim().split('v')[1].split('.');
         const branch = infer_branch(semver);
 
+        // correct patch?
+        let patch = semver[2];
+
+        // get the prerelease string on the version, by splitting just the first '-' char if it exisits
+        let possible_prerelease = semver[3] && patch + '.' + semver[3] || patch;
+        possible_prerelease = possible_prerelease && possible_prerelease.split(/-(.+)/);
+
+        if (possible_prerelease && possible_prerelease[1] && possible_prerelease[1].length) {
+            contents['prerelease'] = possible_prerelease[1];
+
+            // in case a prerelease option other than 'prerelease' was used
+            // [premajor | preminor | prepatch]
+            const pre_option = get_prerelease(args['-v']);
+            // add to contents
+            pre_option.length && (contents[pre_option] = true);
+
+            patch = possible_prerelease[0];
+        }
+
         // edit contents
         contents.full = semver.join('.');
         contents.raw = 'v' + contents.full;
         contents.major = semver[0];
         contents.minor = semver[1];
-        contents.patch = semver[2];
+        contents.patch = patch;
         contents.branch = branch;
 
         // generate version file
