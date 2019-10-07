@@ -1,11 +1,11 @@
 {
-    "codename": "average-trousers",
+    "codename": "receptive-beach",
     "branch": "",
-    "full": "11.1.0-1",
-    "raw": "v11.1.0-1",
+    "full": "11.1.0-2",
+    "raw": "v11.1.0-2",
     "major": "11",
     "minor": "1",
     "patch": "0",
-    "prerelease": "1",
+    "prerelease": "2",
     "premajor": true
 }
