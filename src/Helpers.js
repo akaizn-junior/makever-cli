@@ -259,9 +259,9 @@ function get_prerelease(semver, arg_v) {
     // in case a prerelease option other than 'prerelease' was used
     // add it should be added to contents as a boolean to indicate the type of the prerelease
     switch (true) {
-        case arg_v.includes('prepatch'): prerelease_label = 'prepatch';
-        case arg_v.includes('preminor'): prerelease_label = 'preminor';
-        case arg_v.includes('premajor'): prerelease_label = 'premajor';
+        case arg_v.includes('prepatch'): prerelease_label = 'prepatch'; break;
+        case arg_v.includes('preminor'): prerelease_label = 'preminor'; break;
+        case arg_v.includes('premajor'): prerelease_label = 'premajor'; break;
     }
 
     // get the prerelease string on the version, by splitting just the first '-' char if it exisits
