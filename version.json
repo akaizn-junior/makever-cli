@@ -1,11 +1,10 @@
 {
-    "codename": "guarded-onion",
+    "codename": "arrogant-gateway",
     "branch": "",
-    "full": "9.15.0-0",
-    "raw": "v9.15.0-0",
+    "full": "9.16.0-0",
+    "raw": "v9.16.0-0",
     "major": "9",
-    "minor": "15",
+    "minor": "16",
     "patch": "0",
-    "prerelease": "0",
-    "preminor": true
+    "prerelease": "0"
 }
