@@ -1,11 +1,11 @@
 {
-    "codename": "weary-self",
+    "codename": "small-flood",
     "branch": "",
-    "full": "11.2.1-1",
-    "raw": "v11.2.1-1",
+    "full": "11.2.1-2",
+    "raw": "v11.2.1-2",
     "major": "11",
     "minor": "2",
     "patch": "1",
-    "prerelease": "1",
+    "prerelease": "2",
     "premajor": true
 }
