@@ -1,11 +1,10 @@
 {
-    "codename": "filthy-balloon",
+    "codename": "jobless-moustache",
     "branch": "",
-    "full": "9.21.0-0",
-    "raw": "v9.21.0-0",
+    "full": "9.21.0-1",
+    "raw": "v9.21.0-1",
     "major": "9",
     "minor": "21",
     "patch": "0",
-    "prerelease": "0",
-    "preminor": true
+    "prerelease": "1"
 }
