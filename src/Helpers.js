@@ -260,7 +260,7 @@ function replace_placeholders(str, replacers = {}) {
  * @param {array} semver The current semver version
  * @param {string} arg_v Value read for '-v' option
  */
-function get_prerelease(semver, arg_v) {
+function get_prerelease(semver, arg_v = '') {
     const cache_data = Store.read();
     let patch = semver[2];
     let prerelease_label = '';
