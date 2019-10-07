@@ -135,15 +135,6 @@ function run_tag(args) {
     is_clean_repo(tag_clean_repo({ version, codename, tag_m: args['-m'] }));
 }
 
-function get_prerelease(version) {
-    switch(true) {
-        case version.includes('prepatch'): return 'prepatch';
-        case version.includes('preminor'): return 'preminor';
-        case version.includes('premajor'): return 'premajor';
-    }
-    return '';
-}
-
 /**
  * @description Spawn a child_process to run 'npm version [options]'.
  * Saves new version data to the store for later usage.
