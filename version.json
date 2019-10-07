@@ -1,10 +1,10 @@
 {
-    "codename": "sore-diamond",
+    "codename": "callous-hyacinth",
     "branch": "",
-    "full": "9.13.0-sore-diamond.0",
-    "raw": "v9.13.0-sore-diamond.0",
+    "full": "9.13.0-sore-diamond.1",
+    "raw": "v9.13.0-sore-diamond.1",
     "major": "9",
     "minor": "13",
     "patch": "0",
-    "prerelease": "sore-diamond.0"
+    "prerelease": "sore-diamond.1"
 }
