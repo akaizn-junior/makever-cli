@@ -94,6 +94,11 @@ function write_to(directory, filename, data, dump = false) {
             Store.add('filename', filename);
             Store.add('version', semver);
             Store.add('branch', data.branch);
+            // add these values to the store if they exist
+            'prerelease' in data && Store.add('prerelease', data.prerelease);
+            'premajor' in data && Store.add('premajor', data.premajor);
+            'preminor' in data && Store.add('preminor', data.preminor);
+            'prepatch' in data && Store.add('premajor', data.prepatch);
         });
     } else {
         console.log(contents);

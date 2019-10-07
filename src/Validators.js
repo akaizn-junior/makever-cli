@@ -85,6 +85,10 @@ function is_valid_version_file(version_file) {
         && 'major' in version_file
         && 'minor' in version_file
         && 'patch' in version_file
+        || 'prerelease' in version_file
+        || 'premajor' in version_file
+        || 'preminor' in version_file
+        || 'prepatch' in version_file
     );
     return valid_version_file && version_file;
 }

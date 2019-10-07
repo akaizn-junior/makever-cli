@@ -143,6 +143,7 @@ function run_tag(args) {
  * @param {object} args command arguments
  */
 async function run_npm_version(args) {
+    const cache_data = Store.read();
     const { dir, file, contents } = get_contents(args);
 
     // commit message for the version update
@@ -176,7 +177,8 @@ async function run_npm_version(args) {
         contents.patch = patch;
         contents.branch = branch;
         contents['prerelease'] = prerelease_value;
-        prerelease_label.length && (contents[prerelease_label] = true);
+        cache_data && prerelease_label in cache_data && prerelease_label.length
+            && (contents[prerelease_label] = true);
 
         // generate version file
         write_to(dir, file, contents, args['--std']);
