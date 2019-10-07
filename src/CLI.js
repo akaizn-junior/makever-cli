@@ -169,8 +169,6 @@ async function run_npm_version(args) {
         // correct patch?
         const { patch, prerelease_value, prerelease_label } = get_prerelease(semver, args['-v']);
 
-        console.log(prerelease_label);
-
         // edit contents
         contents.full = semver.join('.');
         contents.raw = 'v' + contents.full;

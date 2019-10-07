@@ -268,11 +268,9 @@ function get_prerelease(semver, arg_v = '') {
 
     // in case a prerelease option other than 'prerelease' was used
     // add it should be added to contents as a boolean to indicate the type of the prerelease
-    switch (true) {
-        case arg_v.includes('prepatch'): prerelease_label = 'prepatch'; break;
-        case arg_v.includes('preminor'): prerelease_label = 'preminor'; break;
-        case arg_v.includes('premajor'): prerelease_label = 'premajor'; break;
-    }
+    arg_v.includes('prepatch') && (prerelease_label = 'prepatch');
+    arg_v.includes('preminor') && (prerelease_label = 'preminor');
+    arg_v.includes('premajor') && (prerelease_label = 'premajor');
 
     // get the prerelease string on the version, by splitting just the first '-' char if it exisits
     let possible_prerelease = semver[3] && patch + '.' + semver[3] || patch;
@@ -284,12 +282,15 @@ function get_prerelease(semver, arg_v = '') {
         patch = possible_prerelease[0];
     }
 
-    console.log(prerelease_label);
-
-    !prerelease_value.length && cache_data && 'prerelease' in cache_data && (prerelease_value = cache_data.prerelease);
-    !prerelease_label.length && cache_data && 'premajor' in cache_data && (prerelease_label = 'premajor');
-    !prerelease_label.length && cache_data && 'preminor' in cache_data && (prerelease_label = 'preminor');
-    !prerelease_label.length && cache_data && 'prepatch' in cache_data && (prerelease_label = 'prepatch');
+    // check the cache for this data if none was generated
+    !prerelease_value.length && cache_data && 'prerelease' in cache_data
+        && (prerelease_value = cache_data.prerelease);
+    !prerelease_label.length && cache_data && 'premajor' in cache_data
+        && (prerelease_label = 'premajor');
+    !prerelease_label.length && cache_data && 'preminor' in cache_data
+        && (prerelease_label = 'preminor');
+    !prerelease_label.length && cache_data && 'prepatch' in cache_data
+        && (prerelease_label = 'prepatch');
 
     return { patch, prerelease_value, prerelease_label };
 }
