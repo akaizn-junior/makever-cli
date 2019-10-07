@@ -186,6 +186,7 @@ async function run_npm_version(args) {
         }
 
         // in case a prerelease option other than prerelease was used
+        // [premajor | preminor | prepatch]
         const pre_option = get_prerelease(args['-v']);
         // add to contents
         pre_option.length && (contents[pre_option] = true);
