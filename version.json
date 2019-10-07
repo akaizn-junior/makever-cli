@@ -1,11 +1,11 @@
 {
-    "codename": "roasted-puppy",
+    "codename": "scarce-punishment",
     "branch": "",
-    "full": "11.6.0-1",
-    "raw": "v11.6.0-1",
+    "full": "11.6.1-0",
+    "raw": "v11.6.1-0",
     "major": "11",
     "minor": "6",
-    "patch": "0",
-    "prerelease": "1",
-    "preminor": true
+    "patch": "1",
+    "prerelease": "0",
+    "prepatch": true
 }
