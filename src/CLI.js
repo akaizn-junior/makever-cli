@@ -182,6 +182,7 @@ async function run_npm_version(args) {
         // generate version file
         write_to(dir, file, contents, args['--std']);
     } catch (err) {
+        console.log(err);
         const { cmd, stderr } = err && 'cmd' in err && 'stderr' in err ? err : { cmd: '', stderr: '' };
         Print.error(`"${cmd}" passed to underlying process has failed`);
         console.error(stderr);
