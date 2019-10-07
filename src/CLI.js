@@ -166,23 +166,7 @@ async function run_npm_version(args) {
         const branch = infer_branch(semver);
 
         // correct patch?
-        let patch = semver[2];
-
-        // get the prerelease string on the version, by splitting just the first '-' char if it exisits
-        let possible_prerelease = semver[3] && patch + '.' + semver[3] || patch;
-        possible_prerelease = possible_prerelease && possible_prerelease.split(/-(.+)/);
-
-        if (possible_prerelease && possible_prerelease[1] && possible_prerelease[1].length) {
-            contents['prerelease'] = possible_prerelease[1];
-
-            // in case a prerelease option other than 'prerelease' was used
-            // [premajor | preminor | prepatch]
-            const pre_option = get_prerelease(args['-v']);
-            // add to contents
-            pre_option.length && (contents[pre_option] = true);
-
-            patch = possible_prerelease[0];
-        }
+        const { patch, prerelease_value, prerelease_label } = get_prerelease(semver, args['-v']);
 
         // edit contents
         contents.full = semver.join('.');
@@ -191,6 +175,8 @@ async function run_npm_version(args) {
         contents.minor = semver[1];
         contents.patch = patch;
         contents.branch = branch;
+        contents['prerelease'] = prerelease_value;
+        prerelease_label.length && (contents[prerelease_label] = true);
 
         // generate version file
         write_to(dir, file, contents, args['--std']);

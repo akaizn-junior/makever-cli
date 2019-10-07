@@ -246,16 +246,35 @@ function replace_placeholders(str, replacers = {}) {
 }
 
 /**
- * @description Verifies if the -v argument includes prerelease options
- * @param {string} arg_v -v option value
+ * @description Verifies if the -v argument includes prerelease options.
+ * And separate the prerelease values from the regular semver value.
+ * @param {array} semver The current semver version
+ * @param {string} arg_v Value read for '-v' option
  */
-function get_prerelease(arg_v) {
+function get_prerelease(semver, arg_v) {
+    const patch = semver[2];
+    let prerelease_label = '';
+    let prerelease_value = '';
+
+    // in case a prerelease option other than 'prerelease' was used
+    // add it should be added to contents as a boolean to indicate the type of the prerelease
     switch (true) {
-        case arg_v.includes('prepatch'): return 'prepatch';
-        case arg_v.includes('preminor'): return 'preminor';
-        case arg_v.includes('premajor'): return 'premajor';
+        case arg_v.includes('prepatch'): prerelease_label = 'prepatch';
+        case arg_v.includes('preminor'): prerelease_label = 'preminor';
+        case arg_v.includes('premajor'): prerelease_label = 'premajor';
     }
-    return '';
+
+    // get the prerelease string on the version, by splitting just the first '-' char if it exisits
+    let possible_prerelease = semver[3] && patch + '.' + semver[3] || patch;
+    possible_prerelease = possible_prerelease && possible_prerelease.split(/-(.+)/);
+
+    if (possible_prerelease && possible_prerelease[1] && possible_prerelease[1].length) {
+        prerelease_value = possible_prerelease[1];
+        // update patch number
+        patch = possible_prerelease[0];
+    }
+
+    return { patch, prerelease_value, prerelease_label };
 }
 
 module.exports = {
