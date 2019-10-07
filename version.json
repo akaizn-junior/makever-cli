@@ -1,11 +1,10 @@
 {
-    "codename": "abnormal-fan",
+    "codename": "sore-diamond",
     "branch": "",
-    "full": "9.13.0-0",
-    "raw": "v9.13.0-0",
+    "full": "9.13.0-sore-diamond.0",
+    "raw": "v9.13.0-sore-diamond.0",
     "major": "9",
     "minor": "13",
     "patch": "0",
-    "prerelease": "0",
-    "preminor": true
+    "prerelease": "sore-diamond.0"
 }
