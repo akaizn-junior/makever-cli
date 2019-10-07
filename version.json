@@ -1,11 +1,11 @@
 {
-    "codename": "small-flood",
+    "codename": "foregoing-beat",
     "branch": "",
-    "full": "11.2.1-2",
-    "raw": "v11.2.1-2",
+    "full": "11.3.0-0",
+    "raw": "v11.3.0-0",
     "major": "11",
-    "minor": "2",
-    "patch": "1",
-    "prerelease": "2",
-    "premajor": true
+    "minor": "3",
+    "patch": "0",
+    "prerelease": "0",
+    "preminor": true
 }
