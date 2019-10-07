@@ -140,7 +140,7 @@ function get_prerelease(version) {
         case version.includes('preminor'): return 'preminor';
         case version.includes('premajor'): return 'premajor';
     }
-    return 'prerelease';
+    return '';
 }
 
 /**
@@ -185,7 +185,10 @@ async function run_npm_version(args) {
             patch = possible_prerelease[0];
         }
 
-        console.log(possible_prerelease);
+        // in case a prerelease option other than prerelease was used
+        const pre_option = get_prerelease(semver);
+        // add to contents
+        pre_option.length && (contents[pre_option] = true);
 
         // edit contents
         contents.full = semver.join('.');
