@@ -1,11 +1,10 @@
 {
-    "codename": "guiltless-creek",
+    "codename": "tasty-bridge",
     "branch": "",
-    "full": "11.4.0-2",
-    "raw": "v11.4.0-2",
+    "full": "11.4.0-3",
+    "raw": "v11.4.0-3",
     "major": "11",
     "minor": "4",
     "patch": "0",
-    "prerelease": "2",
-    "premajor": true
+    "prerelease": "3"
 }
