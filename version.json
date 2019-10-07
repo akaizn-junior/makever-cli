@@ -1,11 +1,11 @@
 {
-    "codename": "dysfunctional-british",
-    "branch": "x.0.0",
-    "full": "11.0.0-0",
-    "raw": "v11.0.0-0",
+    "codename": "enthusiastic-tie",
+    "branch": "11.x.0",
+    "full": "11.1.0-0",
+    "raw": "v11.1.0-0",
     "major": "11",
-    "minor": "0",
+    "minor": "1",
     "patch": "0",
     "prerelease": "0",
-    "premajor": true
+    "preminor": true
 }
