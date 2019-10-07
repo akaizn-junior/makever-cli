@@ -1,11 +1,11 @@
 {
-    "codename": "sweet-teller",
+    "codename": "tame-moat",
     "branch": "",
-    "full": "9.22.0-0",
-    "raw": "v9.22.0-0",
+    "full": "9.22.0-1",
+    "raw": "v9.22.0-1",
     "major": "9",
     "minor": "22",
     "patch": "0",
-    "prerelease": "0",
+    "prerelease": "1",
     "preminor": true
 }
