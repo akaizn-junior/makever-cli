@@ -6,7 +6,7 @@ const fs = require('fs');
 const exec = require('child_process').exec;
 const execute = require('util').promisify(exec);
 
-const { labelWColors, printDisplayFreq, done, end } = require('./Globals');
+const { userRoot, labelWColors, printDisplayFreq, done, end } = require('./Globals');
 const Print = require('./Print')(labelWColors, printDisplayFreq);
 
 // import Helpers for initialized cache
@@ -42,7 +42,7 @@ function show_help() {
 function dump_contents() {
     const cache_data = cache.read();
     if (cache_data && cache_data.filename) {
-        let res = fs.readFileSync(path.join(process.env.PWD, cache_data.directory, cache_data.filename), 'utf8');
+        let res = fs.readFileSync(path.join(userRoot, cache_data.directory, cache_data.filename), 'utf8');
         res && console.log(res);
     } else {
         Print.info('No contents to dump');

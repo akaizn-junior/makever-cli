@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const execute = require('util').promisify(require('child_process').exec);
 
-const { labelWColors, printDisplayFreq, errors, end } = require('./Globals');
+const { userRoot, labelWColors, printDisplayFreq, errors, end } = require('./Globals');
 const Sentence = require('./Rand').RandomSentence;
 const Print = require('./Print')(labelWColors, printDisplayFreq);
 
@@ -132,7 +132,7 @@ function get_valid_pkg_version(pkg_obj) {
  * @description Verifies if the project running is a git repository
  */
 function is_a_repo() {
-    return fs.existsSync(path.join(process.env.PWD, '.git'));
+    return fs.existsSync(path.join(userRoot, '.git'));
 }
 
 /**

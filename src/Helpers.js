@@ -4,14 +4,15 @@
 
 const fs = require('fs');
 const path = require('path');
+const os = require('os');
 
 // local
-const { labelWColors, printDisplayFreq, done, end } = require('./Globals');
+const { userRoot, labelWColors, printDisplayFreq, done, end } = require('./Globals');
 const Store = require('./Store');
 const Print = require('./Print')(labelWColors, printDisplayFreq);
 
 // project package.json
-const pkg = require(path.join(process.env.PWD, 'package.json'));
+const pkg = require(path.join(userRoot, 'package.json'));
 
 // validators
 const {
@@ -84,9 +85,9 @@ function write_to(directory, filename, data, dump = false) {
 
     if (!dump) {
         // create the directory if given
-        directory && fs.mkdirSync(path.join(process.env.PWD, directory), { recursive: true });
+        directory && fs.mkdirSync(path.join(userRoot, directory), { recursive: true });
         // async write
-        fs.writeFile(path.join(process.env.PWD, directory, filename), contents, err => {
+        fs.writeFile(path.join(userRoot, directory, filename), contents, err => {
             if (err) { end(); }
             // store relevant data for makever
             Store.add('codename', data.codename);
@@ -114,7 +115,7 @@ function get_current_version_file(cache_data) {
         return (
             cache_data
             && cache_data.filename
-            && require(path.join(process.env.PWD, cache_data.directory, cache_data.filename))
+            && require(path.join(userRoot, cache_data.directory, cache_data.filename))
         );
     } catch (err) {
         Print.error(err);

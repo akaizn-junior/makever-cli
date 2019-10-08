@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 // globals
-const { end } = require('./Globals');
+const { module_root, end } = require('./Globals');
 
 const CACHE_NAME = '.store';
 let CACHE = {};
@@ -34,7 +34,7 @@ function is_valid_cache_dir(cache_dir) {
  */
 function init(cache_dir = '') {
     // create the directory if given
-    is_valid_cache_dir(cache_dir) && fs.mkdirSync(path.join(process.env.PWD, cache_dir), { recursive: true });
+    is_valid_cache_dir(cache_dir) && fs.mkdirSync(path.join(module_root, cache_dir), { recursive: true });
     // test if a dir was given and silently validate it
     cache_dir = is_valid_cache_dir(cache_dir) ? cache_dir : __dirname;
     // update global var
