@@ -99,7 +99,7 @@ function write_to(directory, filename, data, dump = false) {
             'prerelease' in data && Store.add('prerelease', data.prerelease);
             'premajor' in data && Store.add('premajor', data.premajor);
             'preminor' in data && Store.add('preminor', data.preminor);
-            'prepatch' in data && Store.add('premajor', data.prepatch);
+            'prepatch' in data && Store.add('prepatch', data.prepatch);
         });
     } else {
         console.log(contents);
@@ -258,8 +258,8 @@ function replace_placeholders(str, replacers = {}) {
 }
 
 /**
- * @description Verifies if the -v argument includes prerelease options.
- * And separate the prerelease values from the regular semver value.
+ * @description Verifies if the -v argument or cache includes prerelease data.
+ * And separates the prerelease values from the regular semver value.
  * @param {array} semver The current semver version
  * @param {string} arg_v Value read for '-v' option
  */
