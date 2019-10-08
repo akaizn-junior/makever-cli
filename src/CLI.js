@@ -180,9 +180,6 @@ async function run_npm_version(args) {
             prerelease_label
         } = get_prerelease(semver, args['-v']);
 
-        console.log(prerelease_label);
-        console.log(prerelease_value);
-
         // edit contents
         contents.full = semver.join('.');
         contents.raw = 'v' + contents.full;
