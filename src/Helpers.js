@@ -130,11 +130,12 @@ function get_contents(args) {
     // read cache data
     const cache_data = Store.read();
 
-    // is input output same to current file?
+    // is 'input' output same to current file?
     const is_same_o = is_existing_file(args, cache_data);
+    const is_valid_file = cache_data && is_valid_version_file(get_current_version_file(cache_data));
 
     // blows up if version file exists
-    if (is_valid_version_file(get_current_version_file(cache_data)) && !args['-f'] && is_same_o) {
+    if (is_valid_file && !args['-f'] && is_same_o) {
         Print.log('A version file already exists for this version');
         Print.log('Use "-f" to overwrite the existing version file or "-o" to write to a new file');
         Print.tip('see "makever -h" for command options');
@@ -274,7 +275,7 @@ function get_prerelease(semver, arg_v = '') {
     arg_v.includes('premajor') && (prerelease_label = 'premajor');
 
     // get the prerelease string on the version, by splitting just the first '-' char if it exisits
-    let possible_prerelease = semver[3] && patch + '.' + semver[3] || patch;
+    let possible_prerelease = semver[3] && (patch + '.' + semver[3]) || patch;
     possible_prerelease = possible_prerelease && possible_prerelease.split(/-(.+)/);
 
     if (possible_prerelease && possible_prerelease[1] && possible_prerelease[1].length) {

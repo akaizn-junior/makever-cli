@@ -128,8 +128,16 @@ function run(args) {
  */
 function run_tag(args) {
     const cache_data = cache.read();
-    const version = cache_data && cache_data.version.join('.') || valid_pkg_version;
-    const codename = !args['-c'] ? cache_data && cache_data.codename : is_valid_codename(args['-c']);
+    const version = (
+        cache_data
+        && cache_data.version.join('.')
+        || valid_pkg_version
+    );
+    const codename = (
+        !args['-c']
+            ? cache_data && cache_data.codename
+            : is_valid_codename(args['-c'])
+    );
 
     // verify if the current repo has a clean tree
     is_clean_repo(tag_clean_repo({ version, codename, tag_m: args['-m'] }));
@@ -143,7 +151,6 @@ function run_tag(args) {
  * @param {object} args command arguments
  */
 async function run_npm_version(args) {
-    const cache_data = cache.read();
     const { dir, file, contents } = get_contents(args);
 
     // commit message for the version update
@@ -167,7 +174,11 @@ async function run_npm_version(args) {
         const branch = infer_branch(semver);
 
         // correct patch?
-        const { patch, prerelease_value, prerelease_label } = get_prerelease(semver, args['-v']);
+        const {
+            patch,
+            prerelease_value,
+            prerelease_label
+        } = get_prerelease(semver, args['-v']);
 
         // edit contents
         contents.full = semver.join('.');
@@ -182,7 +193,11 @@ async function run_npm_version(args) {
         // generate version file
         write_to(dir, file, contents, args['--std']);
     } catch (err) {
-        const { cmd, stderr } = err && 'cmd' in err && 'stderr' in err ? err : { cmd: '', stderr: '' };
+        const { cmd, stderr } = (
+            err && 'cmd' in err && 'stderr' in err
+                ? err
+                : { cmd: '', stderr: '' }
+        );
         Print.error(`"${cmd}" passed to underlying process has failed`);
         console.error(stderr);
         Print.tip('see "makever -h"');
@@ -202,7 +217,13 @@ function run_dry(args) {
     if (args['-v']) {
         const version_upgrade = args['-v'];
         const semver = contents.full.split('.');
-        let prerelease = args['-v'] && args['-v'].includes('--preid=') && args['-v'].split('--preid=')[1] || '';
+        let prerelease = (
+            args['-v']
+            && args['-v'].includes('--preid=')
+            && args['-v'].split('--preid=')[1]
+            || ''
+        );
+
         prerelease = replace_placeholders(prerelease, { codename: contents.codename });
 
         switch (true) {
