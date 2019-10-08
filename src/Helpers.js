@@ -99,7 +99,7 @@ function write_to(directory, filename, data, dump = false) {
             'prerelease' in data && Store.add('prerelease', data.prerelease);
             'premajor' in data && Store.add('premajor', data.premajor);
             'preminor' in data && Store.add('preminor', data.preminor);
-            'prepatch' in data && Store.add('premajor', data.prepatch);
+            'prepatch' in data && Store.add('prepatch', data.prepatch);
         });
     } else {
         console.log(contents);
@@ -258,8 +258,8 @@ function replace_placeholders(str, replacers = {}) {
 }
 
 /**
- * @description Verifies if the -v argument includes prerelease options.
- * And separate the prerelease values from the regular semver value.
+ * @description Verifies if the -v argument or cache includes prerelease data.
+ * And separates the prerelease values from the regular semver value.
  * @param {array} semver The current semver version
  * @param {string} arg_v Value read for '-v' option
  */
@@ -285,6 +285,9 @@ function get_prerelease(semver, arg_v = '') {
         patch = possible_prerelease[0];
     }
 
+    console.log(prerelease_label);
+    console.log(prerelease_value);
+
     // check the cache for this data if none was generated
     !prerelease_value.length && cache_data && 'prerelease' in cache_data
         && (prerelease_value = cache_data.prerelease);
@@ -294,6 +297,9 @@ function get_prerelease(semver, arg_v = '') {
         && (prerelease_label = 'preminor');
     !prerelease_label.length && cache_data && 'prepatch' in cache_data
         && (prerelease_label = 'prepatch');
+
+    console.log(prerelease_label);
+    console.log(prerelease_value);
 
     return { patch, prerelease_value, prerelease_label };
 }
