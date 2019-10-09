@@ -229,13 +229,13 @@ function dry_run_messages(args, data) {
     // verifies that the output is quiet to mock running in Shh mode
     args['-q'] && Print.log('Ran in "Shh mode". The command runs silently');
 
-    // verifies that the output is not quiet and mock using force option
-    !args['-q'] && args['-f']
-        && Print.log('Force ran this command. "-f" will only force certain operations,\notherwise it is ignored');
-
     // if the output is not quiet
     // dump data to stdout for the dry run
     !args['-q'] && console.log(contents);
+
+    // verifies that the output is not quiet and mock using force option
+    !args['-q'] && args['-f']
+        && Print.log('Force ran this command. "-f" will only force certain operations,\notherwise it is ignored');
 }
 
 /**

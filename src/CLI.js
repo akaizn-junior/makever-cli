@@ -219,7 +219,7 @@ async function run_npm_version(args) {
 function run_dry(args) {
     const { dir, file, contents } = get_contents(args);
 
-    // mock npm verison run
+    // mock npm version run
     if (args['-v']) {
         const version_upgrade = args['-v'];
         const semver = contents.full.split('.');
@@ -286,5 +286,6 @@ function run_dry(args) {
     args['-t']
         && run_dry(args);
     // inform the user anytime force flag is used
-    args['-f'] && Print.log('Using force flag!? Level of confidence +100', 'black.white');
+    args['-f'] && !args['-t']
+        && Print.log('Using force flag!? Level of confidence +100', 'black.white');
 }(ARGUMENTS_DATA));
