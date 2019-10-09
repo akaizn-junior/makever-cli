@@ -35,9 +35,6 @@ function Pretty(msg, colors = 'white.black', label = '', type = 'log', displayFr
     // verify if it can print message
     const canDisplay = rand === displayFreq && !ADDONS['quiet'];
 
-    // don't use colors
-    const isTransparent = colors === 'transparent';
-
     const fgColors = {
         'black': '\33[30;',
         'bright-green': '\33[92;',
@@ -64,9 +61,9 @@ function Pretty(msg, colors = 'white.black', label = '', type = 'log', displayFr
         !label.length && canDisplay
             && console[type]('%s%s%s %s', fgColors[fg], bgColors[bg], msg, RESET_COLOR);
     } else {
-        label.length && isTransparent && canDisplay
+        label.length && canDisplay
             && console[type]('%s %s %s', label, msg, RESET_COLOR);
-        !label.length && isTransparent && canDisplay
+        !label.length && canDisplay
             && console[type]('%s %s', msg, RESET_COLOR);
     }
 }
@@ -102,14 +99,14 @@ const Print = (label, tipDisplayFreq) => ({
      * @param {string} msg The message to write
      */
     error: msg => {
-        Pretty(`ERR!${RESET_COLOR} ${msg}`, 'red.black', label, 'error');
+        Pretty(`err!${RESET_COLOR} ${msg}`, 'red.black', label, 'error');
     },
     /**
      * @description pretty tip
      * @param {string} msg The message to write
      */
     tip: msg => {
-        Pretty(`TIP!${RESET_COLOR} ${msg}`, 'green.black', label, 'log', tipDisplayFreq);
+        Pretty(`tip!${RESET_COLOR} ${msg}`, 'green.black', label, 'log', tipDisplayFreq);
     },
     /**
      * @description pretty success message
@@ -130,7 +127,7 @@ const Print = (label, tipDisplayFreq) => ({
      * @param {string} msg The message to write
      * @param {string} colors The foreground and the background colors separated by a "."
      */
-    log: (msg, colors = 'transparent') => {
+    log: (msg, colors = '') => {
         Pretty(msg, colors, label);
     },
     /**

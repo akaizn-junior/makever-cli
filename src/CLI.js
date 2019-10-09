@@ -285,4 +285,6 @@ function run_dry(args) {
         && run_tag(args);
     args['-t']
         && run_dry(args);
+    // inform the user anytime force flag is used
+    args['-f'] && Print.log('Using force flag!? Level of confidence +100', 'black.white');
 }(ARGUMENTS_DATA));
