@@ -62,7 +62,7 @@ function tag_clean_repo(data) {
         if (result && !result.stderr.length && !result.stdout.length || force_flag) {
             try {
                 const tag_msg = (
-                    replace_placeholders(tag_m || '', { codename, version })
+                    replace_placeholders(tag_m, { codename, version })
                     || `Codename ${codename}`
                 );
                 const { stdout, stderr } = await execute(`git tag -f -a "v${version}" -m "${tag_msg}"`);

@@ -144,7 +144,7 @@ function run_tag(args) {
     is_clean_repo(tag_clean_repo({
         version,
         codename,
-        tag_m: args['-m'],
+        tag_m: args['-m'] || '',
         force_flag: args['-f'] || false
     }));
 }
