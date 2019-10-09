@@ -56,10 +56,10 @@ function dump_contents() {
  * @param {object} data Generated data needed by the handler
  */
 function tag_clean_repo(data) {
-    const { version, codename, tag_m } = data;
+    const { version, codename, tag_m, force_flag } = data;
 
     return async (result) => {
-        if (result && !result.stderr.length && !result.stdout.length) {
+        if (result && !result.stderr.length && !result.stdout.length || force_flag) {
             try {
                 const tag_msg = (
                     replace_placeholders(tag_m || '', { codename, version })
@@ -104,12 +104,12 @@ function tag_clean_repo(data) {
         }
 
         if (result && result.stderr.length) {
-            Print.log('Something went wrong. Could not tag last commit');
+            Print.log('Something went wrong. Could not tag repo');
             console.error(result.stderr);
             end();
         }
 
-        if (result && result.stdout.length) {
+        if (result && result.stdout.length && !force_flag) {
             Print.log('Cannot tag a repo with current changes');
             Print.log('Please commit or stash your current changes before tagging');
             done();

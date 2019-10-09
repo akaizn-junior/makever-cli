@@ -133,6 +133,7 @@ function run_tag(args) {
         && cache_data.version.join('.')
         || valid_pkg_version
     );
+
     const codename = (
         !args['-c']
             ? cache_data && cache_data.codename
@@ -140,7 +141,12 @@ function run_tag(args) {
     );
 
     // verify if the current repo has a clean tree
-    is_clean_repo(tag_clean_repo({ version, codename, tag_m: args['-m'] }));
+    is_clean_repo(tag_clean_repo({
+        version,
+        codename,
+        tag_m: args['-m'],
+        force_flag: args['-f'] || false
+    }));
 }
 
 /**
