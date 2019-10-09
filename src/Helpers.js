@@ -178,20 +178,15 @@ function get_contents(args) {
 
     // prerelease data
     prerelease_value.length && (contents['prerelease'] = prerelease_value);
+
     // only get the prerelease label at this stage if option -v is not used
     !args['-v'] && prerelease_label.length && (contents[prerelease_label] = true);
 
-    // verify if the user passed a diretory or just a filename
-    let [...nested] = filename.includes('/') ? filename.split('/') : ['', filename];
-
     // get the actual filename
-    const file = nested[nested.length - 1];
+    const file = path.basename(filename) || '';
 
-    // erase the filename from the list of possible nested directories
-    nested[nested.length - 1] = '';
-
-    // update dir if path has nested directories
-    let dir = path.join(...nested);
+    // get the correct dir even if path has nested directories
+    const dir = path.dirname(filename) || '';
 
     return { dir, file, contents };
 }
@@ -232,6 +227,18 @@ function dry_run_messages(args, data) {
     // if the output is not quiet
     // dump data to stdout for the dry run
     !args['-q'] && console.log(contents);
+
+    // verifies that the output is not quiet and mock running in npm version with a message
+    !args['-q'] && args['-m'] && args['-v']
+        && Print.log(
+            'npm version will tag the version with the message "'
+            + replace_placeholders(
+                args['-m'], {
+                codename: contents.codename,
+                version: contents.raw
+            })
+            + '"'
+        );
 
     // verifies that the output is not quiet and mock using force option
     !args['-q'] && args['-f']
