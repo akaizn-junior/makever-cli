@@ -1,9 +1,11 @@
 {
-    "codename": "prime",
-    "branch": "x.0.0",
-    "full": "1.0.0",
-    "raw": "v1.0.0",
-    "major": "1",
-    "minor": "0",
-    "patch": "0"
+    "codename": "tender-tense-fiberglass",
+    "branch": "",
+    "full": "11.6.1-1",
+    "raw": "v11.6.1-1",
+    "major": "11",
+    "minor": "6",
+    "patch": "1",
+    "prerelease": "1",
+    "preminor": true
 }
