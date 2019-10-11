@@ -9,7 +9,8 @@ const RESET_COLOR = '\33[0m';
 // Addons with more functions for this module
 const ADDONS = {
     // A flag for quiet mode; default: false
-    'quiet': false
+    'quiet': false,
+    'noColor': false
 };
 
 // Helpers
@@ -35,6 +36,9 @@ function Pretty(msg, colors = 'white.black', label = '', type = 'log', displayFr
     // verify if it can print message
     const canDisplay = rand === displayFreq && !ADDONS['quiet'];
 
+    // verify if can print with colors
+    const wColors = !ADDONS['noColor'];
+
     const fgColors = {
         'black': '\33[30;',
         'bright-green': '\33[92;',
@@ -55,15 +59,16 @@ function Pretty(msg, colors = 'white.black', label = '', type = 'log', displayFr
         'gray': '100m'
     };
 
-    if (fgColors[fg] && bgColors[bg]) {
+    if (wColors && fgColors[fg] && bgColors[bg]) {
         label.length && canDisplay
             && console[type]('%s %s%s%s %s', label, fgColors[fg], bgColors[bg], msg, RESET_COLOR);
+
         !label.length && canDisplay
             && console[type]('%s%s%s %s', fgColors[fg], bgColors[bg], msg, RESET_COLOR);
     } else {
-        label.length && canDisplay
+        wColors && label.length && canDisplay
             && console[type]('%s %s %s', label, msg, RESET_COLOR);
-        !label.length && canDisplay
+        !label.length || !wColors && canDisplay
             && console[type]('%s %s', msg, RESET_COLOR);
     }
 }
@@ -85,6 +90,16 @@ function Scan(msg, opts, cb) {
     });
 }
 
+/**
+ * @description Creates the correct message depending on ADDONS
+ * @param {string} prefix The message prefix depending on the function
+ * @param {string} msg The message to show
+ */
+function getMessage(prefix, msg) {
+    let name = !ADDONS['noColor'] ? prefix + RESET_COLOR + ' ' : '';
+    return `${name}${msg}`;
+}
+
 // Interface
 
 /**
@@ -99,28 +114,28 @@ const Print = (label, tipDisplayFreq) => ({
      * @param {string} msg The message to write
      */
     error: msg => {
-        Pretty(`err!${RESET_COLOR} ${msg}`, 'red.black', label, 'error');
+        Pretty(getMessage('err!', msg), 'red.black', label, 'error');
     },
     /**
      * @description pretty tip
      * @param {string} msg The message to write
      */
     tip: msg => {
-        Pretty(`tip!${RESET_COLOR} ${msg}`, 'green.black', label, 'log', tipDisplayFreq);
+        Pretty(getMessage('tip!', msg), 'green.black', label, 'log', tipDisplayFreq);
     },
     /**
      * @description pretty success message
      * @param {string} msg The message to write
      */
     success: msg => {
-        Pretty(`success!${RESET_COLOR} ${msg}`, 'black.green', label);
+        Pretty(getMessage('success!', msg), 'black.green', label);
     },
     /**
      * @description pretty info
      * @param {string} msg The message to write
      */
     info: msg => {
-        Pretty(`info${RESET_COLOR} ${msg}`, 'blue.black', label, 'info', tipDisplayFreq);
+        Pretty(getMessage('info', msg), 'blue.black', label, 'info', tipDisplayFreq);
     },
     /**
      * @description pretty log
@@ -137,7 +152,7 @@ const Print = (label, tipDisplayFreq) => ({
      * @param {string} opts Options for answers; default: '(y/n)'
      */
     ask: (msg, cb, opts = '(y/n)') => {
-        process.stdout.write(label + ' ' + RESET_COLOR);
+        !ADDONS['noColor'] && process.stdout.write(label + ' ' + RESET_COLOR);
         Scan(msg, opts, ans => {
             cb(ans.toString().trim());
         });
