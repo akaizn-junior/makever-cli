@@ -60,11 +60,11 @@ function get_data_to_append(__args__) {
 function validate_args(__args__, definedArgs, longFormArgs, failed) {
     const len = __args__.length;
     // when to start counting possible valid arguments
-    const POS_0 = 2;
+    const pos_0 = 2;
     // gathered if OPERATOR.append is used
     const data_to_append = get_data_to_append(__args__);
 
-    for (let i = POS_0; i < len; i++) {
+    for (let i = pos_0; i < len; i++) {
         let current_arg_read = __args__[i];
         // was OPERATOR.equal used to pass a value?
         let actual_arg = current_arg_read.split(OPERATOR.equal)[0];
@@ -96,7 +96,7 @@ function validate_args(__args__, definedArgs, longFormArgs, failed) {
                     add_arg(actual_arg, true, success);
                     break;
                 case definedArgs[actual_arg].flag && !combine:
-                    if (i === POS_0) add_arg(actual_arg, true, success);
+                    if (i === pos_0) add_arg(actual_arg, true, success);
                     // args that cannot be combined w/ others will end the process
                     done();
                     break;
