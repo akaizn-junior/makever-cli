@@ -12,10 +12,8 @@ const Print = require('./Print')(labelWColors, printDisplayFreq);
  * @param {string} filename The name of the file to generate
  */
 function is_valid_filename(args, filename) {
-    let possible_name = args['-o'] || filename;
-
     const test = RegExp(/([\w|\w\/]){3,}/);
-
+    let possible_name = args['-o'] || filename;
     const [name, ext] = possible_name.split('.');
 
     if (args['-o'] && args['--std']) {
