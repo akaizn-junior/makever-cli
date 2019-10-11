@@ -1,11 +1,10 @@
 {
-    "codename": "tender-tense-fiberglass",
+    "codename": "elderly-owner",
     "branch": "",
-    "full": "11.6.1-1",
-    "raw": "v11.6.1-1",
+    "full": "11.8.11",
+    "raw": "v11.8.11",
     "major": "11",
-    "minor": "6",
-    "patch": "1",
-    "prerelease": "1",
-    "preminor": true
+    "minor": "8",
+    "patch": "11",
+    "prerelease": ""
 }
