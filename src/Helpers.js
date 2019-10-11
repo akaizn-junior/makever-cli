@@ -257,10 +257,10 @@ function replace_placeholders(str, replacers = {}) {
     const codename = replacers && replacers.codename || '';
     // replace version placeholders with '%s' and let npm version do the rest
     let parsed = str
-        .replace('%codename', codename)
-        .replace('%c', codename)
-        .replace('%v', version)
-        .replace('%version', version);
+        .replace(/\%codename/g, codename)
+        .replace(/\%c/g, codename)
+        .replace(/\%v/g, version)
+        .replace(/\%version/, version);
     return parsed;
 }
 

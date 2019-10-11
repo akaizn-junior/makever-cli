@@ -30,6 +30,15 @@
             "args": ["--tag", "-m", "Codename %c for Version %v"],
             "console": "integratedTerminal",
             "trace": true
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "makever -v",
+            "program": "${workspaceFolder}/src/CLI.js",
+            "args": ["-f", "-v", "prerelease --preid=%c", "-m", "Codename %c for Version %v"],
+            "console": "integratedTerminal",
+            "trace": true
         }
     ]
 }

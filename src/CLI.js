@@ -100,8 +100,8 @@ const LONG_FORM_ARGS_MAP = {
 // Evaluate command line arguments
 // ++++++++++++++++++++++++++++++++++++++++++++++++
 
-const ARGUMENTS_DATA = CAR(DEFINED_ARGS, LONG_FORM_ARGS_MAP, (err) => {
-    Print.error(err);
+const ARGUMENTS_DATA = CAR(DEFINED_ARGS, LONG_FORM_ARGS_MAP, (stderr) => {
+    Print.error(stderr);
     Print.tip('see accepted arguments by: "makever -h"');
 });
 
@@ -164,17 +164,25 @@ async function run_npm_version(args) {
     const { dir, file, contents } = get_contents(args);
 
     // commit message for the version update
-    const version_m = (
-        replace_placeholders(args['-m'] || '', { codename: contents.codename })
-        || 'Update to %s, codename ' + contents.codename
+    const version_m = (replace_placeholders(
+        args['-m'] || 'Update to %s, codename %c'
+        , { codename: contents.codename })
     );
 
-    try {
-        const parsed = replace_placeholders(args['-v'], { codename: contents.codename });
-        const { stderr, stdout } = await execute('npm version ' + parsed + ' -m "' + version_m + '"');
+    const parsed = replace_placeholders(args['-v'], { codename: contents.codename });
+    const force_flag = args['-f'] ? ' --force' : '';
 
-        if (stderr.length) {
-            Print.error(`"${cmd_args}" is not a valid option for 'npm version'`);
+    // run npm version with correct options
+    let script = parsed.includes('-m')
+        ? 'npm version ' + parsed + force_flag
+        : 'npm version ' + parsed + ' -m "' + version_m + '"' + force_flag;
+
+    try {
+        const { stderr, stdout } = await execute(script);
+
+        if (stderr.length && !stderr.includes('--force')) {
+            Print.error(`'npm version' failed`);
+            console.log(stderr);
             Print.tip('see "makever -h"');
             Print.tip('see https://docs.npmjs.com/cli/version');
             end();
@@ -203,6 +211,7 @@ async function run_npm_version(args) {
         // generate version file
         write_to(dir, file, contents, { dump: args['--std'], quiet: args['-q'] });
     } catch (err) {
+        console.log(err);
         const { cmd, stderr } = (
             err && 'cmd' in err && 'stderr' in err
                 ? err
