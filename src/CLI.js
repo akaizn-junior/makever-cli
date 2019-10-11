@@ -76,6 +76,9 @@ const DEFINED_ARGS = {
     },
     '-f': {
         flag: true
+    },
+    '--no-color': {
+        flag: true
     }
 };
 
@@ -107,6 +110,7 @@ const ARGUMENTS_DATA = CAR(DEFINED_ARGS, LONG_FORM_ARGS_MAP, (err) => {
 // +++++++++++++++++++++++++++++++++++++
 
 Print.extend('quiet', ARGUMENTS_DATA['-q'] && !ARGUMENTS_DATA['-t']);
+Print.extend('noColor', ARGUMENTS_DATA['--no-color']);
 
 // +++++++++++++++++++++++++++++++++++++
 // command runners
@@ -119,7 +123,7 @@ Print.extend('quiet', ARGUMENTS_DATA['-q'] && !ARGUMENTS_DATA['-t']);
 function run(args) {
     const { dir, file, contents } = get_contents(args);
     // generate version file
-    write_to(dir, file, contents, args['--std']);
+    write_to(dir, file, contents, { dump: args['--std'], quiet: args['-q'] });
 }
 
 /**
@@ -197,7 +201,7 @@ async function run_npm_version(args) {
         prerelease_label.length && (contents[prerelease_label] = true);
 
         // generate version file
-        write_to(dir, file, contents, args['--std']);
+        write_to(dir, file, contents, { dump: args['--std'], quiet: args['-q'] });
     } catch (err) {
         const { cmd, stderr } = (
             err && 'cmd' in err && 'stderr' in err

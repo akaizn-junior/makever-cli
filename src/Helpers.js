@@ -76,11 +76,12 @@ function infer_branch(version) {
  * @param {string} directory The file's location
  * @param {string} filename The file to write to
  * @param {object} data The data to write to the file and cache
- * @param {boolean} dump A flag for dumping contents to standard out; default false
+ * @param {boolean} flags Used for toggling functionality in this function
  */
-function write_to(directory, filename, data, dump = false) {
+function write_to(directory, filename, data, flags) {
     const contents = JSON.stringify(data, null, jsontab);
     const semver = data.full.split('.');
+    const { dump, quiet } = flags;
 
     if (!dump) {
         // create the directory if given
@@ -101,7 +102,7 @@ function write_to(directory, filename, data, dump = false) {
             'prepatch' in data && Store.add('premajor', data.prepatch);
         });
     } else {
-        console.log(contents);
+        !quiet && console.log(contents);
     }
 }
 

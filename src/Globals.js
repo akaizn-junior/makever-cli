@@ -84,7 +84,7 @@ module.exports = {
     end,
     getRandomInt: get_random_int,
     labelWColors,
-    printDisplayFreq: 5,
+    printDisplayFreq: 0,
     userRoot: get_user_project_root(),
     module_root,
     jsontab: 4
