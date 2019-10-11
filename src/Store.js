@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 // globals
-const { module_root, end } = require('./Globals');
+const { module_root, end, jsontab } = require('./Globals');
 
 const CACHE_NAME = '.store';
 let CACHE = {};
@@ -14,7 +14,7 @@ let CACHE_DIR = __dirname;
  * @param {string} data Data to write to the cache
  */
 function write(data) {
-    fs.writeFileSync(path.join(CACHE_DIR, CACHE_NAME), JSON.stringify(data, null, 4));
+    fs.writeFileSync(path.join(CACHE_DIR, CACHE_NAME), JSON.stringify(data, null, jsontab));
 }
 
 /**

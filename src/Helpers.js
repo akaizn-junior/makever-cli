@@ -4,10 +4,9 @@
 
 const fs = require('fs');
 const path = require('path');
-const os = require('os');
 
 // local
-const { userRoot, labelWColors, printDisplayFreq, done, end } = require('./Globals');
+const { userRoot, labelWColors, printDisplayFreq, jsontab, done, end } = require('./Globals');
 const Store = require('./Store');
 const Print = require('./Print')(labelWColors, printDisplayFreq);
 
@@ -80,7 +79,7 @@ function infer_branch(version) {
  * @param {boolean} dump A flag for dumping contents to standard out; default false
  */
 function write_to(directory, filename, data, dump = false) {
-    const contents = JSON.stringify(data, null, 4);
+    const contents = JSON.stringify(data, null, jsontab);
     const semver = data.full.split('.');
 
     if (!dump) {

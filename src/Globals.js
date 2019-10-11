@@ -86,5 +86,6 @@ module.exports = {
     labelWColors,
     printDisplayFreq: 5,
     userRoot: get_user_project_root(),
-    module_root
+    module_root,
+    jsontab: 4
 };
