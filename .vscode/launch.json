@@ -7,8 +7,27 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Debug Node app",
+            "name": "makever default -c",
             "program": "${workspaceFolder}/src/CLI.js",
+            "args": ["-f"],
+            "console": "integratedTerminal",
+            "trace": true
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "makever -o",
+            "program": "${workspaceFolder}/src/CLI.js",
+            "args": ["-f", "-o", "output"],
+            "console": "integratedTerminal",
+            "trace": true
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "makever --tag",
+            "program": "${workspaceFolder}/src/CLI.js",
+            "args": ["--tag", "-m", "Codename %c for Version %v"],
             "console": "integratedTerminal",
             "trace": true
         }
