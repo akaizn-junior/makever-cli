@@ -15,11 +15,11 @@ const pkg = require(path.join(userRoot, 'package.json'));
 
 // validators
 const {
-    is_valid_filename,
-    is_valid_codename,
-    is_valid_version_file,
-    is_existing_file,
-    get_valid_pkg_version
+	is_valid_filename,
+	is_valid_codename,
+	is_valid_version_file,
+	is_existing_file,
+	get_valid_pkg_version
 } = require('./Validators');
 
 // +++++++++++++++++++++++++++++++++++++++++
@@ -35,40 +35,40 @@ Store.init();
  * @param {array} version The current version as an array of numbers
  */
 function infer_branch(version) {
-    const cache_data = Store.read();
-    let [major, minor, patch] = version;
-    major = parseInt(major);
-    minor = parseInt(minor);
-    patch = parseInt(patch);
+	const cache_data = Store.read();
+	let [major, minor, patch] = version;
+	major = parseInt(major, 10);
+	minor = parseInt(minor, 10);
+	patch = parseInt(patch, 10);
 
-    // branches strings
-    const major_br = ['x', minor, patch].join('.');
-    const minor_br = [major, 'x', patch].join('.');
-    const patch_br = [major, minor, 'x'].join('.');
+	// branches strings
+	const major_br = ['x', minor, patch].join('.');
+	const minor_br = [major, 'x', patch].join('.');
+	const patch_br = [major, minor, 'x'].join('.');
 
-    // if there is saved branch data
-    if (cache_data && cache_data.branch) {
-        let [mj, mi, pa] = cache_data.version;
-        mj = parseInt(mj);
-        mi = parseInt(mi);
-        pa = parseInt(pa);
+	// if there is saved branch data
+	if (cache_data && cache_data.branch) {
+		let [mj, mi, pa] = cache_data.version;
+		mj = parseInt(mj, 10);
+		mi = parseInt(mi, 10);
+		pa = parseInt(pa, 10);
 
-        if (major > mj && minor === mi && patch === pa) return major_br;
-        if (minor > mi && major === mj && patch === pa) return minor_br;
-        if (patch > pa && major === mj && minor === mi) return patch_br;
-    } else {
-        if (minor === 0 && patch === 0) return major_br;
-        if (major === 0 && patch === 0) return minor_br;
-        if (major === 0 && minor === 0) return patch_br;
-    }
+		if (major > mj && minor === mi && patch === pa) return major_br;
+		if (minor > mi && major === mj && patch === pa) return minor_br;
+		if (patch > pa && major === mj && minor === mi) return patch_br;
+	} else {
+		if (minor === 0 && patch === 0) return major_br;
+		if (major === 0 && patch === 0) return minor_br;
+		if (major === 0 && minor === 0) return patch_br;
+	}
 
-    // verify if current branch has not changed
-    if (cache_data.version && version.join('.') === cache_data.version.join('.')) {
-        return cache_data.branch;
-    }
+	// verify if current branch has not changed
+	if (cache_data.version && version.join('.') === cache_data.version.join('.')) {
+		return cache_data.branch;
+	}
 
-    // otherwise can't infer
-    return '';
+	// otherwise can't infer
+	return '';
 }
 
 /**
@@ -79,31 +79,33 @@ function infer_branch(version) {
  * @param {boolean} flags Used for toggling functionality in this function
  */
 function write_to(directory, filename, data, flags) {
-    const contents = JSON.stringify(data, null, jsontab);
-    const semver = data.full.split('.');
-    const { dump, quiet } = flags;
+	const contents = JSON.stringify(data, null, jsontab);
+	const semver = data.full.split('.');
+	const { dump, quiet } = flags;
 
-    if (!dump) {
-        // create the directory if given
-        directory && fs.mkdirSync(path.join(userRoot, directory), { recursive: true });
-        // async write
-        fs.writeFile(path.join(userRoot, directory, filename), contents, err => {
-            if (err) { end(); }
-            // store relevant data for makever
-            Store.add('codename', data.codename);
-            Store.add('directory', directory);
-            Store.add('filename', filename);
-            Store.add('version', semver);
-            Store.add('branch', data.branch);
-            // add these values to the store if they exist
-            'prerelease' in data && Store.add('prerelease', data.prerelease);
-            'premajor' in data && Store.add('premajor', data.premajor);
-            'preminor' in data && Store.add('preminor', data.preminor);
-            'prepatch' in data && Store.add('premajor', data.prepatch);
-        });
-    } else {
-        !quiet && console.log(contents);
-    }
+	if (!dump) {
+		// create the directory if given
+		directory && fs.mkdirSync(path.join(userRoot, directory), { recursive: true });
+		// async write
+		fs.writeFile(path.join(userRoot, directory, filename), contents, err => {
+			if (err) {
+				end();
+			}
+			// store relevant data for makever
+			Store.add('codename', data.codename);
+			Store.add('directory', directory);
+			Store.add('filename', filename);
+			Store.add('version', semver);
+			Store.add('branch', data.branch);
+			// add these values to the store if they exist
+			'prerelease' in data && Store.add('prerelease', data.prerelease);
+			'premajor' in data && Store.add('premajor', data.premajor);
+			'preminor' in data && Store.add('preminor', data.preminor);
+			'prepatch' in data && Store.add('premajor', data.prepatch);
+		});
+	} else {
+		!quiet && console.log(contents);
+	}
 }
 
 /**
@@ -111,16 +113,16 @@ function write_to(directory, filename, data, flags) {
  * @param {object} cache_data Current saved data in store
  */
 function get_current_version_file(cache_data) {
-    try {
-        return (
-            cache_data
+	try {
+		return (
+			cache_data
             && cache_data.filename
             && require(path.join(userRoot, cache_data.directory, cache_data.filename))
-        );
-    } catch (err) {
-        Print.error(err);
-        return false;
-    }
+		);
+	} catch (err) {
+		Print.error(err);
+		return false;
+	}
 }
 
 /**
@@ -128,67 +130,67 @@ function get_current_version_file(cache_data) {
  * @param {object} args Data from arguments read from the command line
  */
 function get_contents(args) {
-    // read cache data
-    const cache_data = Store.read();
+	// read cache data
+	const cache_data = Store.read();
 
-    // is 'input' output same to current file?
-    const is_same_o = is_existing_file(args, cache_data);
-    const is_valid_file = cache_data && is_valid_version_file(get_current_version_file(cache_data));
+	// is 'input' output same to current file?
+	const is_same_o = is_existing_file(args, cache_data);
+	const is_valid_file = cache_data && is_valid_version_file(get_current_version_file(cache_data));
 
-    // blows up if version file exists
-    if (is_valid_file && !args['-f'] && is_same_o) {
-        Print.log('A version file already exists for this version');
-        Print.log('Use "-f" to overwrite the existing version file or "-o" to write to a new file');
-        Print.tip('see "makever -h" for command options');
-        done();
-    }
+	// blows up if version file exists
+	if (is_valid_file && !args['-f'] && is_same_o) {
+		Print.log('A version file already exists for this version');
+		Print.log('Use "-f" to overwrite the existing version file or "-o" to write to a new file');
+		Print.tip('see "makever -h" for command options');
+		done();
+	}
 
-    // blows up if filename is invalid
-    let filename = is_valid_filename(
-        args,
-        cache_data && cache_data.filename
+	// blows up if filename is invalid
+	let filename = is_valid_filename(
+		args,
+		cache_data && cache_data.filename
         || 'version.json'
-    );
+	);
 
-    // blows up if codename is invalid
-    let codename = is_valid_codename(args['-c']);
+	// blows up if codename is invalid
+	let codename = is_valid_codename(args['-c']);
 
-    // the version as an array of its semver parts
-    const semver = get_valid_pkg_version(pkg) || cache_data && cache_data.version;
+	// the version as an array of its semver parts
+	const semver = get_valid_pkg_version(pkg) || cache_data && cache_data.version;
 
-    // current version branch
-    const branch = infer_branch(semver);
+	// current version branch
+	const branch = infer_branch(semver);
 
-    // the version as a string
-    const full = semver.join('.');
+	// the version as a string
+	const full = semver.join('.');
 
-    // correct patch?
-    const { patch, prerelease_value, prerelease_label } = get_prerelease(semver);
+	// correct patch?
+	const { patch, prerelease_value, prerelease_label } = get_prerelease(semver);
 
-    // structure data
-    const contents = {
-        codename,
-        branch,
-        full,
-        raw: 'v' + full,
-        major: semver[0],
-        minor: semver[1],
-        patch
-    };
+	// structure data
+	const contents = {
+		codename,
+		branch,
+		full,
+		raw: `v${full}`,
+		major: semver[0],
+		minor: semver[1],
+		patch
+	};
 
-    // prerelease data
-    prerelease_value.length && (contents['prerelease'] = prerelease_value);
+	// prerelease data
+	prerelease_value.length && (contents.prerelease = prerelease_value);
 
-    // only get the prerelease label at this stage if option -v is not used
-    !args['-v'] && prerelease_label.length && (contents[prerelease_label] = true);
+	// only get the prerelease label at this stage if option -v is not used
+	!args['-v'] && prerelease_label.length && (contents[prerelease_label] = true);
 
-    // get the actual filename
-    const file = path.basename(filename) || '';
+	// get the actual filename
+	const file = path.basename(filename) || '';
 
-    // get the correct dir even if path has nested directories
-    const dir = path.dirname(filename) || '';
+	// get the correct dir even if path has nested directories
+	const dir = path.dirname(filename) || '';
 
-    return { dir, file, contents };
+	return { dir, file, contents };
 }
 
 /**
@@ -197,51 +199,51 @@ function get_contents(args) {
  * @param {object} data Values needed to show messages correctly
  */
 function dry_run_messages(args, data) {
-    const { dir, file, contents } = data;
-    // a correct label for the value of 'dir'
-    const curr_dir = dir === '.' ? 'current directory' : 'directory "' + dir + '"';
+	const { dir, file, contents } = data;
+	// a correct label for the value of 'dir'
+	const curr_dir = dir === '.' ? 'current directory' : `directory "${dir}"`;
 
-    // verifies if the output is not quiet and data is not being dumped to stdout
-    // to mock a version file has been written
-    !args['-q'] && !args['--std']
+	// verifies if the output is not quiet and data is not being dumped to stdout
+	// to mock a version file has been written
+	!args['-q'] && !args['--std']
         && Print.log('Successfully written a new version file');
 
-    // verifies if the output is not quiet and data is being dumped to stdout
-    // to mock dumping generated data to stdout instead of writing a version file
-    !args['-q'] && args['--std']
+	// verifies if the output is not quiet and data is being dumped to stdout
+	// to mock dumping generated data to stdout instead of writing a version file
+	!args['-q'] && args['--std']
         && Print.log('Do not write a version file. Output data to stdout by "--std"');
 
-    // verifies if the output is not quiet, data is not being dumped to stdout
-    // and a file has be provided to mock writing a version file by a custom name
-    !args['-q'] && !args['--std'] && args['-o']
-        && Print.log('The file "' + file + '" was written to the ' + curr_dir);
+	// verifies if the output is not quiet, data is not being dumped to stdout
+	// and a file has be provided to mock writing a version file by a custom name
+	!args['-q'] && !args['--std'] && args['-o']
+        && Print.log(`The file "${file}" was written to the ${curr_dir}`);
 
-    // verifies if the output is not quiet, data is not being dumped to stdout and not custom file is given
-    // to mock writing a version file on the current directory with a default name
-    !args['-q'] && !args['--std'] && !args['-o']
-        && Print.log('The file "' + file + '" was written to the current directory');
+	// verifies if the output is not quiet, data is not being dumped to stdout and not custom file is given
+	// to mock writing a version file on the current directory with a default name
+	!args['-q'] && !args['--std'] && !args['-o']
+        && Print.log(`The file "${file}" was written to the current directory`);
 
-    // verifies that the output is quiet to mock running in Shh mode
-    args['-q'] && Print.log('Ran in "Shh mode". The command runs silently');
+	// verifies that the output is quiet to mock running in Shh mode
+	args['-q'] && Print.log('Ran in "Shh mode". The command runs silently');
 
-    // if the output is not quiet
-    // dump data to stdout for the dry run
-    !args['-q'] && console.log(contents);
+	// if the output is not quiet
+	// dump data to stdout for the dry run
+	!args['-q'] && console.log(contents);
 
-    // verifies that the output is not quiet and mock running in npm version with a message
-    !args['-q'] && args['-m'] && args['-v']
-        && Print.log(
-            'npm version will tag the version with the message "'
-            + replace_placeholders(
-                args['-m'], {
-                codename: contents.codename,
-                version: contents.raw
-            })
-            + '"'
-        );
+	// verifies that the output is not quiet and mock running in npm version with a message
+	!args['-q'] && args['-m'] && args['-v']
+		&& Print.log(
+			`npm version will tag the version with the message "${
+				replace_placeholders(
+					args['-m'], {
+						codename: contents.codename,
+						version: contents.raw
+					})
+			}"`
+		);
 
-    // verifies that the output is not quiet and mock using force option
-    !args['-q'] && args['-f']
+	// verifies that the output is not quiet and mock using force option
+	!args['-q'] && args['-f']
         && Print.log('Force ran this command. "-f" will only force certain operations,\notherwise it is ignored');
 }
 
@@ -251,17 +253,17 @@ function dry_run_messages(args, data) {
  * @param {object} replacers Values to replace the placeholders with
  */
 function replace_placeholders(str, replacers = {}) {
-    // '%s' is the default placeholder for version for npm version
-    // otherwise just use the current version
-    const version = replacers && replacers.version || '%s';
-    const codename = replacers && replacers.codename || '';
-    // replace version placeholders with '%s' and let npm version do the rest
-    let parsed = str
-        .replace(/\%codename/g, codename)
-        .replace(/\%c/g, codename)
-        .replace(/\%v/g, version)
-        .replace(/\%version/, version);
-    return parsed;
+	// '%s' is the default placeholder for version for npm version
+	// otherwise just use the current version
+	const version = replacers && replacers.version || '%s';
+	const codename = replacers && replacers.codename || '';
+	// replace version placeholders with '%s' and let npm version do the rest
+	let parsed = str
+		.replace(/%codename/g, codename)
+		.replace(/%c/g, codename)
+		.replace(/%v/g, version)
+		.replace(/%version/, version);
+	return parsed;
 }
 
 /**
@@ -271,47 +273,47 @@ function replace_placeholders(str, replacers = {}) {
  * @param {string} arg_v Value read for '-v' option
  */
 function get_prerelease(semver, arg_v = '') {
-    const cache_data = Store.read();
-    let patch = semver[2];
-    let prerelease_label = '';
-    let prerelease_value = '';
+	const cache_data = Store.read();
+	let patch = semver[2];
+	let prerelease_label = '';
+	let prerelease_value = '';
 
-    // in case a prerelease option other than 'prerelease' was used
-    // add it should be added to contents as a boolean to indicate the type of the prerelease
-    arg_v.includes('prepatch') && (prerelease_label = 'prepatch');
-    arg_v.includes('preminor') && (prerelease_label = 'preminor');
-    arg_v.includes('premajor') && (prerelease_label = 'premajor');
+	// in case a prerelease option other than 'prerelease' was used
+	// add it should be added to contents as a boolean to indicate the type of the prerelease
+	arg_v.includes('prepatch') && (prerelease_label = 'prepatch');
+	arg_v.includes('preminor') && (prerelease_label = 'preminor');
+	arg_v.includes('premajor') && (prerelease_label = 'premajor');
 
-    // get the prerelease string on the version, by splitting just the first '-' char if it exisits
-    let possible_prerelease = semver[3] && (patch + '.' + semver[3]) || patch;
-    possible_prerelease = possible_prerelease && possible_prerelease.split(/-(.+)/);
+	// get the prerelease string on the version, by splitting just the first '-' char if it exisits
+	let possible_prerelease = semver[3] && (`${patch}.${semver[3]}`) || patch;
+	possible_prerelease = possible_prerelease && possible_prerelease.split(/-(.+)/);
 
-    if (possible_prerelease && possible_prerelease[1] && possible_prerelease[1].length) {
-        prerelease_value = possible_prerelease[1];
-        // update patch number
-        patch = possible_prerelease[0];
-    }
+	if (possible_prerelease && possible_prerelease[1] && possible_prerelease[1].length) {
+		prerelease_value = possible_prerelease[1];
+		// update patch number
+		patch = possible_prerelease[0];
+	}
 
-    // check the cache for this data if none was generated
-    !prerelease_value.length && cache_data && 'prerelease' in cache_data
+	// check the cache for this data if none was generated
+	!prerelease_value.length && cache_data && 'prerelease' in cache_data
         && (prerelease_value = cache_data.prerelease);
-    !prerelease_label.length && cache_data && 'premajor' in cache_data
+	!prerelease_label.length && cache_data && 'premajor' in cache_data
         && (prerelease_label = 'premajor');
-    !prerelease_label.length && cache_data && 'preminor' in cache_data
+	!prerelease_label.length && cache_data && 'preminor' in cache_data
         && (prerelease_label = 'preminor');
-    !prerelease_label.length && cache_data && 'prepatch' in cache_data
+	!prerelease_label.length && cache_data && 'prepatch' in cache_data
         && (prerelease_label = 'prepatch');
 
-    return { patch, prerelease_value, prerelease_label };
+	return { patch, prerelease_value, prerelease_label };
 }
 
 module.exports = {
-    infer_branch,
-    write_to,
-    get_contents,
-    dry_run_messages,
-    replace_placeholders,
-    get_prerelease,
-    cache: Store,
-    valid_pkg_version: get_valid_pkg_version(pkg)
+	infer_branch,
+	write_to,
+	get_contents,
+	dry_run_messages,
+	replace_placeholders,
+	get_prerelease,
+	cache: Store,
+	valid_pkg_version: get_valid_pkg_version(pkg)
 };

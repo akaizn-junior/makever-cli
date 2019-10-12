@@ -12,36 +12,36 @@ const Print = require('./Print')(labelWColors, printDisplayFreq);
  * @param {string} filename The name of the file to generate
  */
 function is_valid_filename(args, filename) {
-    const test = RegExp(/([\w|\w\/]){3,}/);
-    let possible_name = args['-o'] || filename;
-    const [name, ext] = possible_name.split('.');
+	const test = RegExp(/([\w|\w/]){3,}/);
+	let possible_name = args['-o'] || filename;
+	const [name, ext] = possible_name.split('.');
 
-    if (args['-o'] && args['--std']) {
-        Print.error('Invalid operation: cannot combine "--std" and "-o"');
-        Print.info('Makever will not write to file and stdout at the same time');
-        end();
-    }
+	if (args['-o'] && args['--std']) {
+		Print.error('Invalid operation: cannot combine "--std" and "-o"');
+		Print.info('Makever will not write to file and stdout at the same time');
+		end();
+	}
 
-    if (name && name.length && test.test(name)) {
-        // only allow 'json' as an extension
-        if (ext && ext !== 'json') {
-            Print.error('Generated file must be a json file');
-            Print.tip('"makever -h" or "man makever"');
-            end();
-        }
+	if (name && name.length && test.test(name)) {
+		// only allow 'json' as an extension
+		if (ext && ext !== 'json') {
+			Print.error('Generated file must be a json file');
+			Print.tip('"makever -h" or "man makever"');
+			end();
+		}
 
-        if (!ext) {
-            // no extension on the name, slpa a '.json' on it
-            let name_json = name + '.json';
-            return name_json;
-        }
+		if (!ext) {
+			// no extension on the name, slpa a '.json' on it
+			let name_json = `${name}.json`;
+			return name_json;
+		}
 
-        return possible_name;
-    } else {
-        Print.error(errors.bad_filename);
-        Print.info('Filename must be a valid word with a minimum of 3 chars');
-        end();
-    }
+		return possible_name;
+	} else {
+		Print.error(errors.bad_filename);
+		Print.info('Filename must be a valid word with a minimum of 3 chars');
+		end();
+	}
 }
 
 /**
@@ -49,22 +49,22 @@ function is_valid_filename(args, filename) {
  * @param {string} codename The version's codename
  */
 function is_valid_codename(codename) {
-    const test = RegExp(/([\w\-]){3,50}/);
+	const test = RegExp(/([\w-]){3,50}/);
 
-    if (!codename) {
-        Print.info('Makever will generate a Random codename if none provided');
-        return Sentence('-');
-    }
+	if (!codename) {
+		Print.info('Makever will generate a Random codename if none provided');
+		return Sentence('-');
+	}
 
-    if (test.test(codename)) {
-        return test.exec(codename)[0];
-    } else {
-        Print.error(errors.und_codename(codename));
-        Print.info("Codename may be similar to: 'baby-face', '123Super', 'Marine44', 'AQUA'");
-        Print.info("and be on the range of 3-50 chars");
-        Print.tip('"makever -h" or "man makever"');
-        end();
-    }
+	if (test.test(codename)) {
+		return test.exec(codename)[0];
+	} else {
+		Print.error(errors.und_codename(codename));
+		Print.info("Codename may be similar to: 'baby-face', '123Super', 'Marine44', 'AQUA'");
+		Print.info('and be on the range of 3-50 chars');
+		Print.tip('"makever -h" or "man makever"');
+		end();
+	}
 }
 
 /**
@@ -73,8 +73,8 @@ function is_valid_codename(codename) {
  * @param {object} version_file Existing version file data
  */
 function is_valid_version_file(version_file) {
-    const valid_version_file = (
-        version_file
+	const valid_version_file = (
+		version_file
         && Object.prototype.toString.call(version_file).includes('Object')
         && 'codename' in version_file
         && 'branch' in version_file
@@ -87,8 +87,8 @@ function is_valid_version_file(version_file) {
         || 'premajor' in version_file
         || 'preminor' in version_file
         || 'prepatch' in version_file
-    );
-    return valid_version_file && version_file;
+	);
+	return valid_version_file && version_file;
 }
 
 /**
@@ -97,13 +97,13 @@ function is_valid_version_file(version_file) {
  * @param {object} cache_data Stored generated data
  */
 function is_existing_file(args, cache_data) {
-    const input_o = is_valid_filename(
-        args,
-        cache_data && cache_data.filename
+	const input_o = is_valid_filename(
+		args,
+		cache_data && cache_data.filename
         || 'version.json'
-    );
-    const saved_o = cache_data && path.join(cache_data.directory, cache_data.filename);
-    return input_o && saved_o && input_o === saved_o;
+	);
+	const saved_o = cache_data && path.join(cache_data.directory, cache_data.filename);
+	return input_o && saved_o && input_o === saved_o;
 }
 
 /**
@@ -111,26 +111,26 @@ function is_existing_file(args, cache_data) {
  * @param {JSON} pkg_obj JSON read from local package.json file
  */
 function get_valid_pkg_version(pkg_obj) {
-    if (
-        pkg_obj // common sense
+	if (
+		pkg_obj // common sense
         && 'version' in pkg_obj // it may not exist in a package.json?
         && typeof pkg_obj.version === 'string' // maybe redudant but hey!
         && pkg_obj.version.split('.').length >= 3 // verify if version is valid semver
         || pkg_obj.version.split('-').length >= 2 // in case the version has a prerelease attached to it
-    ) {
-        return pkg_obj.version.split('.');
-    } else {
-        Print.error('command Failed. Invalid package.json version');
-        Print.tip('see https://docs.npmjs.com/files/package.json for help');
-        end();
-    }
+	) {
+		return pkg_obj.version.split('.');
+	} else {
+		Print.error('command Failed. Invalid package.json version');
+		Print.tip('see https://docs.npmjs.com/files/package.json for help');
+		end();
+	}
 }
 
 /**
  * @description Verifies if the project running is a git repository
  */
 function is_a_repo() {
-    return fs.existsSync(path.join(userRoot, '.git'));
+	return fs.existsSync(path.join(userRoot, '.git'));
 }
 
 /**
@@ -138,24 +138,24 @@ function is_a_repo() {
  * @param {function} cb Respond to the caller
  */
 async function is_clean_repo(cb) {
-    if (is_a_repo()) {
-        try {
-            const { stderr, stdout } = await execute('git status --porcelain; git clean -nd');
-            return (typeof cb === 'function') && cb({ stdout, stderr });
-        } catch (err) {
-            Print.log('Something went wrong. Could not verify repo');
-            console.error(err);
-            end();
-        }
-    }
-    return (typeof cb === 'function') && cb(null);
+	if (is_a_repo()) {
+		try {
+			const { stderr, stdout } = await execute('git status --porcelain; git clean -nd');
+			return (typeof cb === 'function') && cb({ stdout, stderr });
+		} catch (err) {
+			Print.log('Something went wrong. Could not verify repo');
+			console.error(err);
+			end();
+		}
+	}
+	return (typeof cb === 'function') && cb(null);
 }
 
 module.exports = {
-    is_valid_filename,
-    is_valid_codename,
-    is_valid_version_file,
-    is_existing_file,
-    get_valid_pkg_version,
-    is_clean_repo
+	is_valid_filename,
+	is_valid_codename,
+	is_valid_version_file,
+	is_existing_file,
+	get_valid_pkg_version,
+	is_clean_repo
 };

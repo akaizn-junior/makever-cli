@@ -7,9 +7,9 @@
 const { errors, done, end } = require('./Globals');
 const ARGUMENTS_DATA = {};
 const OPERATOR = {
-    equal: '=',
-    append: '--',
-    arg_indicator: '-'
+	equal: '=',
+	append: '--',
+	arg_indicator: '-'
 };
 
 // Interface
@@ -23,8 +23,8 @@ const OPERATOR = {
  * @returns {object} A map of valid arguments
  */
 function CAR(definedArgs, longFormArgs = [], failed = () => {}) {
-    validate_args(process.argv, definedArgs, longFormArgs, failed);
-    return ARGUMENTS_DATA;
+	validate_args(process.argv, definedArgs, longFormArgs, failed);
+	return ARGUMENTS_DATA;
 }
 
 // Helpers
@@ -36,17 +36,18 @@ function CAR(definedArgs, longFormArgs = [], failed = () => {}) {
  * @returns {string} Arguments read by the append operator or an empty string
  */
 function get_data_to_append(__args__) {
-    const appendOpIndex = __args__.indexOf(OPERATOR.append);
+	const appendOpIndex = __args__.indexOf(OPERATOR.append);
 
-    if (appendOpIndex !== -1) {
-        return __args__.reduce((acc = '', value, i) => {
-            if (i > appendOpIndex) {
-                return acc + ' ' + value;
-            }
-        }).trim();
-    }
+	if (appendOpIndex !== -1) {
+		return __args__.reduce((acc = '', value, i) => {
+			if (i > appendOpIndex) {
+				return `${acc} ${value}`;
+			}
+			return '';
+		}).trim();
+	}
 
-    return '';
+	return '';
 }
 
 /**
@@ -58,54 +59,55 @@ function get_data_to_append(__args__) {
  * @returns {void}
  */
 function validate_args(__args__, definedArgs, longFormArgs, failed) {
-    const len = __args__.length;
-    // when to start counting possible valid arguments
-    const pos_0 = 2;
-    // gathered if OPERATOR.append is used
-    const data_to_append = get_data_to_append(__args__);
+	const len = __args__.length;
+	// when to start counting possible valid arguments
+	const pos_0 = 2;
+	// gathered if OPERATOR.append is used
+	const data_to_append = get_data_to_append(__args__);
 
-    for (let i = pos_0; i < len; i++) {
-        let current_arg_read = __args__[i];
-        // was OPERATOR.equal used to pass a value?
-        let actual_arg = current_arg_read.split(OPERATOR.equal)[0];
-        // get its possible value
-        let possible_value = current_arg_read.split(OPERATOR.equal)[1];
+	for (let i = pos_0; i < len; i++) {
+		let current_arg_read = __args__[i];
+		// was OPERATOR.equal used to pass a value?
+		let actual_arg = current_arg_read.split(OPERATOR.equal)[0];
+		// get its possible value
+		let possible_value = current_arg_read.split(OPERATOR.equal)[1];
 
-        // verify and translate actual_arg if is in long form
-        actual_arg = longFormArgs[actual_arg] || actual_arg;
+		// verify and translate actual_arg if is in long form
+		actual_arg = longFormArgs[actual_arg] || actual_arg;
 
-        // can this current arg be combined with other args
-        let combine = getValueOrDefault(definedArgs[actual_arg], 'combine', true);
-        // run this callback if this argument is valid
-        let success = getValueOrDefault(definedArgs[actual_arg], 'cb', function () { });
+		// can this current arg be combined with other args
+		let combine = getValueOrDefault(definedArgs[actual_arg], 'combine', true);
+		// run this callback if this argument is valid
+		let success = getValueOrDefault(definedArgs[actual_arg], 'cb', function() { });
 
-        if (actual_arg && definedArgs[actual_arg]) {
-            switch (true) {
-                case definedArgs[actual_arg].var:
-                    if (!data_to_append.length) {
-                        read_value(__args__, i, possible_value, longFormArgs, success, failed);
-                        // skip the index of a possible value if 'var' is not assigned using OPERATOR.equal
-                        if (!possible_value) i++;
-                    } else {
-                        read_value(__args__, i, data_to_append, longFormArgs, success, failed);
-                        // end loop
-                        i = len;
-                    }
-                    break;
-                case definedArgs[actual_arg].flag && combine:
-                    add_arg(actual_arg, true, success);
-                    break;
-                case definedArgs[actual_arg].flag && !combine:
-                    if (i === pos_0) add_arg(actual_arg, true, success);
-                    // args that cannot be combined w/ others will end the process
-                    done();
-                    break;
-            }
-        } else if (actual_arg !== OPERATOR.append) {
-            failed(errors.und_arg.concat(' "', __args__[i], '"'));
-            end();
-        }
-    }
+		if (actual_arg && definedArgs[actual_arg]) {
+			switch (true) {
+			case definedArgs[actual_arg].var:
+				if (!data_to_append.length) {
+					read_value(__args__, i, possible_value, longFormArgs, success, failed);
+					// skip the index of a possible value if 'var' is not assigned using OPERATOR.equal
+					// eslint-disable-next-line max-depth
+					if (!possible_value) i++;
+				} else {
+					read_value(__args__, i, data_to_append, longFormArgs, success, failed);
+					// end loop
+					i = len;
+				}
+				break;
+			case definedArgs[actual_arg].flag && combine:
+				add_arg(actual_arg, true, success);
+				break;
+			case definedArgs[actual_arg].flag && !combine:
+				if (i === pos_0) add_arg(actual_arg, true, success);
+				// args that cannot be combined w/ others will end the process
+				done();
+				break;
+			}
+		} else if (actual_arg !== OPERATOR.append) {
+			failed(errors.und_arg.concat(' "', __args__[i], '"'));
+			end();
+		}
+	}
 }
 
 /**
@@ -119,27 +121,27 @@ function validate_args(__args__, definedArgs, longFormArgs, failed) {
  * @returns {void}
  */
 function read_value(args, i, possible_value, longFormArgs, success, failed) {
-    let arg = args[i].split(OPERATOR.equal)[0];
-    // translate long form arg if read
-    arg = longFormArgs[arg] || arg;
+	let arg = args[i].split(OPERATOR.equal)[0];
+	// translate long form arg if read
+	arg = longFormArgs[arg] || arg;
 
-    // verify if value already exists to avoid doulbe declaration
-    if (!ARGUMENTS_DATA[arg]) {
-        if (possible_value) {
-            return add_arg(arg, possible_value, success);
-        } else if (i + 1 < args.length) {
-            let value = is_valid_arg_value(args[++i], arg, failed);
-            return add_arg(arg, value, success);
-        } else {
-            // no valid value to read
-            failed('no valid value to read for option "' + arg + '"');
-            end();
-        }
-    } else {
-        // already declared
-        failed('repeated option "' + arg + '"');
-        end();
-    }
+	// verify if value already exists to avoid doulbe declaration
+	if (!ARGUMENTS_DATA[arg]) {
+		if (possible_value) {
+			return add_arg(arg, possible_value, success);
+		} else if (i + 1 < args.length) {
+			let value = is_valid_arg_value(args[++i], arg, failed);
+			return add_arg(arg, value, success);
+		} else {
+			// no valid value to read
+			failed(`no valid value to read for option "${arg}"`);
+			end();
+		}
+	} else {
+		// already declared
+		failed(`repeated option "${arg}"`);
+		end();
+	}
 }
 
 /**
@@ -150,13 +152,13 @@ function read_value(args, i, possible_value, longFormArgs, success, failed) {
  * @returns {string|void} A valid argument value or void
  */
 function is_valid_arg_value(val, arg, failed) {
-    if (val && !val.startsWith(OPERATOR.arg_indicator) && val !== OPERATOR.equal) {
-        return val;
-    } else {
-        // invalid arg value, maybe another arg or OPERATOR.equal
-        failed('invalid value "'+ val + '" for option "' + arg + '"');
-        end();
-    }
+	if (val && !val.startsWith(OPERATOR.arg_indicator) && val !== OPERATOR.equal) {
+		return val;
+	} else {
+		// invalid arg value, maybe another arg or OPERATOR.equal
+		failed(`invalid value "${val}" for option "${arg}"`);
+		end();
+	}
 }
 
 /**
@@ -167,9 +169,9 @@ function is_valid_arg_value(val, arg, failed) {
  * @returns {void}
  */
 function add_arg(arg, value = '', success) {
-    ARGUMENTS_DATA[arg] = value;
-    success(ARGUMENTS_DATA);
-    return;
+	ARGUMENTS_DATA[arg] = value;
+	success(ARGUMENTS_DATA);
+	return;
 }
 
 /**
@@ -180,7 +182,7 @@ function add_arg(arg, value = '', success) {
  * @returns {boolean}
  */
 function getValueOrDefault(__obj, __key, __default) {
-    return __obj && __obj[__key] !== undefined ? __obj[__key] : __default;
+	return __obj && __obj[__key] !== undefined ? __obj[__key] : __default;
 }
 
 module.exports = CAR; // 🚗 🚗 🚗

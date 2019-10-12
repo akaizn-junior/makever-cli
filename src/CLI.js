@@ -14,25 +14,25 @@ const CAR = require('./CmdArgsReader'); // 🚗
 const Print = require('./Print')(labelWColors, printDisplayFreq);
 
 const {
-    is_valid_codename,
-    is_clean_repo,
+	is_valid_codename,
+	is_clean_repo,
 } = require('./Validators');
 
 const {
-    show_help,
-    tag_clean_repo,
-    dump_contents
+	show_help,
+	tag_clean_repo,
+	dump_contents
 } = require('./Handlers');
 
 const {
-    infer_branch,
-    write_to,
-    get_contents,
-    cache,
-    dry_run_messages,
-    valid_pkg_version,
-    replace_placeholders,
-    get_prerelease
+	infer_branch,
+	write_to,
+	get_contents,
+	cache,
+	dry_run_messages,
+	valid_pkg_version,
+	replace_placeholders,
+	get_prerelease
 } = require('./Helpers');
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++
@@ -40,69 +40,69 @@ const {
 // ++++++++++++++++++++++++++++++++++++++++++++++++
 
 const DEFINED_ARGS = {
-    '-c': {
-        var: true
-    },
-    '-o': {
-        var: true
-    },
-    '-v': {
-        var: true
-    },
-    '-q': {
-        flag: true
-    },
-    '--std': {
-        flag: true
-    },
-    '-d': {
-        flag: true,
-        cb: dump_contents,
-        combine: false
-    },
-    '-h': {
-        flag: true,
-        cb: show_help,
-        combine: false
-    },
-    '-m': {
-        var: true
-    },
-    '-r': {
-        flag: true
-    },
-    '-t': {
-        flag: true
-    },
-    '-f': {
-        flag: true
-    },
-    '--no-color': {
-        flag: true
-    }
+	'-c': {
+		var: true
+	},
+	'-o': {
+		var: true
+	},
+	'-v': {
+		var: true
+	},
+	'-q': {
+		flag: true
+	},
+	'--std': {
+		flag: true
+	},
+	'-d': {
+		flag: true,
+		cb: dump_contents,
+		combine: false
+	},
+	'-h': {
+		flag: true,
+		cb: show_help,
+		combine: false
+	},
+	'-m': {
+		var: true
+	},
+	'-r': {
+		flag: true
+	},
+	'-t': {
+		flag: true
+	},
+	'-f': {
+		flag: true
+	},
+	'--no-color': {
+		flag: true
+	}
 };
 
 const LONG_FORM_ARGS_MAP = {
-    '--codename': '-c',
-    '--version': '-v',
-    '--help': '-h',
-    '--output': '-o',
-    '--dump': '-d',
-    '--view': '-d',
-    '--quiet': '-q',
-    '--dry-run': '-t',
-    '--force': '-f',
-    '--tag': '-r',
-    '--message': '-m'
+	'--codename': '-c',
+	'--version': '-v',
+	'--help': '-h',
+	'--output': '-o',
+	'--dump': '-d',
+	'--view': '-d',
+	'--quiet': '-q',
+	'--dry-run': '-t',
+	'--force': '-f',
+	'--tag': '-r',
+	'--message': '-m'
 };
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++
 // Evaluate command line arguments
 // ++++++++++++++++++++++++++++++++++++++++++++++++
 
-const ARGUMENTS_DATA = CAR(DEFINED_ARGS, LONG_FORM_ARGS_MAP, (stderr) => {
-    Print.error(stderr);
-    Print.tip('see accepted arguments by: "makever -h"');
+const ARGUMENTS_DATA = CAR(DEFINED_ARGS, LONG_FORM_ARGS_MAP, stderr => {
+	Print.error(stderr);
+	Print.tip('see accepted arguments by: "makever -h"');
 });
 
 // +++++++++++++++++++++++++++++++++++++
@@ -121,9 +121,9 @@ Print.extend('noColor', ARGUMENTS_DATA['--no-color']);
  * @param {object} args Data from arguments read from the command line
  */
 function run(args) {
-    const { dir, file, contents } = get_contents(args);
-    // generate version file
-    write_to(dir, file, contents, { dump: args['--std'], quiet: args['-q'] });
+	const { dir, file, contents } = get_contents(args);
+	// generate version file
+	write_to(dir, file, contents, { dump: args['--std'], quiet: args['-q'] });
 }
 
 /**
@@ -131,26 +131,26 @@ function run(args) {
  * @param {object} args Data from arguments read from the command line
  */
 function run_tag(args) {
-    const cache_data = cache.read();
-    const version = (
-        cache_data
+	const cache_data = cache.read();
+	const version = (
+		cache_data
         && cache_data.version.join('.')
         || valid_pkg_version
-    );
+	);
 
-    const codename = (
-        !args['-c']
-            ? cache_data && cache_data.codename
-            : is_valid_codename(args['-c'])
-    );
+	const codename = (
+		!args['-c']
+			? cache_data && cache_data.codename
+			: is_valid_codename(args['-c'])
+	);
 
-    // verify if the current repo has a clean tree
-    is_clean_repo(tag_clean_repo({
-        version,
-        codename,
-        tag_m: args['-m'] || '',
-        force_flag: args['-f'] || false
-    }));
+	// verify if the current repo has a clean tree
+	is_clean_repo(tag_clean_repo({
+		version,
+		codename,
+		tag_m: args['-m'] || '',
+		force_flag: args['-f'] || false
+	}));
 }
 
 /**
@@ -161,68 +161,68 @@ function run_tag(args) {
  * @param {object} args command arguments
  */
 async function run_npm_version(args) {
-    const { dir, file, contents } = get_contents(args);
+	const { dir, file, contents } = get_contents(args);
 
-    // commit message for the version update
-    const version_m = (replace_placeholders(
-        args['-m'] || 'Update to %s, codename %c'
-        , { codename: contents.codename })
-    );
+	// commit message for the version update
+	const version_m = (replace_placeholders(
+		args['-m'] || 'Update to %s, codename %c'
+		, { codename: contents.codename })
+	);
 
-    const parsed = replace_placeholders(args['-v'], { codename: contents.codename });
-    const force_flag = args['-f'] ? ' --force' : '';
+	const parsed = replace_placeholders(args['-v'], { codename: contents.codename });
+	const force_flag = args['-f'] ? '--force' : '';
 
-    // run npm version with correct options
-    let script = parsed.includes('-m')
-        ? 'npm version ' + parsed + force_flag
-        : 'npm version ' + parsed + ' -m "' + version_m + '"' + force_flag;
+	// run npm version with correct options
+	let script = parsed.includes('-m')
+		? `npm version ${parsed} ${force_flag}`
+		: `npm version ${parsed} -m "${version_m}" ${force_flag}`;
 
-    try {
-        const { stderr, stdout } = await execute(script);
+	try {
+		const { stderr, stdout } = await execute(script);
 
-        if (stderr.length && !stderr.includes('--force')) {
-            Print.error(`'npm version' failed`);
-            console.log(stderr);
-            Print.tip('see "makever -h"');
-            Print.tip('see https://docs.npmjs.com/cli/version');
-            end();
-        }
+		if (stderr.length && !stderr.includes('--force')) {
+			Print.error('\'npm version\' failed');
+			console.log(stderr);
+			Print.tip('see "makever -h"');
+			Print.tip('see https://docs.npmjs.com/cli/version');
+			end();
+		}
 
-        const semver = stdout.trim().split('v')[1].split('.');
-        const branch = infer_branch(semver);
+		const semver = stdout.trim().split('v')[1].split('.');
+		const branch = infer_branch(semver);
 
-        // correct patch?
-        const {
-            patch,
-            prerelease_value,
-            prerelease_label
-        } = get_prerelease(semver, args['-v']);
+		// correct patch?
+		const {
+			patch,
+			prerelease_value,
+			prerelease_label
+		} = get_prerelease(semver, args['-v']);
 
-        // edit contents
-        contents.full = semver.join('.');
-        contents.raw = 'v' + contents.full;
-        contents.major = semver[0];
-        contents.minor = semver[1];
-        contents.patch = patch;
-        contents.branch = branch;
-        contents['prerelease'] = prerelease_value;
-        prerelease_label.length && (contents[prerelease_label] = true);
+		// edit contents
+		contents.full = semver.join('.');
+		contents.raw = `v${contents.full}`;
+		contents.major = semver[0];
+		contents.minor = semver[1];
+		contents.patch = patch;
+		contents.branch = branch;
+		contents.prerelease = prerelease_value;
+		prerelease_label.length && (contents[prerelease_label] = true);
 
-        // generate version file
-        write_to(dir, file, contents, { dump: args['--std'], quiet: args['-q'] });
-    } catch (err) {
-        console.log(err);
-        const { cmd, stderr } = (
-            err && 'cmd' in err && 'stderr' in err
-                ? err
-                : { cmd: '', stderr: '' }
-        );
-        Print.error(`"${cmd}" passed to underlying process has failed`);
-        console.error(stderr);
-        Print.tip('see "makever -h"');
-        Print.tip('see https://docs.npmjs.com/cli/version');
-        end();
-    }
+		// generate version file
+		write_to(dir, file, contents, { dump: args['--std'], quiet: args['-q'] });
+	} catch (err) {
+		console.log(err);
+		const { cmd, stderr } = (
+			err && 'cmd' in err && 'stderr' in err
+				? err
+				: { cmd: '', stderr: '' }
+		);
+		Print.error(`"${cmd}" passed to underlying process has failed`);
+		console.error(stderr);
+		Print.tip('see "makever -h"');
+		Print.tip('see https://docs.npmjs.com/cli/version');
+		end();
+	}
 }
 
 /**
@@ -230,59 +230,59 @@ async function run_npm_version(args) {
  * @param {object} args command arguments
  */
 function run_dry(args) {
-    const { dir, file, contents } = get_contents(args);
+	const { dir, file, contents } = get_contents(args);
 
-    // mock npm version run
-    if (args['-v']) {
-        const version_upgrade = args['-v'];
-        const semver = contents.full.split('.');
-        let prerelease = (
-            args['-v']
+	// mock npm version run
+	if (args['-v']) {
+		const version_upgrade = args['-v'];
+		const semver = contents.full.split('.');
+		let prerelease = (
+			args['-v']
             && args['-v'].includes('--preid=')
             && args['-v'].split('--preid=')[1]
             || ''
-        );
+		);
 
-        prerelease = replace_placeholders(prerelease, { codename: contents.codename });
+		prerelease = replace_placeholders(prerelease, { codename: contents.codename });
 
-        switch (true) {
-            case (version_upgrade === 'major'): ++semver[0]; break;
-            case (version_upgrade === 'minor'): ++semver[1]; break;
-            case (version_upgrade === 'patch'): ++semver[2]; break;
-            case (version_upgrade === 'premajor'):
-                ++semver[0];
-                semver[2] += '.0';
-                break;
-            case (version_upgrade === 'preminor'):
-                ++semver[1];
-                semver[2] += '.0';
-                break;
-            case (version_upgrade === 'prepatch'):
-                ++semver[2];
-                semver[2] += '.0';
-                break;
-            case (Boolean(prerelease.length)):
-                ++semver[2];
-                semver[2] += '-' + prerelease + '.0';
-                break;
-            default:
-                Print.error('Invalid "npm version" option');
-                Print.tip('see https://docs.npmjs.com/cli/version')
-                end();
-        }
+		switch (true) {
+		case (version_upgrade === 'major'): ++semver[0]; break;
+		case (version_upgrade === 'minor'): ++semver[1]; break;
+		case (version_upgrade === 'patch'): ++semver[2]; break;
+		case (version_upgrade === 'premajor'):
+			++semver[0];
+			semver[2] += '.0';
+			break;
+		case (version_upgrade === 'preminor'):
+			++semver[1];
+			semver[2] += '.0';
+			break;
+		case (version_upgrade === 'prepatch'):
+			++semver[2];
+			semver[2] += '.0';
+			break;
+		case (Boolean(prerelease.length)):
+			++semver[2];
+			semver[2] += `-${prerelease}.0`;
+			break;
+		default:
+			Print.error('Invalid "npm version" option');
+			Print.tip('see https://docs.npmjs.com/cli/version');
+			end();
+		}
 
-        // edit contents
-        contents.full = semver.join('.');
-        contents.raw = 'v' + contents.full;
-        contents.major = String(semver[0]);
-        contents.minor = String(semver[1]);
-        contents.patch = String(semver[2]);
-        contents.branch = infer_branch(semver);
-    }
+		// edit contents
+		contents.full = semver.join('.');
+		contents.raw = `v${contents.full}`;
+		contents.major = String(semver[0]);
+		contents.minor = String(semver[1]);
+		contents.patch = String(semver[2]);
+		contents.branch = infer_branch(semver);
+	}
 
-    dry_run_messages(args, { dir, file, contents });
-    // done
-    Print.success('Dry run complete');
+	dry_run_messages(args, { dir, file, contents });
+	// done
+	Print.success('Dry run complete');
 }
 
 // +++++++++++++++++++++++++++++++++++++
@@ -290,15 +290,15 @@ function run_dry(args) {
 // +++++++++++++++++++++++++++++++++++++
 
 (function makever(args) {
-    !args['-v'] && !args['-t'] && !args['-r']
+	!args['-v'] && !args['-t'] && !args['-r']
         && run(args);
-    args['-v'] && !args['-t'] && !args['-r']
+	args['-v'] && !args['-t'] && !args['-r']
         && run_npm_version(args);
-    !args['-v'] && !args['-t'] && args['-r']
+	!args['-v'] && !args['-t'] && args['-r']
         && run_tag(args);
-    args['-t']
+	args['-t']
         && run_dry(args);
-    // inform the user anytime force flag is used
-    args['-f'] && !args['-t']
+	// inform the user anytime force flag is used
+	args['-f'] && !args['-t']
         && Print.log('Using force flag!? Level of confidence +100', 'black.white');
 }(ARGUMENTS_DATA));

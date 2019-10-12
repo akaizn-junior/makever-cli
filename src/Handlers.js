@@ -75,15 +75,14 @@ function tag_clean_repo(data) {
 					end();
 				}
 
-				console.log(stdout);
-
 				Print.ask('commit and push annonated tag', ans => {
 					if (ans === 'Y' || ans === 'y') {
 						try {
 							exec('git add .');
 							exec(`git commit -m "v${version} - ${codename}"`);
 							exec(`git push origin v${version}`); // only push this specific tag
-							Print.log(`annotated tag "v${version}" was pushed with message "${tag_msg}"`);
+							const commit = stdout.split('was')[1].trim();
+							Print.log(`annotated tag "v${version}" was pushed with message "${tag_msg}" (commit ${commit}`);
 							done();
 						} catch (err) {
 							Print.log('Something went wrong. Could not push tag');
