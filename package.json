@@ -3,6 +3,12 @@
     "version": "1.0.0",
     "description": "Creates a file with more descriptive information based on the version of your package",
     "main": "src/CLI.js",
+    "scripts": {
+        "test": "mocha tests/*.spec.js",
+        "test:w": "nodemon --exec 'npm run test'",
+        "lint": "eslint .",
+        "lint:w": "nodemon --exec 'npm run lint'"
+    },
     "bin": {
         "makever": "src/CLI.js"
     },
@@ -24,6 +30,9 @@
     ],
     "devDependencies": {
         "babel-eslint": "^10.0.3",
-        "eslint": "^6.5.1"
+        "chai": "^4.2.0",
+        "eslint": "^6.5.1",
+        "mocha": "^6.2.1",
+        "nodemon": "^1.19.3"
     }
 }
