@@ -35,9 +35,9 @@ const {
 	get_prerelease
 } = require('./Helpers');
 
-// ++++++++++++++++++++++++++++++++++++++++++++++++
+//++++++++++++++++++++++++++++++++++++++++++++++++
 // defined arguments
-// ++++++++++++++++++++++++++++++++++++++++++++++++
+//++++++++++++++++++++++++++++++++++++++++++++++++
 
 const DEFINED_ARGS = {
 	'-c': {
@@ -96,25 +96,25 @@ const LONG_FORM_ARGS_MAP = {
 	'--message': '-m'
 };
 
-// ++++++++++++++++++++++++++++++++++++++++++++++++
+//++++++++++++++++++++++++++++++++++++++++++++++++
 // Evaluate command line arguments
-// ++++++++++++++++++++++++++++++++++++++++++++++++
+//++++++++++++++++++++++++++++++++++++++++++++++++
 
 const ARGUMENTS_DATA = CAR(DEFINED_ARGS, LONG_FORM_ARGS_MAP, stderr => {
 	Print.error(stderr);
 	Print.tip('see accepted arguments by: "makever -h"');
 });
 
-// +++++++++++++++++++++++++++++++++++++
+//+++++++++++++++++++++++++++++++++++++
 // extend Print functionality
-// +++++++++++++++++++++++++++++++++++++
+//+++++++++++++++++++++++++++++++++++++
 
 Print.extend('quiet', ARGUMENTS_DATA['-q'] && !ARGUMENTS_DATA['-t']);
 Print.extend('noColor', ARGUMENTS_DATA['--no-color']);
 
-// +++++++++++++++++++++++++++++++++++++
+//+++++++++++++++++++++++++++++++++++++
 // command runners
-// +++++++++++++++++++++++++++++++++++++
+//+++++++++++++++++++++++++++++++++++++
 
 /**
  * @description Run the command
@@ -211,7 +211,6 @@ async function run_npm_version(args) {
 		// generate version file
 		write_to(dir, file, contents, { dump: args['--std'], quiet: args['-q'] });
 	} catch (err) {
-		console.log(err);
 		const { cmd, stderr } = (
 			err && 'cmd' in err && 'stderr' in err
 				? err
@@ -285,9 +284,9 @@ function run_dry(args) {
 	Print.success('Dry run complete');
 }
 
-// +++++++++++++++++++++++++++++++++++++
+//+++++++++++++++++++++++++++++++++++++
 // execute command
-// +++++++++++++++++++++++++++++++++++++
+//+++++++++++++++++++++++++++++++++++++
 
 (function makever(args) {
 	!args['-v'] && !args['-t'] && !args['-r']
