@@ -1,16 +1,45 @@
-/* !
+/*!
  * Print
  * Print to the terminal with colors
  * (c) 2018 Verdexdesign
  */
 
-const { getRandomInt } = require('./Globals');
-const RESET_COLOR = '\33[0m';
+const { getRandomInt } = require('./Utils');
+
 // Addons with more functions for this module
 const ADDONS = {
 	// A flag for quiet mode; default: false
 	quiet: false,
-	noColor: false
+	noColor: false,
+	cmdlabel: ''
+};
+
+/**
+ * @description Defines color codes used by the Print module
+ * @property {object} fg - Foreground color codes for the Terminal
+ * @property {object} bg - Background color codes for the Terminal
+ * @property {string} reset - Terminal color reset code
+ */
+const color_codes = {
+	fg: {
+		black: '\u001b[30;',
+		'bright-green': '\u001b[92;',
+		yellow: '\u001b[33;',
+		white: '\u001b[37;',
+		blue: '\u001b[34;',
+		green: '\u001b[32;',
+		red: '\u001b[31;'
+	},
+	bg: {
+		black: '40m',
+		'bright-green': '102m',
+		yellow: '43m',
+		white: '47m',
+		blue: '44m',
+		green: '42m',
+		gray: '100m'
+	},
+	reset: '\u001b[0m'
 };
 
 // Helpers
@@ -26,6 +55,7 @@ const ADDONS = {
  * Range 0-5, from display always to less often; default: 0
  */
 function Pretty(msg, colors = 'white.black', label = '', type = 'log', displayFreq = 0) {
+	// get foreground and background colors
 	const [fg, bg] = colors.split('.');
 
 	// random number to compare to 'displayFreq'
@@ -39,37 +69,18 @@ function Pretty(msg, colors = 'white.black', label = '', type = 'log', displayFr
 	// verify if can print with colors
 	const wColors = !ADDONS.noColor;
 
-	const fgColors = {
-	    'black': '\33[30;',
-	    'bright-green': '\33[92;',
-	    'green': '\33[32;',
-	    'yellow': '\33[33;',
-	    'white': '\33[37;',
-	    'blue': '\33[34;',
-	    'red': '\33[31;'
-	};
-
-	const bgColors = {
-	    'black': '40m',
-	    'bright-green': '102m',
-	    'yellow': '43m',
-	    'white': '47m',
-	    'blue': '44m',
-	    'green': '42m',
-	    'gray': '100m'
-	};
-
-	if (wColors && fgColors[fg] && bgColors[bg]) {
+	if (wColors && color_codes.fg[fg] && color_codes.bg[bg]) {
 		label.length && canDisplay
-            && console[type]('%s %s%s%s %s', label, fgColors[fg], bgColors[bg], msg, RESET_COLOR);
+            && console[type]('%s %s%s%s %s', label, color_codes.fg[fg], color_codes.bg[bg], msg, color_codes.reset);
 
 		!label.length && canDisplay
-            && console[type]('%s%s%s %s', fgColors[fg], bgColors[bg], msg, RESET_COLOR);
+            && console[type]('%s%s%s %s', color_codes.fg[fg], color_codes.bg[bg], msg, color_codes.reset);
 	} else {
 		wColors && label.length && canDisplay
-            && console[type]('%s %s %s', label, msg, RESET_COLOR);
+			&& console[type]('%s %s %s', label, msg, color_codes.reset);
+
 		!label.length || !wColors && canDisplay
-            && console[type]('%s %s', msg, RESET_COLOR);
+            && console[type]('%s %s', msg, color_codes.reset);
 	}
 }
 
@@ -96,7 +107,7 @@ function Scan(msg, opts, cb) {
  * @param {string} msg The message to show
  */
 function getMessage(prefix, msg) {
-	let name = !ADDONS.noColor ? `${prefix + RESET_COLOR} ` : '';
+	let name = !ADDONS.noColor ? `${prefix + color_codes.reset} ` : '';
 	return `${name}${msg}`;
 }
 
@@ -105,37 +116,36 @@ function getMessage(prefix, msg) {
 /**
  * @description Print to the terminal with colors
  * @see {@link https://en.wikipedia.org/wiki/ANSI_escape_code | ANSI escape code }
- * @param {string} label A label to show before every message
- * @param {object} tipDisplayFreq How frequently should 'tips' be displayed; Range 0-5, from always to less often
+ * @param {object} displayFreq How frequently should certain messages be displayed; Range 0-5, from always to less often
  */
-const Print = (label, tipDisplayFreq) => ({
+const Print = displayFreq => ({
 	/**
      * @description writes an error message
      * @param {string} msg The message to write
      */
 	error: msg => {
-		Pretty(getMessage('err!', msg), 'red.black', label, 'error');
+		Pretty(getMessage('err!', msg), 'red.black', ADDONS.cmdlabel, 'error');
 	},
 	/**
      * @description pretty tip
      * @param {string} msg The message to write
      */
 	tip: msg => {
-		Pretty(getMessage('tip!', msg), 'green.black', label, 'log', tipDisplayFreq);
+		Pretty(getMessage('tip!', msg), 'green.black', ADDONS.cmdlabel, 'log', displayFreq);
 	},
 	/**
      * @description pretty success message
      * @param {string} msg The message to write
      */
 	success: msg => {
-		Pretty(getMessage('success!', msg), 'black.green', label);
+		Pretty(getMessage('success!', msg), 'black.green', ADDONS.cmdlabel);
 	},
 	/**
      * @description pretty info
      * @param {string} msg The message to write
      */
 	info: msg => {
-		Pretty(getMessage('info', msg), 'blue.black', label, 'info', tipDisplayFreq);
+		Pretty(getMessage('info', msg), 'blue.black', ADDONS.cmdlabel, 'info', displayFreq);
 	},
 	/**
      * @description pretty log
@@ -143,7 +153,7 @@ const Print = (label, tipDisplayFreq) => ({
      * @param {string} colors The foreground and the background colors separated by a "."
      */
 	log: (msg, colors = '') => {
-		Pretty(msg, colors, label);
+		Pretty(msg, colors, ADDONS.cmdlabel);
 	},
 	/**
      * @description pretty question
@@ -152,7 +162,7 @@ const Print = (label, tipDisplayFreq) => ({
      * @param {string} opts Options for answers; default: '(y/n)'
      */
 	ask: (msg, cb, opts = '(y/n)') => {
-		!ADDONS.noColor && process.stdout.write(`${label} ${RESET_COLOR}`);
+		!ADDONS.noColor && process.stdout.write(`${ADDONS.cmdlabel} ${color_codes.reset}`);
 		Scan(msg, opts, ans => {
 			cb(ans.toString().trim());
 		});
@@ -162,9 +172,36 @@ const Print = (label, tipDisplayFreq) => ({
      * @param {string} k The addon; list of addons: ['quiet']
      * @param {string} v The value for the addon
      */
-	extend(k, v) {
+	extend: (k, v) => {
 		ADDONS[k] = v;
+	},
+	/**
+	 * @description Defines a label with colors to prefix Print messages with
+	 * @param {string} cmdlabel The label used as prefix for messages
+	 * @param {string} colors Print colors for the label
+	 * @param {number} padLabel Number of spaces to pad the label with
+	 */
+	setPrettyLabel: (cmdlabel, colors, padLabel = 0) => {
+		// get foreground and background colors
+		const [fore, back] = colors.split('.');
+		const { fg, bg } = color_codes;
+		// create the label with colors and possible padding
+		const labelWColors = fg[fore]
+			+ bg[back]
+			+ String().padStart(padLabel)
+			+ cmdlabel
+			+ String().padEnd(padLabel)
+			+ color_codes.reset
+			+ String().padEnd(0);
+		ADDONS.cmdlabel = labelWColors;
 	}
 });
+
+/**
+ * @description Print color codes
+ */
+module.exports.colors = color_codes;
+
+// Export default
 
 module.exports = Print;
