@@ -1,12 +1,11 @@
 const { describe, it } = require('mocha');
 const { expect } = require('chai');
 
-const fs = require('fs');
 const execute = require('util').promisify(require('child_process').exec);
 
 describe('makever cli test', () => {
 	const testDir = 'tests/.tmp';
-	const customDir = `${testDir}/out/file`;
+	const customDir = `${testDir}/out/file.json`;
 
 	it('should show help', async function() {
 		const { stdout, stderr } = await execute('makever -h');
@@ -57,14 +56,5 @@ describe('makever cli test', () => {
 		const { stdout, stderr } = await execute(`makever -o ${customDir} -f`);
 		expect(stderr).to.be.empty;
 		expect(stdout).to.not.be.empty;
-	});
-
-	it('clean after tests', () => {
-		try {
-			fs.unlinkSync(testDir, () => {});
-			fs.unlinkSync('../src/.store', () => {});
-		} catch {
-			console.log('Tests done!');
-		}
 	});
 });
