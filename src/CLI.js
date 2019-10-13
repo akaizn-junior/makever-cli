@@ -13,7 +13,7 @@ const { printDisplayFreq, end } = require('./Globals');
 const CAR = require('./CmdArgsReader'); // 🚗
 
 const Print = require('./Print')(printDisplayFreq);
-// Print.setPrettyLabel('makever', 'yellow.black', 1);
+Print.setPrettyLabel('makever', 'yellow.black', 1);
 
 const {
 	is_valid_codename,
