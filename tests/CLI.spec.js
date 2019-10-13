@@ -7,6 +7,7 @@ const execute = require('util').promisify(require('child_process').exec);
 describe('makever cli test', () => {
 	const testDir = 'tests/.tmp';
 	const customDir = `${testDir}/out/file.json`;
+	const log = console.log;
 
 	it('should show help', async function() {
 		const { stdout, stderr } = await execute('makever -h');
@@ -42,6 +43,7 @@ describe('makever cli test', () => {
 		expect(stdout).to.not.be.empty;
 		// verify certain keys in the version data
 		expect(stdout).to.include('testeros');
+		log(stdout);
 	});
 
 	it('should throw error if combined --std and -o for custom output path', async function() {
@@ -64,9 +66,11 @@ describe('makever cli test', () => {
 		expect(versionFile).to.have.keys(['codename', 'branch', 'full', 'major', 'minor', 'patch', 'raw']);
 	});
 
-	it('should tag the repo with the current version and codename', async function() {
-		const { stdout, stderr } = await execute('makever --tag -m "Codename %c Version %v" -y');
-		expect(stderr).to.be.empty;
-		expect(stdout).to.not.be.empty;
-	});
+	it('should test tagging the repo (use -f to bypass a repo with current changes and -n to not actually tag)',
+		async function() {
+			const { stdout, stderr } = await execute('makever --tag -m "Codename %c Version %v" -f -n');
+			expect(stderr).to.be.empty;
+			expect(stdout).to.not.be.empty;
+			log(stdout);
+		});
 });
