@@ -121,7 +121,7 @@ function get_current_version_file(cache_data) {
 		);
 	} catch (err) {
 		Print.error(err);
-		return false;
+		return {};
 	}
 }
 
