@@ -9,9 +9,11 @@
 const execute = require('util').promisify(require('child_process').exec);
 
 // local
-const { labelWColors, printDisplayFreq, end } = require('./Globals');
+const { printDisplayFreq, end } = require('./Globals');
 const CAR = require('./CmdArgsReader'); // 🚗
-const Print = require('./Print')(labelWColors, printDisplayFreq);
+
+const Print = require('./Print')(printDisplayFreq);
+// Print.setPrettyLabel('makever', 'yellow.black', 1);
 
 const {
 	is_valid_codename,

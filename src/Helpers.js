@@ -6,9 +6,9 @@ const fs = require('fs');
 const path = require('path');
 
 // local
-const { userRoot, labelWColors, printDisplayFreq, jsontab, done, end } = require('./Globals');
+const { userRoot, printDisplayFreq, jsontab, done, end } = require('./Globals');
 const Store = require('./Store');
-const Print = require('./Print')(labelWColors, printDisplayFreq);
+const Print = require('./Print')(printDisplayFreq);
 
 // project package.json
 const pkg = require(path.join(userRoot, 'package.json'));

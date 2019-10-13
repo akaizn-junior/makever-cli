@@ -4,7 +4,7 @@
  * (c) 2019 Verdexdesign
  */
 
-const { getRandomInt } = require('./Globals');
+const { getRandomInt } = require('./Utils');
 
 const nouns = ['accelerator', 'accordion', 'account', 'accountant', 'acknowledgment', 'acoustic', 'acrylic', 'act', 'action', 'active',
 	'activity', 'actor', 'actress', 'adapter', 'addition', 'address', 'adjustment', 'adult', 'advantage', 'advertisement',

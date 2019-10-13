@@ -2,9 +2,9 @@ const fs = require('fs');
 const path = require('path');
 const execute = require('util').promisify(require('child_process').exec);
 
-const { userRoot, labelWColors, printDisplayFreq, errors, end } = require('./Globals');
+const { userRoot, printDisplayFreq, errors, end } = require('./Globals');
 const Sentence = require('./Rand').RandomSentence;
-const Print = require('./Print')(labelWColors, printDisplayFreq);
+const Print = require('./Print')(printDisplayFreq);
 
 /**
  * @description Validates input for filename

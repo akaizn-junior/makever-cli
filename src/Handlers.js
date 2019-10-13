@@ -7,8 +7,8 @@ const path = require('path');
 const exec = require('child_process').exec;
 const execute = require('util').promisify(exec);
 
-const { userRoot, labelWColors, printDisplayFreq, done, end } = require('./Globals');
-const Print = require('./Print')(labelWColors, printDisplayFreq);
+const { userRoot, printDisplayFreq, done, end } = require('./Globals');
+const Print = require('./Print')(printDisplayFreq);
 
 // import Helpers for initialized cache
 const { cache, replace_placeholders } = require('./Helpers');
@@ -17,7 +17,7 @@ const { cache, replace_placeholders } = require('./Helpers');
  * @description Help
  */
 function show_help() {
-	Print.log('makever -c=<codename>', 'yellow.black');
+	Print.log('[-c=codename]', 'yellow.black');
 	console.log('Basic:');
 	console.log('-c, --codename         Set the codename. The Codename must contain only letters, underscode and numbers');
 	console.log('-o, --output           The name of the version file. Pass only a name or name + ".json". Default "version.json"');
