@@ -119,8 +119,7 @@ function get_current_version_file(cache_data) {
             && cache_data.filename
             && require(path.join(userRoot, cache_data.directory, cache_data.filename))
 		);
-	} catch (err) {
-		Print.error(err);
+	} catch {
 		return {};
 	}
 }
