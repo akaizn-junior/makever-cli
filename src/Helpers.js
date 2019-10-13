@@ -4,6 +4,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const exec = require('child_process').exec;
 
 // local
 const { userRoot, printDisplayFreq, jsontab, done, end } = require('./Globals');
@@ -29,7 +30,7 @@ const {
 Store.init();
 
 /**
- * @description Tries to get the current version branch.
+ * Tries to get the current version branch.
  * A version branch indicates what type of update was made to the project version.
  * Checks for '0's on other branches to infer the current branch, or calculate ir from saved data.
  * @param {array} version The current version as an array of numbers
@@ -72,7 +73,7 @@ function infer_branch(version) {
 }
 
 /**
- * @description Writes to/Creates the version file or dumps to stdout
+ * Writes to/Creates the version file or dumps to stdout
  * @param {string} directory The file's location
  * @param {string} filename The file to write to
  * @param {object} data The data to write to the file and cache
@@ -109,7 +110,7 @@ function write_to(directory, filename, data, flags) {
 }
 
 /**
- * @description Require the current version file if cache data exists
+ * Require the current version file if cache data exists
  * @param {object} cache_data Current saved data in store
  */
 function get_current_version_file(cache_data) {
@@ -125,7 +126,7 @@ function get_current_version_file(cache_data) {
 }
 
 /**
- * @description Aggregates data genearted by the command
+ * Aggregates data genearted by the command
  * @param {object} args Data from arguments read from the command line
  */
 function get_contents(args) {
@@ -193,7 +194,7 @@ function get_contents(args) {
 }
 
 /**
- * @description Outputs info about options ran on a dry run
+ * Outputs info about options ran on a dry run
  * @param {object} args Command line arguments
  * @param {object} data Values needed to show messages correctly
  */
@@ -247,7 +248,7 @@ function dry_run_messages(args, data) {
 }
 
 /**
- * @description Parses a string with value placeholders
+ * Parses a string with value placeholders
  * @param {string} str the string to parse
  * @param {object} replacers Values to replace the placeholders with
  */
@@ -266,7 +267,7 @@ function replace_placeholders(str, replacers = {}) {
 }
 
 /**
- * @description Verifies if the -v argument includes prerelease options.
+ * Verifies if the -v argument includes prerelease options.
  * And separate the prerelease values from the regular semver value.
  * @param {array} semver The current semver version
  * @param {string} arg_v Value read for '-v' option
@@ -306,6 +307,27 @@ function get_prerelease(semver, arg_v = '') {
 	return { patch, prerelease_value, prerelease_label };
 }
 
+/**
+ * A Helper for handling the answer when tagging the repo
+ * @param {object} data Generated data needed by the helper
+ */
+function push_tag(data) {
+	const { version, codename, tag_msg, stdout } = data;
+
+	try {
+		exec('git add .');
+		exec(`git commit -m "v${version} - ${codename}"`);
+		exec(`git push origin v${version}`); // only push this specific tag
+		const commit = stdout.split('was')[1].trim();
+		Print.log(`annotated tag "v${version}" was pushed with message "${tag_msg}" (commit ${commit}`);
+		done();
+	} catch (err) {
+		Print.log('Something went wrong. Could not push tag');
+		console.error(err);
+		end();
+	}
+}
+
 module.exports = {
 	infer_branch,
 	write_to,
@@ -313,6 +335,7 @@ module.exports = {
 	dry_run_messages,
 	replace_placeholders,
 	get_prerelease,
+	push_tag,
 	cache: Store,
 	valid_pkg_version: get_valid_pkg_version(pkg)
 };

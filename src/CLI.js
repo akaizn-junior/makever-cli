@@ -79,6 +79,12 @@ const DEFINED_ARGS = {
 	'-f': {
 		flag: true
 	},
+	'-y': {
+		flag: true
+	},
+	'-n': {
+		flag: true
+	},
 	'--no-color': {
 		flag: true
 	}
@@ -95,7 +101,9 @@ const LONG_FORM_ARGS_MAP = {
 	'--dry-run': '-t',
 	'--force': '-f',
 	'--tag': '-r',
-	'--message': '-m'
+	'--message': '-m',
+	'--yes': '-y',
+	'--no': '-n'
 };
 
 //++++++++++++++++++++++++++++++++++++++++++++++++
@@ -119,7 +127,7 @@ Print.extend('noColor', ARGUMENTS_DATA['--no-color']);
 //+++++++++++++++++++++++++++++++++++++
 
 /**
- * @description Run the command
+ * Run the command
  * @param {object} args Data from arguments read from the command line
  */
 function run(args) {
@@ -129,7 +137,7 @@ function run(args) {
 }
 
 /**
- * @description Tags the current commit with an unsigned annotated tag object with a message.
+ * Tags the current commit with an unsigned annotated tag object with a message.
  * @param {object} args Data from arguments read from the command line
  */
 function run_tag(args) {
@@ -151,12 +159,16 @@ function run_tag(args) {
 		version,
 		codename,
 		tag_m: args['-m'] || '',
-		force_flag: args['-f'] || false
+		flags: {
+			force: args['-f'] || false,
+			yes: args['-y'] || false,
+			no: args['-n'] || false
+		}
 	}));
 }
 
 /**
- * @description Spawn a child_process to run 'npm version [options]'.
+ * Spawn a child_process to run 'npm version [options]'.
  * Saves new version data to the store for later usage.
  * @see {@link https://docs.npmjs.com/cli/version | npm version } for options
  * @see {@link https://nodejs.org/api/all.html#child_process_child_process_exec_command_options_callback | node child_process's exec}
@@ -227,7 +239,7 @@ async function run_npm_version(args) {
 }
 
 /**
- * @description Mocks the behaviour of the command, causing no side effects.
+ * Mocks the behaviour of the command, causing no side effects.
  * @param {object} args command arguments
  */
 function run_dry(args) {
