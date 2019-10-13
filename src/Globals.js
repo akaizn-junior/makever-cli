@@ -7,7 +7,7 @@ const path = require('path');
 const { getUserRoot } = require('./Utils');
 
 /**
- * @description Main project errors
+ * Main project errors
  */
 const errors = {
 	und_arg: 'invalid argument',
@@ -17,7 +17,7 @@ const errors = {
 };
 
 /**
- * @description Call when something succeeds
+ * Call when something succeeds
  */
 const done = () => {
 	// eslintrc will complain about process.exit
@@ -27,7 +27,7 @@ const done = () => {
 };
 
 /**
- * @description Call when something fails
+ * Call when something fails
  */
 const end = () => {
 	// eslintrc will complain about process.exit
@@ -37,12 +37,12 @@ const end = () => {
 };
 
 /**
- * @description makever module root directory
+ * makever module root directory
  */
 const module_root = path.dirname(__dirname);
 
 /**
- * @description Runs when getting the user root fails
+ * Runs when getting the user root fails
  * @param {string} err The returned error
  */
 const userRootErrCb = err => {

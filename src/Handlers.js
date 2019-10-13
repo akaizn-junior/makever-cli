@@ -11,7 +11,7 @@ const { userRoot, printDisplayFreq, done, end } = require('./Globals');
 const Print = require('./Print')(printDisplayFreq);
 
 // import Helpers for initialized cache
-const { cache, replace_placeholders } = require('./Helpers');
+const { cache, replace_placeholders, push_tag } = require('./Helpers');
 
 /**
  * @description Help
@@ -57,10 +57,10 @@ function dump_contents() {
  * @param {object} data Generated data needed by the handler
  */
 function tag_clean_repo(data) {
-	const { version, codename, tag_m, force_flag } = data;
+	const { version, codename, tag_m, flags } = data;
 
 	return async result => {
-		if (result && !result.stderr.length && !result.stdout.length || force_flag) {
+		if (result && !result.stderr.length && !result.stdout.length || flags.force) {
 			try {
 				const tag_msg = (
 					replace_placeholders(tag_m, { codename, version })
@@ -75,25 +75,31 @@ function tag_clean_repo(data) {
 					end();
 				}
 
-				Print.ask('commit and push annonated tag', ans => {
-					if (ans === 'Y' || ans === 'y') {
-						try {
-							exec('git add .');
-							exec(`git commit -m "v${version} - ${codename}"`);
-							exec(`git push origin v${version}`); // only push this specific tag
-							const commit = stdout.split('was')[1].trim();
-							Print.log(`annotated tag "v${version}" was pushed with message "${tag_msg}" (commit ${commit}`);
+				const answers = '[Y/n]';
+
+				// do not ask if the these flags are used
+				if (!flags.yes && !flags.no) {
+					Print.ask('commit and push annonated tag', ans => {
+						if (['Y', 'y', 'yes'].includes(ans)) {
+							push_tag({ version, codename, tag_msg, stdout });
+						} else if (['N', 'n', 'no'].includes(ans)) {
+							Print.log('Tag not pushed');
 							done();
-						} catch (err) {
-							Print.log('Something went wrong. Could not push tag');
-							console.error(err);
+						} else {
+							Print.log(`Invalid answer. Plese choose one of the following ${answers}`);
 							end();
 						}
-					} else {
-						Print.log('Tag not pushed');
-						done();
-					}
-				}, '(Y/n)');
+					}, answers);
+				}
+
+				if (flags.yes) {
+					push_tag({ version, codename, tag_msg, stdout });
+				}
+
+				if (flags.no) {
+					Print.log('Tag not pushed');
+					done();
+				}
 			} catch (err) {
 				Print.log('Something went wrong. Could not tag the repo');
 				console.error(err);
@@ -112,7 +118,7 @@ function tag_clean_repo(data) {
 			end();
 		}
 
-		if (result && result.stdout.length && !force_flag) {
+		if (result && result.stdout.length && !flags.force) {
 			Print.log('Cannot tag a repo with current changes');
 			Print.log('Please commit or stash your current changes before tagging');
 			done();

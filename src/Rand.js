@@ -281,7 +281,7 @@ const adjectives = ['aback', 'abaft', 'abandoned', 'abashed', 'aberrant', 'abhor
 	'zany', 'zealous', 'zesty', 'zippy', 'zonked'];
 
 /**
- * @description Generates a sentence from random adjectives and nouns
+ * Generates a sentence from random adjectives and nouns
  * @param {string} separator A character other than white-space to use as separator on sentences
  */
 function random_sentence(separator = ' ') {

@@ -3,7 +3,7 @@ const fs = require('fs');
 const os = require('os');
 
 /**
- * @description Generates random integers between min and max
+ * Generates random integers between min and max
  * @param {number} max An exclusive upper bound for the random number generated
  * @param {number} min An inclusive lower bound for the random number generated. 0 by default.
  * @see {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random | MDN: Math Random}
@@ -16,7 +16,7 @@ function get_random_int(min = 0, max = 1) {
 }
 
 /**
- * @description Gets the correct root path of the user project.
+ * Gets the correct root path of the user project.
  * Starts by checking 'process.cwd' but since 'process.cwd' can be edited by 'process.chdir',
  * lets verify if the path reported by 'process.cwd' points to a 'package.json' file.
  * Otherwise, verify that we are not on a windows machine and return POSIX's 'process.env.PWD', if points to 'package.json' too.

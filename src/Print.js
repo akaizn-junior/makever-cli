@@ -15,7 +15,7 @@ const ADDONS = {
 };
 
 /**
- * @description Defines color codes used by the Print module
+ * Defines color codes used by the Print module
  * @property {object} fg - Foreground color codes for the Terminal
  * @property {object} bg - Background color codes for the Terminal
  * @property {string} reset - Terminal color reset code
@@ -45,7 +45,7 @@ const color_codes = {
 // Helpers
 
 /**
- * @description writes a message to the console using ANSI colors
+ * writes a message to the console using ANSI colors
  * @see {@link https://en.wikipedia.org/wiki/ANSI_escape_code | ANSI escape code }
  * @param {string} msg The message to write
  * @param {string} colors The foreground and the background colors separated by a "."
@@ -85,7 +85,7 @@ function Pretty(msg, colors = 'white.black', label = '', type = 'log', displayFr
 }
 
 /**
- * @description Scans user input and passes it to the callback
+ * Scans user input and passes it to the callback
  * @param {string} msg The message to print
  * @param {string} opts Options for answers; default: '(y/n)'
  * @param {function} cb A callback
@@ -102,7 +102,7 @@ function Scan(msg, opts, cb) {
 }
 
 /**
- * @description Creates the correct message depending on ADDONS
+ * Creates the correct message depending on ADDONS
  * @param {string} prefix The message prefix depending on the function
  * @param {string} msg The message to show
  */
@@ -114,41 +114,41 @@ function getMessage(prefix, msg) {
 // Interface
 
 /**
- * @description Print to the terminal with colors
+ * Print to the terminal with colors
  * @see {@link https://en.wikipedia.org/wiki/ANSI_escape_code | ANSI escape code }
  * @param {object} displayFreq How frequently should certain messages be displayed; Range 0-5, from always to less often
  */
 const Print = displayFreq => ({
 	/**
-     * @description writes an error message
+     * writes an error message
      * @param {string} msg The message to write
      */
 	error: msg => {
 		Pretty(getMessage('err!', msg), 'red.black', ADDONS.cmdlabel, 'error');
 	},
 	/**
-     * @description pretty tip
+     * pretty tip
      * @param {string} msg The message to write
      */
 	tip: msg => {
 		Pretty(getMessage('tip!', msg), 'green.black', ADDONS.cmdlabel, 'log', displayFreq);
 	},
 	/**
-     * @description pretty success message
+     * pretty success message
      * @param {string} msg The message to write
      */
 	success: msg => {
 		Pretty(getMessage('success!', msg), 'black.green', ADDONS.cmdlabel);
 	},
 	/**
-     * @description pretty info
+     * pretty info
      * @param {string} msg The message to write
      */
 	info: msg => {
 		Pretty(getMessage('info', msg), 'blue.black', ADDONS.cmdlabel, 'info', displayFreq);
 	},
 	/**
-     * @description pretty log
+     * pretty log
      * @param {string} msg The message to write
      * @param {string} colors The foreground and the background colors separated by a "."
      */
@@ -156,7 +156,7 @@ const Print = displayFreq => ({
 		Pretty(msg, colors, ADDONS.cmdlabel);
 	},
 	/**
-     * @description pretty question
+     * pretty question
      * @param {string} msg The message to write
      * @param {function} cb A callback function
      * @param {string} opts Options for answers; default: '(y/n)'
@@ -168,7 +168,7 @@ const Print = displayFreq => ({
 		});
 	},
 	/**
-     * @description Extends this module with additional functionalities
+     * Extends this module with additional functionalities
      * @param {string} k The addon; list of addons: ['quiet']
      * @param {string} v The value for the addon
      */
@@ -176,7 +176,7 @@ const Print = displayFreq => ({
 		ADDONS[k] = v;
 	},
 	/**
-	 * @description Defines a label with colors to prefix Print messages with
+	 * Defines a label with colors to prefix Print messages with
 	 * @param {string} cmdlabel The label used as prefix for messages
 	 * @param {string} colors Print colors for the label
 	 * @param {number} padLabel Number of spaces to pad the label with
@@ -198,7 +198,7 @@ const Print = displayFreq => ({
 });
 
 /**
- * @description Print color codes
+ * Print color codes
  */
 module.exports.colors = color_codes;
 

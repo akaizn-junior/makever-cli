@@ -15,8 +15,8 @@ const OPERATOR = {
 // Interface
 
 /**
- * @name CAR 🚗 🚗 🚗
- * @description Reads 'process.argv' for command line argument and validates them following a defined list
+ * CAR 🚗 🚗 🚗
+ * Reads 'process.argv' for command line argument and validates them following a defined list
  * @param {object} definedArgs A list of defined arguments by the user
  * @param {object} longFormArgs A list of long form arguments to match the short form args in the defined list
  * @param {function} failed (err: string) => {} A callback for when validation fails for an argument or its value
@@ -30,7 +30,7 @@ function CAR(definedArgs, longFormArgs = [], failed = () => {}) {
 // Helpers
 
 /**
- * @description Verifies if arguments include the append operator;
+ * Verifies if arguments include the append operator;
  * and reduce all the values after it.
  * @param {array} __args__ process arguments
  * @returns {string} Arguments read by the append operator or an empty string
@@ -51,7 +51,7 @@ function get_data_to_append(__args__) {
 }
 
 /**
- * @description Validates cmd args
+ * Validates cmd args
  * @param {array} __args__ process arguments
  * @param {object} definedArgs A list of defined arguments by the user
  * @param {object} longFormArgs A list of long form arguments to match the short form args in the defined list
@@ -111,7 +111,7 @@ function validate_args(__args__, definedArgs, longFormArgs, failed) {
 }
 
 /**
- * @description Reads the value passed to an argument read as a 'var'
+ * Reads the value passed to an argument read as a 'var'
  * @param {array} args A list of command line arguments
  * @param {number} i An index on the arguments list
  * @param {string} possible_value The possible value of a 'var' arg
@@ -145,7 +145,7 @@ function read_value(args, i, possible_value, longFormArgs, success, failed) {
 }
 
 /**
- * @description Verififes if the cmd arg can be considered a valid value to read
+ * Verififes if the cmd arg can be considered a valid value to read
  * @param {string} val The value to read
  * @param {string} arg The option being validated
  * @param {function} failed The callback for when the argument value is invalid
@@ -162,7 +162,7 @@ function is_valid_arg_value(val, arg, failed) {
 }
 
 /**
- * @description Adds (k,v) like data to a global list of validated arguments
+ * Adds (k,v) like data to a global list of validated arguments
  * @param {string} arg The arg to trun into a key
  * @param {string} value The value
  * @param {function} success The callback for when data was added successfully
@@ -175,7 +175,7 @@ function add_arg(arg, value = '', success) {
 }
 
 /**
- * @description Reads a key inside an object if defined, otherwise returns a default value
+ * Reads a key inside an object if defined, otherwise returns a default value
  * @param {object} __obj The object to test
  * @param {string} __key The key to test
  * @param {any} __default The value to return in case the object and key are both undefined

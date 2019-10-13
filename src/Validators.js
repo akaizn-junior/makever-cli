@@ -7,7 +7,7 @@ const Sentence = require('./Rand').RandomSentence;
 const Print = require('./Print')(printDisplayFreq);
 
 /**
- * @description Validates input for filename
+ * Validates input for filename
  * @param {object} args Data from arguments read from the command line
  * @param {string} filename The name of the file to generate
  */
@@ -44,7 +44,7 @@ function is_valid_filename(args, filename) {
 }
 
 /**
- * @description Validates input for codename
+ * Validates input for codename
  * @param {string} codename The version's codename
  */
 function is_valid_codename(codename) {
@@ -67,7 +67,7 @@ function is_valid_codename(codename) {
 }
 
 /**
- * @description Validates the current version file.
+ * Validates the current version file.
  * Returns data from the file or false if the data is not valid.
  * @param {object} version_file Existing version file data
  */
@@ -91,7 +91,7 @@ function is_valid_version_file(version_file) {
 }
 
 /**
- * @description Verifies if input output file is the same as any existing version file
+ * Verifies if input output file is the same as any existing version file
  * @param {object} args Command line arguments data
  * @param {object} cache_data Stored generated data
  */
@@ -106,7 +106,7 @@ function is_existing_file(args, cache_data) {
 }
 
 /**
- * @description Validates JSON read from a local package.json file
+ * Validates JSON read from a local package.json file
  * @param {JSON} pkg_obj JSON read from local package.json file
  */
 function get_valid_pkg_version(pkg_obj) {
@@ -126,14 +126,14 @@ function get_valid_pkg_version(pkg_obj) {
 }
 
 /**
- * @description Verifies if the project running is a git repository
+ * Verifies if the project running is a git repository
  */
 function is_a_repo() {
 	return fs.existsSync(path.join(userRoot, '.git'));
 }
 
 /**
- * @description Verifies if the repo has a clean git tree
+ * Verifies if the repo has a clean git tree
  * @param {function} cb Respond to the caller
  */
 async function is_clean_repo(cb) {

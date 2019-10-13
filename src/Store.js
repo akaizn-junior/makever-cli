@@ -10,7 +10,7 @@ let CACHE_DIR = __dirname;
 // Helpers
 
 /**
- * @description Writes data to the cache
+ * Writes data to the cache
  * @param {string} data Data to write to the cache
  */
 function write(data) {
@@ -18,7 +18,7 @@ function write(data) {
 }
 
 /**
- * @description Silently verifies if the 'cache_dir' is valid
+ * Silently verifies if the 'cache_dir' is valid
  * @param {string} cache_dir Possible location for the store/cache
  */
 function is_valid_cache_dir(cache_dir) {
@@ -29,7 +29,7 @@ function is_valid_cache_dir(cache_dir) {
 // Interface
 
 /**
- * @description Initializes the CACHE object
+ * Initializes the CACHE object
  * @param {string} cache_dir The location of the store file/cache; default current directory (__dirname)
  */
 function init(cache_dir = '') {
@@ -56,7 +56,7 @@ function init(cache_dir = '') {
 }
 
 /**
- * @description Adds data to the cache for a new key.
+ * Adds data to the cache for a new key.
  * Updates data for an existing key.
  * @param {string} k A key to add to the cache
  * @param {string} v The value of the key
@@ -68,7 +68,7 @@ function upsert(k, v) {
 }
 
 /**
- * @description Reads cache data
+ * Reads cache data
  */
 function read() {
 	const res = fs.readFileSync(path.join(CACHE_DIR, CACHE_NAME), 'utf8');

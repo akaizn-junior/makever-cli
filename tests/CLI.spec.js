@@ -1,6 +1,7 @@
 const { describe, it } = require('mocha');
 const { expect } = require('chai');
 
+const fs = require('fs');
 const execute = require('util').promisify(require('child_process').exec);
 
 describe('makever cli test', () => {
@@ -53,7 +54,18 @@ describe('makever cli test', () => {
 	});
 
 	it('should write a version file on a custom path', async function() {
-		const { stdout, stderr } = await execute(`makever -o ${customDir} -f`);
+		const { stdout, stderr } = await execute(`makever -c Testeros -o ${customDir} -f`);
+		expect(stderr).to.be.empty;
+		expect(stdout).to.not.be.empty;
+		// verify contents
+		expect(fs.existsSync(customDir)).to.be.true;
+		const versionFile = JSON.parse(fs.readFileSync(customDir));
+		expect(versionFile.codename).to.equal('Testeros');
+		expect(versionFile).to.have.keys(['codename', 'branch', 'full', 'major', 'minor', 'patch', 'raw']);
+	});
+
+	it('should tag the repo with the current version and codename', async function() {
+		const { stdout, stderr } = await execute('makever --tag -m "Codename %c Version %v" -y');
 		expect(stderr).to.be.empty;
 		expect(stdout).to.not.be.empty;
 	});
