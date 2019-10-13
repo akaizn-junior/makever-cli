@@ -12,9 +12,9 @@ const Print = require('./Print')(labelWColors, printDisplayFreq);
  * @param {string} filename The name of the file to generate
  */
 function is_valid_filename(args, filename) {
-	const test = RegExp(/([\w|\w/])/);
-	let possible_name = args['-o'] || filename;
-	const {name, ext} = path.parse(possible_name);
+	const test = RegExp(/\w/);
+	const input = args['-o'] || filename;
+	const {root, dir, base, name, ext} = path.parse(input);
 
 	if (args['-o'] && args['--std']) {
 		Print.error('Invalid operation: cannot combine "--std" and "-o"');
@@ -22,9 +22,9 @@ function is_valid_filename(args, filename) {
 		end();
 	}
 
-	if (name && name.length && test.test(name)) {
+	if (input && input.length && test.test(name)) {
 		// only allow 'json' as an extension
-		if (ext && ext !== 'json') {
+		if (ext && ext !== '.json') {
 			Print.error('Generated file must be a json file');
 			Print.tip('"makever -h" or "man makever"');
 			end();
@@ -33,10 +33,10 @@ function is_valid_filename(args, filename) {
 		if (!ext) {
 			// no extension on the name, slpa a '.json' on it
 			let name_json = `${name}.json`;
-			return name_json;
+			return path.join(root, dir, name_json);
 		}
 
-		return possible_name;
+		return path.join(root, dir, base);
 	} else {
 		Print.error(errors.bad_filename);
 		end();
