@@ -22,7 +22,7 @@ function write(data) {
  * @param {string} cache_dir Possible location for the store/cache
  */
 function is_valid_cache_dir(cache_dir) {
-	const test = RegExp(/([\w|\w/]){3,}/);
+	const test = RegExp(/([\w|\w/])/);
 	return cache_dir.length && test.test(cache_dir);
 }
 
@@ -33,12 +33,17 @@ function is_valid_cache_dir(cache_dir) {
  * @param {string} cache_dir The location of the store file/cache; default current directory (__dirname)
  */
 function init(cache_dir = '') {
-	// create the directory if given
-	is_valid_cache_dir(cache_dir) && fs.mkdirSync(path.join(module_root, cache_dir), { recursive: true });
 	// test if a dir was given and silently validate it
-	cache_dir = is_valid_cache_dir(cache_dir) ? cache_dir : __dirname;
+	if (is_valid_cache_dir(cache_dir)) {
+		// create the directory if given
+		fs.mkdirSync(path.join(module_root, cache_dir), { recursive: true });
+	} else {
+		cache_dir = __dirname;
+	}
+
 	// update global var
 	CACHE_DIR = cache_dir;
+
 	// try to read
 	fs.readFile(path.join(cache_dir, CACHE_NAME),
 		{ encoding: 'utf8', flag: 'a+' },

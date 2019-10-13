@@ -12,9 +12,9 @@ const Print = require('./Print')(labelWColors, printDisplayFreq);
  * @param {string} filename The name of the file to generate
  */
 function is_valid_filename(args, filename) {
-	const test = RegExp(/([\w|\w/]){3,}/);
+	const test = RegExp(/([\w|\w/])/);
 	let possible_name = args['-o'] || filename;
-	const [name, ext] = possible_name.split('.');
+	const {name, ext} = path.parse(possible_name);
 
 	if (args['-o'] && args['--std']) {
 		Print.error('Invalid operation: cannot combine "--std" and "-o"');
@@ -39,7 +39,6 @@ function is_valid_filename(args, filename) {
 		return possible_name;
 	} else {
 		Print.error(errors.bad_filename);
-		Print.info('Filename must be a valid word with a minimum of 3 chars');
 		end();
 	}
 }
