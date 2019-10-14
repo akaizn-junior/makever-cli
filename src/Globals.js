@@ -50,11 +50,20 @@ const userRootErrCb = err => {
 	end();
 };
 
+/**
+ * Options used by child_process's exec function
+ * @see https://nodejs.org/api/child_process.html#child_process_child_process_exec_command_options_callback
+ */
+const execOptions = {
+	windowsHide: true
+};
+
 module.exports = {
 	errors,
 	done,
 	end,
 	module_root,
+	execOptions,
 	jsontab: 4,
 	printDisplayFreq: 0,
 	userRoot: getUserRoot(userRootErrCb)

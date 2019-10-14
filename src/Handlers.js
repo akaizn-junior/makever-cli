@@ -4,10 +4,9 @@
 
 const fs = require('fs');
 const path = require('path');
-const exec = require('child_process').exec;
-const execute = require('util').promisify(exec);
+const execute = require('util').promisify(require('child_process').execFile);
 
-const { userRoot, printDisplayFreq, done, end } = require('./Globals');
+const { userRoot, printDisplayFreq, done, end, execOptions } = require('./Globals');
 const Print = require('./Print')(printDisplayFreq);
 
 // import Helpers for initialized cache
@@ -67,7 +66,7 @@ function tag_clean_repo(data) {
                     || `Codename ${codename}`
 				);
 
-				const { stdout, stderr } = await execute(`git tag -f -a "v${version}" -m "${tag_msg}"`);
+				const { stdout, stderr } = await execute('git', ['tag', '-f', '-a', `"v${version}"`, '-m', `"${tag_msg}"`], execOptions);
 
 				if (stderr.length) {
 					Print.log('Something went wrong. Could not tag the repo');

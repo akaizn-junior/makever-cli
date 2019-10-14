@@ -6,10 +6,10 @@
  * (c) 2018 Verdexdesign
  */
 
-const execute = require('util').promisify(require('child_process').exec);
+const execute = require('util').promisify(require('child_process').execFile);
 
 // local
-const { printDisplayFreq, end } = require('./Globals');
+const { printDisplayFreq, end, execOptions } = require('./Globals');
 const CAR = require('./CmdArgsReader'); // 🚗
 
 const Print = require('./Print')(printDisplayFreq);
@@ -187,12 +187,12 @@ async function run_npm_version(args) {
 	const force_flag = args['-f'] ? '--force' : '';
 
 	// run npm version with correct options
-	let script = parsed.includes('-m')
-		? `npm version ${parsed} ${force_flag}`
-		: `npm version ${parsed} -m "${version_m}" ${force_flag}`;
+	let script_args = parsed.includes('-m')
+		? `version ${parsed} ${force_flag}`
+		: `version ${parsed} -m "${version_m}" ${force_flag}`;
 
 	try {
-		const { stderr, stdout } = await execute(script);
+		const { stderr, stdout } = await execute('npm', script_args.split(' '), execOptions);
 
 		if (stderr.length && !stderr.includes('--force')) {
 			Print.error('\'npm version\' failed');

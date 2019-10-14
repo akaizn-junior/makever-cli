@@ -4,10 +4,10 @@
 
 const fs = require('fs');
 const path = require('path');
-const exec = require('child_process').exec;
+const execFile = require('child_process').execFile;
 
 // local
-const { userRoot, printDisplayFreq, jsontab, done, end } = require('./Globals');
+const { userRoot, printDisplayFreq, jsontab, done, end, execOptions } = require('./Globals');
 const Store = require('./Store');
 const Print = require('./Print')(printDisplayFreq);
 
@@ -315,9 +315,9 @@ function push_tag(data) {
 	const { version, codename, tag_msg, stdout } = data;
 
 	try {
-		exec('git add .');
-		exec(`git commit -m "v${version} - ${codename}"`);
-		exec(`git push origin v${version}`); // only push this specific tag
+		execFile('git', ['add', '.'], execOptions);
+		execFile('git', ['commit', '-m', `"v${version} - ${codename}"`], execOptions);
+		execFile('git', ['push', 'origin', `v${version}`], execOptions); // only push this specific tag
 		const commit = stdout.split('was')[1].trim();
 		Print.log(`annotated tag "v${version}" was pushed with message "${tag_msg}" (commit ${commit}`);
 		done();

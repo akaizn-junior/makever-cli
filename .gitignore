@@ -1,6 +1,6 @@
 node_modules
 .store
-.tmp
-tmp
+.tmp*
+tmp*
 .nyc_output
 coverage
