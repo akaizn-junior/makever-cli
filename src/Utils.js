@@ -9,7 +9,7 @@ const os = require('os');
  * @see {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random | MDN: Math Random}
  * @returns A random number
  */
-function get_random_int(min = 0, max = 1) {
+function getRandomInt(min = 0, max = 1) {
 	min = Math.ceil(Math.abs(min));
 	max = Math.floor(Math.abs(max));
 	return Math.floor(Math.random() * (max - min)) + min;
@@ -25,7 +25,7 @@ function get_random_int(min = 0, max = 1) {
  * use this last approach. For now, this function should test all the possibilities.
  * @param {function} failed The callback when something fails
  */
-function get_user_project_root(failed = () => {}) {
+function getUserRoot(failed = () => {}) {
 	const node_project_entry = 'package.json';
 	const is_win32 = os.platform() === 'win32';
 	const test_1 = path.join(process.cwd(), node_project_entry);
@@ -44,7 +44,24 @@ function get_user_project_root(failed = () => {}) {
 	}
 }
 
+/**
+ * Sets keys in an object to readonly properties
+ * @param {object} obj The object to set as readonly
+ */
+function readOnlyKeys(obj) {
+	for (let key in obj) {
+		if (key) {
+			Object.defineProperty(obj, key, {
+				writable: false,
+				enumerable: false,
+				configurable: false
+			});
+		}
+	}
+}
+
 module.exports = {
-	getRandomInt: get_random_int,
-	getUserRoot: get_user_project_root
+	readOnlyKeys,
+	getRandomInt,
+	getUserRoot
 };

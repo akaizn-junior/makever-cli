@@ -2,3 +2,5 @@ node_modules
 .store
 .tmp
 tmp
+.nyc_output
+coverage

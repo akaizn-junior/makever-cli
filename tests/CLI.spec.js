@@ -4,7 +4,7 @@ const { expect } = require('chai');
 const fs = require('fs');
 const execute = require('util').promisify(require('child_process').exec);
 
-describe('makever cli test', () => {
+describe('makever cli tests', () => {
 	const testDir = 'tests/.tmp';
 	const customDir = `${testDir}/out/file.json`;
 	const log = console.log;
