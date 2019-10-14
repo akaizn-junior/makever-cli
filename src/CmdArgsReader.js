@@ -83,13 +83,16 @@ function validate_args(__args__, definedArgs, longFormArgs, failed) {
 		if (actual_arg && definedArgs[actual_arg]) {
 			switch (true) {
 			case definedArgs[actual_arg].var:
+				// if the argument read is a 'mixed flag' aka a 'var' with a default value
+				// get the default value
+				const default_value = getValueOrDefault(definedArgs[actual_arg], 'default', undefined);
 				if (!data_to_append.length) {
-					read_value(__args__, i, possible_value, longFormArgs, success, failed);
+					read_value(__args__, i, possible_value, default_value, longFormArgs, success, failed);
 					// skip the index of a possible value if 'var' is not assigned using OPERATOR.equal
 					// eslint-disable-next-line max-depth
 					if (!possible_value) i++;
 				} else {
-					read_value(__args__, i, data_to_append, longFormArgs, success, failed);
+					read_value(__args__, i, data_to_append, default_value, longFormArgs, success, failed);
 					// end loop
 					i = len;
 				}
@@ -114,23 +117,26 @@ function validate_args(__args__, definedArgs, longFormArgs, failed) {
  * Reads the value passed to an argument read as a 'var'
  * @param {array} args A list of command line arguments
  * @param {number} i An index on the arguments list
- * @param {string} possible_value The possible value of a 'var' arg
+ * @param {string} possible_value The possible value for an argument 'var'
+ * @param {string} default_value The default value for an argument 'var'
  * @param {array} longFormArgs A list of long form arguments to match an arg and translate to short form
  * @param {function} success The callback for when the value was read successfully
  * @param {function} failed The callback for when reading the value fails
  * @returns {void}
  */
-function read_value(args, i, possible_value, longFormArgs, success, failed) {
+function read_value(args, i, possible_value, default_value, longFormArgs, success, failed) {
 	let arg = args[i].split(OPERATOR.equal)[0];
 	// translate long form arg if read
 	arg = longFormArgs[arg] || arg;
 
-	// verify if value already exists to avoid doulbe declaration
+	// verify if value already exists to avoid double declaration
 	if (!ARGUMENTS_DATA[arg]) {
+		// try input values first
 		if (possible_value) {
 			return add_arg(arg, possible_value, success);
 		} else if (i + 1 < args.length) {
-			let value = is_valid_arg_value(args[++i], arg, failed);
+			// get a valid value on the next index or the default value
+			let value = get_valid_value(args[++i], default_value, arg, failed);
 			return add_arg(arg, value, success);
 		} else {
 			// no valid value to read
@@ -145,15 +151,19 @@ function read_value(args, i, possible_value, longFormArgs, success, failed) {
 }
 
 /**
- * Verififes if the cmd arg can be considered a valid value to read
+ * Validates the value read, return it if its a valid value,
+ * otherwise return the default value
  * @param {string} val The value to read
+ * @param {string} default_value The default value for an argument 'var'
  * @param {string} arg The option being validated
  * @param {function} failed The callback for when the argument value is invalid
  * @returns {string|void} A valid argument value or void
  */
-function is_valid_arg_value(val, arg, failed) {
+function get_valid_value(val, default_value, arg, failed) {
 	if (val && !val.startsWith(OPERATOR.arg_indicator) && val !== OPERATOR.equal) {
 		return val;
+	} else if (default_value !== undefined) {
+		return default_value;
 	} else {
 		// invalid arg value, maybe another arg or OPERATOR.equal
 		failed(`invalid value "${val}" for option "${arg}"`);
