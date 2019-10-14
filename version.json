@@ -1,9 +1,10 @@
 {
-    "codename": "prime",
-    "branch": "x.0.0",
-    "full": "1.0.0",
-    "raw": "v1.0.0",
-    "major": "1",
-    "minor": "0",
-    "patch": "0"
+    "codename": "elderly-owner",
+    "branch": "",
+    "full": "11.8.11",
+    "raw": "v11.8.11",
+    "major": "11",
+    "minor": "8",
+    "patch": "11",
+    "prerelease": ""
 }
