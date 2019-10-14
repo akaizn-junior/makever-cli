@@ -77,7 +77,7 @@ function tag_clean_repo(data) {
 
 				const answers = '[Y/n]';
 
-				// do not ask if the these flags are used
+				// do not ask if these flags are used
 				if (!flags.yes && !flags.no) {
 					Print.ask('commit and push annonated tag', ans => {
 						if (['Y', 'y', 'yes'].includes(ans)) {

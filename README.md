@@ -16,7 +16,7 @@ npm i -D makever
 
 ## Synopsis
 
-makever [-h] [--dump] [-c=codename] [-o=file] [-v=npm-version-options] [-m=tag-message] [--std] [--tag] [--dry-run] [--quiet] [--force]
+makever [-h] [--dump] [-c=codename] [-o=file] [-v=npm-version-options] [-m=tag-message] [--std] [--tag] [--dry-run] [--quiet] [--force] [--yes] [--no]
 
 ## Quick use
 
@@ -40,6 +40,8 @@ makever # auto generates a codename
 | -h, --help | Show help |
 | -q, --quiet | Shh mode |
 | -f, --force | Force an action that would not otherwise run without this flag |
+| -y, --yes | Directly accept the operation another option is introducing |
+| -n, --no | Directly deny the operation another option is introducing |
 
 ## More detail
 
@@ -75,9 +77,15 @@ For makever ```--tag``` a default message of 'Codename %c' is used if no message
 
 Verifies if the current project is a git repository with a clean tree, tags and pushes an annotated tag.
 
+* ```makever -c=<codename> --tag [-y | -n]```
+
+Before tagging the repo, the user is prompted to accept or deny the tag and push it.
+The prompt may be skipped by accepting or denying the operation with the ```-y``` or ```-n``` options respectively.
+
 * ```makever -c=<codename> --dry-run ...```
 
 Take makever for a test drive. Run with no side effects before committing to generating an actual version file.
+Dry run is an evolving feature, may not cover all cases the command itself covers.
 
 * ```makever -c=<codename> -o=<file> --quiet```
 
@@ -104,6 +112,12 @@ After installing makever you could access the command by
 I recommend using [npx](https://www.npmjs.com/package/npx) instead. npx will use a local installation of a package or download it, in order to run it.
 
 * ```npx makever [options] :)```
+
+### Tests
+
+* ```npm run test``` run entire test suite with coverage report
+* ```npm run test:w``` watch test files
+* ```npm run test:f``` watch specific test file by RegExp, example: ```npm run test:f -- Print``` will run and watch the file Print.test.js
 
 ## Man page
 
