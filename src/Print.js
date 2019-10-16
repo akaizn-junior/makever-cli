@@ -15,12 +15,12 @@ const ADDONS = {
 };
 
 /**
- * Defines color codes used by the Print module
+ * ANSI colors defines by their foreground and background codes
  * @property {object} fg - Foreground color codes for the Terminal
  * @property {object} bg - Background color codes for the Terminal
  * @property {string} reset - Terminal color reset code
  */
-const COLOR_CODES = {
+const COLORS = {
 	fg: {
 		black: '\u001b[30;',
 		'bright-green': '\u001b[92;',
@@ -69,18 +69,18 @@ function Pretty(msg, colors = 'white.black', label = '', type = 'log', displayFr
 	// verify if can print with colors
 	const wColors = !ADDONS.noColor;
 
-	if (wColors && COLOR_CODES.fg[fg] && COLOR_CODES.bg[bg]) {
+	if (wColors && COLORS.fg[fg] && COLORS.bg[bg]) {
 		label.length && canDisplay
-            && console[type]('%s %s%s%s %s', label, COLOR_CODES.fg[fg], COLOR_CODES.bg[bg], msg, COLOR_CODES.reset);
+            && console[type]('%s %s%s%s %s', label, COLORS.fg[fg], COLORS.bg[bg], msg, COLORS.reset);
 
 		!label.length && canDisplay
-            && console[type]('%s%s%s %s', COLOR_CODES.fg[fg], COLOR_CODES.bg[bg], msg, COLOR_CODES.reset);
+            && console[type]('%s%s%s %s', COLORS.fg[fg], COLORS.bg[bg], msg, COLORS.reset);
 	} else {
-		wColors && label.length && canDisplay
-			&& console[type]('%s %s %s', label, msg, COLOR_CODES.reset);
+		!wColors || label.length && canDisplay
+			&& console[type]('%s %s %s', label, msg, COLORS.reset);
 
-		!label.length || !wColors && canDisplay
-            && console[type]('%s %s', msg, COLOR_CODES.reset);
+		!label.length && canDisplay
+            && console[type]('%s %s', msg, COLORS.reset);
 	}
 }
 
@@ -101,16 +101,6 @@ function Scan(msg, opts, cb) {
 	});
 }
 
-/**
- * Creates the correct message depending on ADDONS
- * @param {string} prefix The message prefix depending on the function
- * @param {string} msg The message to show
- */
-function GetMessage(prefix, msg) {
-	let name = !ADDONS.noColor ? `${prefix}${COLOR_CODES.reset} ` : '';
-	return `${name}${msg}`;
-}
-
 // Interface
 
 /**
@@ -124,28 +114,28 @@ const Print = displayFreq => ({
      * @param {string} msg The message to write
      */
 	error: msg => {
-		Pretty(GetMessage('err!', msg), 'red.black', ADDONS.cmdlabel, 'error');
+		Pretty(`err!${COLORS.reset} ${msg}`, 'red.black', ADDONS.cmdlabel, 'error');
 	},
 	/**
      * pretty tip
      * @param {string} msg The message to write
      */
 	tip: msg => {
-		Pretty(GetMessage('tip!', msg), 'green.black', ADDONS.cmdlabel, 'log', displayFreq);
+		Pretty(`tip!${COLORS.reset} ${msg}`, 'green.black', ADDONS.cmdlabel, 'log', displayFreq);
 	},
 	/**
      * pretty success message
      * @param {string} msg The message to write
      */
 	success: msg => {
-		Pretty(GetMessage('success!', msg), 'black.green', ADDONS.cmdlabel);
+		Pretty(`success!${COLORS.reset} ${msg}`, 'black.green', ADDONS.cmdlabel);
 	},
 	/**
      * pretty info
      * @param {string} msg The message to write
      */
 	info: msg => {
-		Pretty(GetMessage('info', msg), 'blue.black', ADDONS.cmdlabel, 'info', displayFreq);
+		Pretty(`info:${COLORS.reset} ${msg}`, 'blue.black', ADDONS.cmdlabel, 'info', displayFreq);
 	},
 	/**
      * pretty log
@@ -162,7 +152,7 @@ const Print = displayFreq => ({
      * @param {string} opts Options for answers; default: '(y/n)'
      */
 	ask: (msg, cb, opts = '(y/n)') => {
-		!ADDONS.noColor && process.stdout.write(`${ADDONS.cmdlabel} ${COLOR_CODES.reset}`);
+		!ADDONS.noColor && process.stdout.write(`${ADDONS.cmdlabel} ${COLORS.reset}`);
 		Scan(msg, opts, ans => {
 			cb(ans.toString().trim());
 		});
@@ -188,19 +178,18 @@ const Print = displayFreq => ({
 	setPrettyLabel: (cmdlabel, colors, padLabel = 0) => {
 		// get foreground and background colors
 		const [fore, back] = colors.split('.');
-		const { fg, bg } = COLOR_CODES;
+		const { fg, bg } = COLORS;
 		// create the label with colors and possible padding
 		const labelWColors = fg[fore]
 			+ bg[back]
-			+ String().padStart(padLabel)
-			+ cmdlabel
-			+ String().padEnd(padLabel)
-			+ COLOR_CODES.reset
+			+ String(cmdlabel)
+				.padStart(padLabel)
+				.padEnd(padLabel)
+			+ COLORS.reset
 			+ String().padEnd(0);
 		ADDONS.cmdlabel = labelWColors;
 	}
 });
-
 
 // Export default
 
@@ -209,14 +198,13 @@ module.exports = Print;
 // Export extras
 
 module.exports.pretty = Pretty;
-module.exports.getMessage = GetMessage;
 module.exports.scan = Scan;
 module.exports.addons = ADDONS;
 
 /**
  * Print color codes
  */
-module.exports.colors = COLOR_CODES;
+module.exports.colors = COLORS;
 
 // Turn keys in module.exports to read only
 
