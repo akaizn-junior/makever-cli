@@ -9,7 +9,7 @@ const execFile = require('child_process').execFile;
 // local
 const { userRoot, printDisplayFreq, jsontab, done, end, execOptions } = require('./Globals');
 const Store = require('./Store');
-const Print = require('./Print')(printDisplayFreq);
+const Print = require('./pretty/Print')(printDisplayFreq);
 
 // project package.json
 const pkg = require(path.join(userRoot, 'package.json'));

@@ -1,10 +1,10 @@
 /*!
- * Print
- * Print to the terminal with colors
- * (c) 2018 Verdexdesign
+ * Pretty
+ * Pretty print to the console
+ * (c) 2018-2019 Verdexdesign
  */
 
-const { getRandomInt, readOnlyKeys } = require('./Utils');
+const { getRandomInt, readOnlyKeys } = require('../Utils');
 
 // Addons with more functions for this module
 const ADDONS = {

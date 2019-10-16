@@ -3,8 +3,8 @@ const path = require('path');
 const execute = require('util').promisify(require('child_process').exec);
 
 const { userRoot, printDisplayFreq, errors, end } = require('./Globals');
-const Sentence = require('./Rand').RandomSentence;
-const Print = require('./Print')(printDisplayFreq);
+const Randy = require('./randy/Randy').RandomSentence;
+const Print = require('./pretty/Print')(printDisplayFreq);
 
 /**
  * Validates input for filename
@@ -52,7 +52,7 @@ function is_valid_codename(codename) {
 
 	if (!codename) {
 		Print.info('Makever will generate a Random codename if none provided');
-		return Sentence('-');
+		return Randy('-');
 	}
 
 	if (test.test(codename)) {

@@ -7,7 +7,7 @@ const path = require('path');
 const execute = require('util').promisify(require('child_process').execFile);
 
 const { userRoot, printDisplayFreq, done, end, execOptions } = require('./Globals');
-const Print = require('./Print')(printDisplayFreq);
+const Print = require('./pretty/Print')(printDisplayFreq);
 
 // import Helpers for initialized cache
 const { cache, replace_placeholders, push_tag } = require('./Helpers');

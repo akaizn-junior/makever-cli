@@ -1,10 +1,3 @@
-/*!
- * Random Sentences Generator
- * Data from https://gist.github.com/ijmacdowell/8325491 Erased original nouns index 2210 and other data
- * (c) 2019 Verdexdesign
- */
-
-const { getRandomInt } = require('./Utils');
 
 const nouns = ['accelerator', 'accordion', 'account', 'accountant', 'acknowledgment', 'acoustic', 'acrylic', 'act', 'action', 'active',
 	'activity', 'actor', 'actress', 'adapter', 'addition', 'address', 'adjustment', 'adult', 'advantage', 'advertisement',
@@ -280,16 +273,4 @@ const adjectives = ['aback', 'abaft', 'abandoned', 'abashed', 'aberrant', 'abhor
 	'woozy', 'workable', 'worried', 'worthless', 'wrathful', 'wretched', 'wrong', 'wry', 'xenophobic', 'yellow', 'yielding', 'young', 'youthful', 'yummy',
 	'zany', 'zealous', 'zesty', 'zippy', 'zonked'];
 
-/**
- * Generates a sentence from random adjectives and nouns
- * @param {string} separator A character other than white-space to use as separator on sentences
- */
-function random_sentence(separator = ' ') {
-	let randomAjective = adjectives[getRandomInt(0, adjectives.length)];
-	let randomNoun = nouns[getRandomInt(0, nouns.length)];
-	randomAjective = randomAjective.trim().replace(/\s/g, separator);
-	randomNoun = randomNoun.trim().replace(/\s/g, separator);
-	return randomAjective.concat(separator, randomNoun);
-}
-
-module.exports = { RandomSentence: random_sentence };
+module.exports = { nouns, adjectives };

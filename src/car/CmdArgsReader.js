@@ -4,7 +4,7 @@
  * (c) 2019 Verdexdesign
  */
 
-const { errors, done, end } = require('./Globals');
+const { errors, done, end } = require('../Globals');
 const ARGUMENTS_DATA = {};
 const OPERATOR = {
 	equal: '=',
