@@ -11,7 +11,8 @@ const ADDONS = {
 	// A flag for quiet mode; default: false
 	quiet: false,
 	noColor: false,
-	cmdlabel: ''
+	labelWColors: '',
+	plainLabel: ''
 };
 
 /**
@@ -92,11 +93,8 @@ function Pretty(msg, colors = 'white.black', label = '', type = 'log', displayFr
 	case hasColors && !label.length && canDisplay:
 		console[type]('%s%s%s %s', Color(asFG).fg, Color(asBG).bg, msg, Color.reset);
 		break;
-	case !hasColors && (!wColors || label.length && canDisplay):
-		console[type]('%s %s %s', label, msg, Color.reset);
-		break;
-	case !hasColors && !label.length && canDisplay:
-		console[type]('%s %s', msg, Color.reset);
+	case !hasColors && !wColors || label.length && canDisplay:
+		console[type]('%s %s %s', ADDONS.plainLabel, msg, Color.reset);
 		break;
 	}
 }
@@ -131,28 +129,28 @@ const Print = displayFreq => ({
      * @param {string} msg The message to write
      */
 	error: msg => {
-		Pretty(`err!${Color.reset} ${msg}`, 'red.black', ADDONS.cmdlabel, 'error');
+		Pretty(`err!${Color.reset} ${msg}`, 'red.black', ADDONS.labelWColors, 'error');
 	},
 	/**
      * pretty tip
      * @param {string} msg The message to write
      */
 	tip: msg => {
-		Pretty(`tip!${Color.reset} ${msg}`, 'green.black', ADDONS.cmdlabel, 'log', displayFreq);
+		Pretty(`tip!${Color.reset} ${msg}`, 'green.black', ADDONS.labelWColors, 'log', displayFreq);
 	},
 	/**
      * pretty success message
      * @param {string} msg The message to write
      */
 	success: msg => {
-		Pretty(`success!${Color.reset} ${msg}`, 'black.green', ADDONS.cmdlabel);
+		Pretty(`success!${Color.reset} ${msg}`, 'black.green', ADDONS.labelWColors);
 	},
 	/**
      * pretty info
      * @param {string} msg The message to write
      */
 	info: msg => {
-		Pretty(`info:${Color.reset} ${msg}`, 'blue.black', ADDONS.cmdlabel, 'info', displayFreq);
+		Pretty(`info:${Color.reset} ${msg}`, 'blue.black', ADDONS.labelWColors, 'info', displayFreq);
 	},
 	/**
      * pretty log
@@ -160,7 +158,7 @@ const Print = displayFreq => ({
      * @param {string} colors The foreground and the background colors separated by a "."
      */
 	log: (msg, colors = '') => {
-		Pretty(msg, colors, ADDONS.cmdlabel);
+		Pretty(msg, colors, ADDONS.labelWColors);
 	},
 	/**
      * pretty question
@@ -169,7 +167,7 @@ const Print = displayFreq => ({
      * @param {string} opts Options for answers; default: '(y/n)'
      */
 	ask: (msg, cb, opts = '(y/n)') => {
-		!ADDONS.noColor && process.stdout.write(`${ADDONS.cmdlabel} ${Color.reset}`);
+		!ADDONS.noColor && process.stdout.write(`${ADDONS.labelWColors} ${Color.reset}`);
 		Scan(msg, opts, ans => {
 			cb(ans.toString().trim());
 		});
@@ -201,9 +199,9 @@ const Print = displayFreq => ({
 			+ String(cmdlabel)
 				.padStart(padLabel)
 				.padEnd(padLabel)
-			+ Color.reset
-			+ String().padEnd(0);
-		ADDONS.cmdlabel = labelWColors;
+			+ Color.reset;
+		ADDONS.labelWColors = labelWColors;
+		ADDONS.plainLabel = cmdlabel;
 	}
 });
 

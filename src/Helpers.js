@@ -92,6 +92,7 @@ function write_to(directory, filename, data, flags) {
 			if (err) {
 				end();
 			}
+
 			// store relevant data for makever
 			Store.add('codename', data.codename);
 			Store.add('directory', directory);
