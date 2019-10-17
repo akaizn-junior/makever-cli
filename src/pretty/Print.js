@@ -48,6 +48,7 @@ function Color(color) {
 		return {
 			fg: `\u001b[${COLOR_CODES[color][0]};`,
 			bg: `${COLOR_CODES[color][1]}m`,
+			nobg: `\u001b[${COLOR_CODES[color][0]}m`
 		};
 	}
 
@@ -88,7 +89,7 @@ function Pretty(msg, colors = 'white.black', label = '', type = 'log', displayFr
 
 	switch (true) {
 	case hasColors && label.length && canDisplay:
-		console[type]('%s %s%s%s %s', label, Color(asFG).fg, Color(asBG).bg, msg, Color.reset);
+		console[type]('%s %s%s%s %s', label, Color(asFG).bg, '', msg, Color.reset);
 		break;
 	case hasColors && !label.length && canDisplay:
 		console[type]('%s%s%s %s', Color(asFG).fg, Color(asBG).bg, msg, Color.reset);
