@@ -3,7 +3,7 @@ const path = require('path');
 const execute = require('util').promisify(require('child_process').exec);
 
 const { userRoot, printDisplayFreq, errors, end } = require('./Globals');
-const Randy = require('./randy/Randy').RandomSentence;
+const Randy = require('./randy/Randy');
 const Print = require('./pretty/Print')(printDisplayFreq);
 
 /**
