@@ -1,7 +1,7 @@
 const { describe, it } = require('mocha');
 const { expect } = require('chai');
 
-const Print = require('../src/Print');
+const Print = require('../src/pretty/Print');
 
 describe('Print module tests', () => {
 	const displayFrequency = 3;
