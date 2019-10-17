@@ -28,20 +28,17 @@ describe('Print module tests', () => {
 
 	it('should have own properties on the default imported object', () => {
 		expect(Print.colors).to.be.ownProperty;
-		expect(Print.getMessage).to.be.ownProperty;
 		expect(Print.pretty).to.be.ownProperty;
 		expect(Print.scan).to.be.ownProperty;
 	});
 
 	it('should verify that the following properties are readonly', () => {
-		const colors = Object.getOwnPropertyDescriptor(Print, 'colors');
-		const getMessage = Object.getOwnPropertyDescriptor(Print, 'getMessage');
+		const color = Object.getOwnPropertyDescriptor(Print, 'color');
 		const pretty = Object.getOwnPropertyDescriptor(Print, 'pretty');
 		const scan = Object.getOwnPropertyDescriptor(Print, 'scan');
 		const addons = Object.getOwnPropertyDescriptor(Print, 'addons');
 
-		expect(colors.writable).to.be.false;
-		expect(getMessage.writable).to.be.false;
+		expect(color.writable).to.be.false;
 		expect(pretty.writable).to.be.false;
 		expect(scan.writable).to.be.false;
 		expect(addons.writable).to.be.false;
@@ -88,28 +85,17 @@ describe('Print module tests', () => {
 
 	it('should test Print.setPrettyLabel', () => {
 		expect(print.setPrettyLabel).to.be.a('function');
-		// get the colors to comapre
-		const yellow = Print.colors.fg.yellow;
-		const black = Print.colors.bg.black;
-		const reset = Print.colors.reset;
+		// get the colors to compare
+		const yellow = Print.color('yellow').fg;
+		const black = Print.color('black').bg;
+		const reset = Print.color.reset;
 		// call with only 2 args
 		print.setPrettyLabel('pretty label', 'yellow.black');
-		expect(Print.addons.cmdlabel).to.equal(`${yellow}${black}pretty label${reset}`);
+		expect(Print.addons.labelWColors).to.equal(`${yellow}${black}pretty label${reset}`);
 		// call with all/3 args
 		print.setPrettyLabel('pretty label', 'yellow.black', 1);
-		expect(Print.addons.cmdlabel).to.equal(`${yellow}${black} pretty label ${reset}`);
-	});
-
-	it('should test getMessage', () => {
-		const reset = Print.colors.reset;
-		expect(Print.getMessage).to.be.a('function');
-
-		let result = Print.getMessage('tip!', 'this is a tip');
-		expect(result).to.equal(`tip!${reset} this is a tip`);
-
-		print.extend('noColor', 'true');
-
-		result = Print.getMessage('tip!', 'this is a tip');
-		expect(result).to.equal('this is a tip');
+		expect(Print.addons.labelWColors).to.equal(`${yellow}${black} pretty label ${reset}`);
+		// verify label with no colors
+		expect(Print.addons.plainLabel).to.equal('pretty label');
 	});
 });

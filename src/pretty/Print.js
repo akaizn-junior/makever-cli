@@ -197,9 +197,9 @@ const Print = displayFreq => ({
 		// create the label with colors and possible padding
 		const labelWColors = Color(fore).fg
 			+ Color(back).bg
+			+ String().padStart(padLabel)
 			+ String(cmdlabel)
-				.padStart(padLabel)
-				.padEnd(padLabel)
+			+ String().padEnd(padLabel)
 			+ Color.reset;
 		ADDONS.labelWColors = labelWColors;
 		ADDONS.plainLabel = cmdlabel;
@@ -219,7 +219,7 @@ module.exports.addons = ADDONS;
 /**
  * Print color codes
  */
-module.exports.colors = COLOR_CODES;
+module.exports.color = Color;
 
 // Turn keys in module.exports to read only
 

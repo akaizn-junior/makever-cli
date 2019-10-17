@@ -7,10 +7,16 @@ cache:
         - "node_modules"
 
 stages:
+	- lint
     - test
 
 jobs:
-    include:
+	include:
+		- stage: lint
+          name: "Lint codebase"
+          script:
+            - npm ci
+            - npm run lint
         - stage: test
           name: "Unit and coverage tests"
           script:
