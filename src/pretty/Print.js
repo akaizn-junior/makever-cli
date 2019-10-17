@@ -83,17 +83,19 @@ function Pretty(msg, colors = 'white.black', label = '', type = 'log', displayFr
 	// verify if can print with colors
 	const wColors = !ADDONS.noColor;
 
+	const hasColors = wColors && Color(asFG) && Color(asBG);
+
 	switch (true) {
-	case wColors && Color(asFG) && Color(asBG) && label.length && canDisplay:
-		console[type]('%s %s%s%s %s', label, Color(asBG).fg, Color(asBG).bg, msg, Color.reset);
+	case hasColors && label.length && canDisplay:
+		console[type]('%s %s%s%s %s', label, Color(asFG).fg, Color(asBG).bg, msg, Color.reset);
 		break;
-	case wColors && Color(asFG) && Color(asBG) && !label.length && canDisplay:
-		console[type]('%s%s%s %s', Color(asBG).fg, Color(asBG).bg, msg, Color.reset);
+	case hasColors && !label.length && canDisplay:
+		console[type]('%s%s%s %s', Color(asFG).fg, Color(asBG).bg, msg, Color.reset);
 		break;
-	case !wColors || label.length && canDisplay:
+	case !hasColors && (!wColors || label.length && canDisplay):
 		console[type]('%s %s %s', label, msg, Color.reset);
 		break;
-	case !label.length && canDisplay:
+	case !hasColors && !label.length && canDisplay:
 		console[type]('%s %s', msg, Color.reset);
 		break;
 	}
