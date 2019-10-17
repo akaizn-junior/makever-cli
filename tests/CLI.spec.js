@@ -9,10 +9,11 @@ const { execOptions } = require('../src/Globals');
 describe('makever cli tests', () => {
 	const testDir = 'tests/.tmp';
 	const customDir = `${testDir}/out/file.json`;
+	const command = 'src/CLI.js';
 	const log = console.log;
 
 	it('should show help', async function() {
-		const { stdout, stderr } = await execute('makever', ['-h'], execOptions);
+		const { stdout, stderr } = await execute(command, ['-h'], execOptions);
 		expect(stderr).to.be.empty;
 		expect(stdout).to.not.be.empty;
 		// verify sections on the help panel
@@ -24,7 +25,7 @@ describe('makever cli tests', () => {
 
 	it('should dump version data to standard out', async function() {
 		// force to bypass any existing version file
-		const { stdout, stderr } = await execute('makever', ['--std', '-f'], execOptions);
+		const { stdout, stderr } = await execute(command, ['--std', '-f'], execOptions);
 		expect(stderr).to.be.empty;
 		expect(stdout).to.not.be.empty;
 		// verify certain keys in the version data
@@ -40,7 +41,7 @@ describe('makever cli tests', () => {
 
 	it('should dump version data to stdout with custom codename', async function() {
 		// force to bypass any existing version file
-		const { stdout, stderr } = await execute('makever', ['--std', '-c', 'testeros', '-f'], execOptions);
+		const { stdout, stderr } = await execute(command, ['--std', '-c', 'testeros', '-f'], execOptions);
 		expect(stderr).to.be.empty;
 		expect(stdout).to.not.be.empty;
 		// verify certain keys in the version data
@@ -50,7 +51,7 @@ describe('makever cli tests', () => {
 
 	it('should throw error if combined --std and -o for custom output path', async function() {
 		try {
-			const { stderr } = await execute('makever', ['--std', '-o', `${customDir}`, '-f'], execOptions);
+			const { stderr } = await execute(command, ['--std', '-o', `${customDir}`, '-f'], execOptions);
 			expect(stderr).to.not.be.empty;
 		} catch (err) {
 			expect(err.stderr).to.include('Invalid operation: cannot combine "--std" and "-o"');
@@ -58,7 +59,7 @@ describe('makever cli tests', () => {
 	});
 
 	it('should write a version file on a custom path', async function() {
-		const { stdout, stderr } = await execute('makever', ['-c', 'Testeros', '-o', `${customDir}`, '-f'], execOptions);
+		const { stdout, stderr } = await execute(command, ['-c', 'Testeros', '-o', `${customDir}`, '-f'], execOptions);
 		expect(stderr).to.be.empty;
 		expect(stdout).to.not.be.empty;
 		// verify contents
@@ -70,7 +71,7 @@ describe('makever cli tests', () => {
 
 	it('should test tagging the repo (use -f to bypass a repo with current changes and -n to not actually tag)',
 		async function() {
-			const { stdout, stderr } = await execute('makever', ['--tag', '-m', 'Codename %c Version %v', '-f', '-n'], execOptions);
+			const { stdout, stderr } = await execute(command, ['--tag', '-m', 'Codename %c Version %v', '-f', '-n'], execOptions);
 			expect(stderr).to.be.empty;
 			expect(stdout).to.not.be.empty;
 			log(stdout);

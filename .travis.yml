@@ -1,0 +1,22 @@
+language: node_js
+node_js:
+    - "lts/*"
+
+cache:
+    directories:
+        - "node_modules"
+
+stages:
+    - test
+
+jobs:
+    include:
+        - stage: test
+          name: "Unit and coverage tests"
+          script:
+            - npm ci
+            - npm run test
+
+notifications:
+  email:
+    - sdnziaka@gmail.com
