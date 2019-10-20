@@ -123,6 +123,10 @@ I recommend using [npx](https://www.npmjs.com/package/npx) instead. npx will use
 
 To read the man page run ```man ./makever.1```
 
+## Build Status
+
+[![Dev Build Status](https://travis-ci.org/verdebydesign/makever-cli.svg?branch=develop)](https://travis-ci.org/verdebydesign/makever-cli)
+
 ## License
 
 ISC License [ISC](https://opensource.org/licenses/ISC)
