@@ -132,28 +132,28 @@ const Print = opts => {
 		 * writes an error message
 		 * @param {string} msg The message to write
 		 */
-		error: msg => {
+		error: (msg = '') => {
 			Pretty(`${labels.error || 'err!'}${Color.reset} ${msg}`, 'red.black', ADDONS.labelWColors, 'error');
 		},
 		/**
 		 * pretty tip
 		 * @param {string} msg The message to write
 		 */
-		tip: msg => {
+		tip: (msg = '') => {
 			Pretty(`${labels.tip || 'tip!'}${Color.reset} ${msg}`, 'green.black', ADDONS.labelWColors, 'log', displayFrequency.tip);
 		},
 		/**
 		 * pretty success message
 		 * @param {string} msg The message to write
 		 */
-		success: msg => {
+		success: (msg = '') => {
 			Pretty(`${labels.success || 'success!'}${Color.reset} ${msg}`, 'black.green', ADDONS.labelWColors);
 		},
 		/**
 		 * pretty info
 		 * @param {string} msg The message to write
 		 */
-		info: msg => {
+		info: (msg = '') => {
 			Pretty(`${labels.info || 'info:'}${Color.reset} ${msg}`, 'blue.black', ADDONS.labelWColors, 'info', displayFrequency.info);
 		},
 		/**
@@ -161,7 +161,7 @@ const Print = opts => {
 		 * @param {string} msg The message to write
 		 * @param {string} colors The foreground and the background colors separated by a "."
 		 */
-		log: (msg, colors = '') => {
+		log: (msg = '', colors = '') => {
 			Pretty(msg, colors, ADDONS.labelWColors);
 		},
 		/**
