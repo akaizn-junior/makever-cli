@@ -221,7 +221,7 @@ async function run_npm_version(args) {
 		contents.minor = version_arr[1];
 		contents.patch = patch;
 		contents.branch = branch;
-		contents.prerelease = prerelease_value;
+		prerelease_value.length && (contents.prerelease = prerelease_value);
 		prerelease_label.length && (contents[prerelease_label] = true);
 
 		// generate version file
@@ -245,50 +245,32 @@ function run_dry(args) {
 
 	// mock npm version run
 	if (args['-v']) {
-		const version_upgrade = args['-v'];
-		const version_arr = contents.full.split('.');
-		let prerelease = (
-			args['-v']
-            && args['-v'].includes('--preid=')
-            && args['-v'].split('--preid=')[1]
-            || ''
-		);
+		let release = replace_placeholders(args['-v'], { codename: contents.codename });
+		// get preid if it exists
+		const preid = release.includes('--preid=') ? release.split('--preid=')[1] : '';
+		// prerelease should only be the string 'prerelease'
+		release = release.includes('prerelease') ? 'prerelease' : release;
 
-		prerelease = replace_placeholders(prerelease, { codename: contents.codename });
+		// increment by release
+		const version = semver.inc(contents.full, release, preid);
+		const version_arr = version.split('.');
 
-		switch (true) {
-		case (version_upgrade === 'major'): ++version_arr[0]; break;
-		case (version_upgrade === 'minor'): ++version_arr[1]; break;
-		case (version_upgrade === 'patch'): ++version_arr[2]; break;
-		case (version_upgrade === 'premajor'):
-			++version_arr[0];
-			version_arr[2] += '.0';
-			break;
-		case (version_upgrade === 'preminor'):
-			++version_arr[1];
-			version_arr[2] += '.0';
-			break;
-		case (version_upgrade === 'prepatch'):
-			++version_arr[2];
-			version_arr[2] += '.0';
-			break;
-		case (Boolean(prerelease.length)):
-			++version_arr[2];
-			version_arr[2] += `-${prerelease}.0`;
-			break;
-		default:
-			Print.error('Invalid "npm version" option');
-			Print.tip('see https://docs.npmjs.com/cli/version');
-			end();
-		}
+		// correct patch?
+		const {
+			patch,
+			prerelease_value,
+			prerelease_label
+		} = get_prerelease(version_arr, args['-v']);
 
-		// edit contents
-		contents.full = version_arr.join('.');
-		contents.raw = `v${contents.full}`;
+		// build contents
+		contents.full = version;
+		contents.raw = `v${version}`;
 		contents.major = String(version_arr[0]);
 		contents.minor = String(version_arr[1]);
-		contents.patch = String(version_arr[2]);
 		contents.branch = infer_branch(version_arr);
+		contents.patch = patch;
+		prerelease_value.length && (contents.prerelease = prerelease_value);
+		prerelease_label.length && (contents[prerelease_label] = true);
 	}
 
 	dry_run_messages(args, { dir, file, contents });

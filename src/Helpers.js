@@ -296,14 +296,20 @@ function get_prerelease(semver, arg_v = '') {
 	}
 
 	// check the cache for this data if none was generated
-	!prerelease_value.length && cache_data && 'prerelease' in cache_data
-        && (prerelease_value = cache_data.prerelease);
-	!prerelease_label.length && cache_data && 'premajor' in cache_data
-        && (prerelease_label = 'premajor');
-	!prerelease_label.length && cache_data && 'preminor' in cache_data
-        && (prerelease_label = 'preminor');
-	!prerelease_label.length && cache_data && 'prepatch' in cache_data
-        && (prerelease_label = 'prepatch');
+	switch (true) {
+	case !prerelease_value.length && cache_data && 'prerelease' in cache_data:
+		prerelease_value = cache_data.prerelease;
+		break;
+	case !prerelease_label.length && cache_data && 'premajor' in cache_data:
+		prerelease_label = 'premajor';
+		break;
+	case !prerelease_label.length && cache_data && 'preminor' in cache_data:
+		prerelease_label = 'preminor';
+		break;
+	case !prerelease_label.length && cache_data && 'prepatch' in cache_data:
+		prerelease_label = 'prepatch';
+		break;
+	}
 
 	return { patch, prerelease_value, prerelease_label };
 }
