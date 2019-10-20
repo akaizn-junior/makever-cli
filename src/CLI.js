@@ -225,11 +225,7 @@ async function run_npm_version(args) {
 		// generate version file
 		write_to(dir, file, contents, { dump: args['--std'], quiet: args['-q'] });
 	} catch (err) {
-		const { cmd, stderr } = (
-			err && 'cmd' in err && 'stderr' in err
-				? err
-				: { cmd: '', stderr: '' }
-		);
+		const { cmd, stderr } = err || { cmd: '', stderr: '' };
 		Print.error(`"${cmd}" passed to underlying process has failed`);
 		console.error(stderr);
 		Print.tip('see "makever -h"');
