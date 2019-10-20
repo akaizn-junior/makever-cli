@@ -6,6 +6,8 @@
  * (c) 2018 Verdexdesign
  */
 
+const semver = require('semver');
+
 const execute = require('util').promisify(require('child_process').execFile);
 
 // local
@@ -202,21 +204,21 @@ async function run_npm_version(args) {
 			end();
 		}
 
-		const semver = stdout.trim().split('v')[1].split('.');
-		const branch = infer_branch(semver);
+		const version_arr = semver.coerce(stdout).split('.');
+		const branch = infer_branch(version_arr);
 
 		// correct patch?
 		const {
 			patch,
 			prerelease_value,
 			prerelease_label
-		} = get_prerelease(semver, args['-v']);
+		} = get_prerelease(version_arr, args['-v']);
 
 		// edit contents
-		contents.full = semver.join('.');
+		contents.full = version_arr.join('.');
 		contents.raw = `v${contents.full}`;
-		contents.major = semver[0];
-		contents.minor = semver[1];
+		contents.major = version_arr[0];
+		contents.minor = version_arr[1];
 		contents.patch = patch;
 		contents.branch = branch;
 		contents.prerelease = prerelease_value;
@@ -244,7 +246,7 @@ function run_dry(args) {
 	// mock npm version run
 	if (args['-v']) {
 		const version_upgrade = args['-v'];
-		const semver = contents.full.split('.');
+		const version_arr = contents.full.split('.');
 		let prerelease = (
 			args['-v']
             && args['-v'].includes('--preid=')
@@ -255,24 +257,24 @@ function run_dry(args) {
 		prerelease = replace_placeholders(prerelease, { codename: contents.codename });
 
 		switch (true) {
-		case (version_upgrade === 'major'): ++semver[0]; break;
-		case (version_upgrade === 'minor'): ++semver[1]; break;
-		case (version_upgrade === 'patch'): ++semver[2]; break;
+		case (version_upgrade === 'major'): ++version_arr[0]; break;
+		case (version_upgrade === 'minor'): ++version_arr[1]; break;
+		case (version_upgrade === 'patch'): ++version_arr[2]; break;
 		case (version_upgrade === 'premajor'):
-			++semver[0];
-			semver[2] += '.0';
+			++version_arr[0];
+			version_arr[2] += '.0';
 			break;
 		case (version_upgrade === 'preminor'):
-			++semver[1];
-			semver[2] += '.0';
+			++version_arr[1];
+			version_arr[2] += '.0';
 			break;
 		case (version_upgrade === 'prepatch'):
-			++semver[2];
-			semver[2] += '.0';
+			++version_arr[2];
+			version_arr[2] += '.0';
 			break;
 		case (Boolean(prerelease.length)):
-			++semver[2];
-			semver[2] += `-${prerelease}.0`;
+			++version_arr[2];
+			version_arr[2] += `-${prerelease}.0`;
 			break;
 		default:
 			Print.error('Invalid "npm version" option');
@@ -281,12 +283,12 @@ function run_dry(args) {
 		}
 
 		// edit contents
-		contents.full = semver.join('.');
+		contents.full = version_arr.join('.');
 		contents.raw = `v${contents.full}`;
-		contents.major = String(semver[0]);
-		contents.minor = String(semver[1]);
-		contents.patch = String(semver[2]);
-		contents.branch = infer_branch(semver);
+		contents.major = String(version_arr[0]);
+		contents.minor = String(version_arr[1]);
+		contents.patch = String(version_arr[2]);
+		contents.branch = infer_branch(version_arr);
 	}
 
 	dry_run_messages(args, { dir, file, contents });
