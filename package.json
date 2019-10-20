@@ -17,9 +17,6 @@
         "name": "Simao Nziaka",
         "email": "sdnziaka@gmail.com"
     },
-    "tap": {
-        "check-coverage": true
-    },
     "nyc": {
         "check-coverage": true,
         "per-file": true,
