@@ -1,4 +1,4 @@
-# Makever
+# Makever - makever(1)
 
 ## Creates a file with more descriptive information based on the version of your package
 
