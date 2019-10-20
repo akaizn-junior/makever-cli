@@ -251,8 +251,15 @@ function run_dry(args) {
 		// prerelease should only be the string 'prerelease'
 		release = release.includes('prerelease') ? 'prerelease' : release;
 
-		// increment by release
+		// increment by release, get valid semver or null
 		const version = semver.inc(contents.full, release, preid);
+
+		if (!version) {
+			Print.error('Invalid npm version option: "', release, '"');
+			Print.tip('see https://docs.npmjs.com/cli/version');
+			end();
+		}
+
 		const version_arr = version.split('.');
 
 		// correct patch?
