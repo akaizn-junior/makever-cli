@@ -40,6 +40,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - append operator "--" to CAR. Pass arguments to underline script
 - placeholders for tag messages used by --tag and -v
 - -m option for --tag and -v
+- add --yes and --no arguments to readily accept or deny prompts
 
 ### Removed
 
@@ -49,3 +50,4 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ### Changed
 
 - The version file's structure, keys are ordered differently
+- Code struture, going for a mono-repo structure
