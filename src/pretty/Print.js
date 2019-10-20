@@ -43,20 +43,16 @@ const COLOR_CODES = {
 function Color(color) {
 	// undefined | number
 	const full = COLOR_CODES[color] && COLOR_CODES[color].length;
-
-	if (full === 2) {
-		return {
+	return (full === 2)
+		? {
 			fg: `\u001b[${COLOR_CODES[color][0]};`,
 			bg: `${COLOR_CODES[color][1]}m`,
 			nobg: `\u001b[${COLOR_CODES[color][0]}m`
-		};
-	}
-
-	return full;
+		}
+		: full;
 }
 
 // Extend for special cases
-
 Color.reset = `\u001b[${COLOR_CODES.reset}m`;
 
 // Helpers
