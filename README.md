@@ -95,7 +95,7 @@ Run in Shh mode, and perform a silent run.
 
 This operations will fail if a version file already exists. option ```-f``` may be used to run the command dangerously, by overwriting the current version file. ```-f``` may be used for other operations but it will silently be ignored everytime is does not apply.
 
-### Placeholders
+## Placeholders
 
 ```makever``` uses placeholders for generated values to create proper messages
 
@@ -103,7 +103,7 @@ This operations will fail if a version file already exists. option ```-f``` may 
 
 * ```%c, %codename``` for the generated codename
 
-### Run
+## Run
 
 After installing makever you could access the command by
 
@@ -113,7 +113,7 @@ I recommend using [npx](https://www.npmjs.com/package/npx) instead. npx will use
 
 * ```npx makever [options] :)```
 
-### Tests
+## Tests
 
 * ```npm run test``` run entire test suite with coverage report
 * ```npm run test:w``` watch test files
