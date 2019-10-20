@@ -37,12 +37,12 @@ const COLOR_CODES = {
  * Creates a complete ANSI color from color codes by defining the color as an object
  * with fg and bg for foreground and background recpectively.
  * Except for special cases such as reset.
- * @see {@link https://en.wikipedia.org/wiki/ANSI_escape_code | ANSI escape code }
- * @param {strin} color The color to build
+ * @see {@link https://en.wikipedia.org/wiki/ANSI_escape_code | ANSI escape code}
+ * @param {string} color The color to build
  */
 function Color(color) {
-	// undefined | number
-	const full = COLOR_CODES[color] && COLOR_CODES[color].length;
+	// {} | number
+	const full = COLOR_CODES[color] && COLOR_CODES[color].length || {};
 	return (full === 2)
 		? {
 			fg: `\u001b[${COLOR_CODES[color][0]};`,
@@ -68,7 +68,10 @@ Color.reset = `\u001b[${COLOR_CODES.reset}m`;
  */
 function Pretty(msg, colors = 'white.black', label = '', type = 'log', displayFreq = 0) {
 	// get foreground and background colors
-	const [asFG, asBG] = colors.split('.');
+	const [asFG, asBG] = colors.includes('.') ? colors.split('.') : ['', ''];
+	// get correct colors with fg and bg or only fg
+	const fore = Color(asFG).fg || Color(colors).nobg || '';
+	const back = Color(asBG).bg || '';
 
 	// random number to compare to 'displayFreq'
 	// a smaller number of course will hit more often than a larger number
@@ -85,10 +88,10 @@ function Pretty(msg, colors = 'white.black', label = '', type = 'log', displayFr
 
 	switch (true) {
 	case hasColors && label.length && canDisplay:
-		console[type]('%s %s%s%s %s', label, Color(asFG).fg, Color(asBG).bg, msg, Color.reset);
+		console[type]('%s %s%s%s %s', label, fore, back, msg, Color.reset);
 		break;
 	case hasColors && !label.length && canDisplay:
-		console[type]('%s%s%s %s', Color(asFG).fg, Color(asBG).bg, msg, Color.reset);
+		console[type]('%s%s%s %s', fore, back, msg, Color.reset);
 		break;
 	case !hasColors && !wColors || label.length && canDisplay:
 		console[type]('%s %s %s', ADDONS.plainLabel, msg, Color.reset);
@@ -126,42 +129,45 @@ const Print = opts => {
 	displayFrequency = displayFrequency || { tip: 5, info: 2 };
 	// labels for messages
 	labels = labels || { error: 'err!', tip: 'tip!', success: 'success!', info: 'info:' };
+	// message can be read as an array of strings, join the data with spaces
+	const join = msg => msg.join('');
 
 	return {
 		/**
 		 * writes an error message
-		 * @param {string} msg The message to write
+		 * @param {string[]} msg The message to write
 		 */
-		error: (msg = '') => {
-			Pretty(`${labels.error || 'err!'}${Color.reset} ${msg}`, 'red.black', ADDONS.labelWColors, 'error');
+		error: (...msg) => {
+			Pretty(`${labels.error || 'err!'}${Color.reset} ${join(msg)}`, 'red.black', ADDONS.labelWColors, 'error');
 		},
 		/**
 		 * pretty tip
-		 * @param {string} msg The message to write
+		 * @param {string[]} msg The message to write
 		 */
-		tip: (msg = '') => {
-			Pretty(`${labels.tip || 'tip!'}${Color.reset} ${msg}`, 'green.black', ADDONS.labelWColors, 'log', displayFrequency.tip);
+		tip: (...msg) => {
+			Pretty(`${labels.tip || 'tip!'}${Color.reset} ${join(msg)}`, 'green.black', ADDONS.labelWColors, 'log', displayFrequency.tip);
 		},
 		/**
 		 * pretty success message
-		 * @param {string} msg The message to write
+		 * @param {string[]} msg The message to write
 		 */
-		success: (msg = '') => {
-			Pretty(`${labels.success || 'success!'}${Color.reset} ${msg}`, 'black.green', ADDONS.labelWColors);
+		success: (...msg) => {
+			Pretty(`${labels.success || 'success!'}${Color.reset} ${join(msg)}`, 'black.green', ADDONS.labelWColors);
 		},
 		/**
 		 * pretty info
-		 * @param {string} msg The message to write
+		 * @param {string[]} msg The message to write
 		 */
-		info: (msg = '') => {
-			Pretty(`${labels.info || 'info:'}${Color.reset} ${msg}`, 'blue.black', ADDONS.labelWColors, 'info', displayFrequency.info);
+		info: (...msg) => {
+			Pretty(`${labels.info || 'info:'}${Color.reset} ${join(msg)}`, 'blue.black', ADDONS.labelWColors, 'info', displayFrequency.info);
 		},
 		/**
 		 * pretty log
 		 * @param {string} msg The message to write
 		 * @param {string} colors The foreground and the background colors separated by a "."
+		 * or just a color. Example: 'blue.black' or 'green'
 		 */
-		log: (msg = '', colors = '') => {
+		log: (msg, colors = '') => {
 			Pretty(msg, colors, ADDONS.labelWColors);
 		},
 		/**
