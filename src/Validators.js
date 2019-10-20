@@ -4,9 +4,9 @@ const fs = require('fs');
 const path = require('path');
 const execute = require('util').promisify(require('child_process').exec);
 
-const { userRoot, printDisplayFreq, errors, end } = require('./Globals');
+const { userRoot, printOptions, errors, end } = require('./Globals');
 const Randy = require('./randy/Randy');
-const Print = require('./pretty/Print')(printDisplayFreq);
+const Print = require('./pretty/Print')(printOptions);
 
 /**
  * Validates input for filename

@@ -11,10 +11,10 @@ const semver = require('semver');
 const execute = require('util').promisify(require('child_process').execFile);
 
 // local
-const { printDisplayFreq, end, execOptions } = require('./Globals');
+const { printOptions, end, execOptions } = require('./Globals');
 const CAR = require('./car/CmdArgsReader'); // 🚗
 
-const Print = require('./pretty/Print')(printDisplayFreq);
+const Print = require('./pretty/Print')(printOptions);
 Print.setPrettyLabel('makever', 'yellow.black', 1);
 
 const {

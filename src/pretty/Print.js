@@ -63,7 +63,7 @@ Color.reset = `\u001b[${COLOR_CODES.reset}m`;
  * @param {string} colors The foreground and the background colors separated by a "."
  * @param {string} label A label to write before the message
  * @param {string} type The console method to use
- * @param {object} displayFreq How frequently should messages be displayed;
+ * @param {number} displayFreq How frequently should messages be displayed;
  * Range 0-5, from display always to less often; default: 0
  */
 function Pretty(msg, colors = 'white.black', label = '', type = 'log', displayFreq = 0) {
@@ -117,90 +117,98 @@ function Scan(msg, opts, cb) {
 
 /**
  * Print to the terminal with colors
- * @see {@link https://en.wikipedia.org/wiki/ANSI_escape_code | ANSI escape code }
- * @param {object} displayFreq How frequently should certain messages be displayed; Range 0-5, from always to less often
+ * @see {@link https://en.wikipedia.org/wiki/ANSI_escape_code | ANSI escape code}
+ * @param {object} opts Print options
  */
-const Print = displayFreq => ({
-	/**
-     * writes an error message
-     * @param {string} msg The message to write
-     */
-	error: msg => {
-		Pretty(`err!${Color.reset} ${msg}`, 'red.black', ADDONS.labelWColors, 'error');
-	},
-	/**
-     * pretty tip
-     * @param {string} msg The message to write
-     */
-	tip: msg => {
-		Pretty(`tip!${Color.reset} ${msg}`, 'green.black', ADDONS.labelWColors, 'log', displayFreq);
-	},
-	/**
-     * pretty success message
-     * @param {string} msg The message to write
-     */
-	success: msg => {
-		Pretty(`success!${Color.reset} ${msg}`, 'black.green', ADDONS.labelWColors);
-	},
-	/**
-     * pretty info
-     * @param {string} msg The message to write
-     */
-	info: msg => {
-		Pretty(`info:${Color.reset} ${msg}`, 'blue.black', ADDONS.labelWColors, 'info', displayFreq);
-	},
-	/**
-     * pretty log
-     * @param {string} msg The message to write
-     * @param {string} colors The foreground and the background colors separated by a "."
-     */
-	log: (msg, colors = '') => {
-		Pretty(msg, colors, ADDONS.labelWColors);
-	},
-	/**
-     * pretty question
-     * @param {string} msg The message to write
-     * @param {function} cb A callback function
-     * @param {string} opts Options for answers; default: '(y/n)'
-     */
-	ask: (msg, cb, opts = '(y/n)') => {
-		!ADDONS.noColor && process.stdout.write(`${ADDONS.labelWColors} ${Color.reset}`);
-		Scan(msg, opts, ans => {
-			cb(ans.toString().trim());
-		});
-	},
-	/**
-     * Extends this module with additional functionalities
-     * @param {string} k The addon; list of addons: ['quiet']
-     * @param {string} v The value for the addon
-     */
-	extend: (k, v) => {
-		if (Object.keys(ADDONS).includes(k)) {
-			ADDONS[k] = v;
-			return true;
-		}
-		return false;
-	},
-	/**
-	 * Defines a label with colors to prefix Print messages with
-	 * @param {string} cmdlabel The label used as prefix for messages
-	 * @param {string} colors Print colors for the label
-	 * @param {number} padLabel Number of spaces to pad the label with
-	 */
-	setPrettyLabel: (cmdlabel, colors, padLabel = 0) => {
+const Print = opts => {
+	let { displayFrequency, labels } = opts;
+	// How frequently should certain messages be displayed; Range 0-5, from always to less often
+	displayFrequency = displayFrequency || { tip: 5, info: 2 };
+	// labels for messages
+	labels = labels || { error: 'err!', tip: 'tip!', success: 'success!', info: 'info:' };
+
+	return {
+		/**
+		 * writes an error message
+		 * @param {string} msg The message to write
+		 */
+		error: msg => {
+			Pretty(`${labels.error || 'err!'}${Color.reset} ${msg}`, 'red.black', ADDONS.labelWColors, 'error');
+		},
+		/**
+		 * pretty tip
+		 * @param {string} msg The message to write
+		 */
+		tip: msg => {
+			Pretty(`${labels.tip || 'tip!'}${Color.reset} ${msg}`, 'green.black', ADDONS.labelWColors, 'log', displayFrequency.tip);
+		},
+		/**
+		 * pretty success message
+		 * @param {string} msg The message to write
+		 */
+		success: msg => {
+			Pretty(`${labels.success || 'success!'}${Color.reset} ${msg}`, 'black.green', ADDONS.labelWColors);
+		},
+		/**
+		 * pretty info
+		 * @param {string} msg The message to write
+		 */
+		info: msg => {
+			Pretty(`${labels.info || 'info:'}${Color.reset} ${msg}`, 'blue.black', ADDONS.labelWColors, 'info', displayFrequency.info);
+		},
+		/**
+		 * pretty log
+		 * @param {string} msg The message to write
+		 * @param {string} colors The foreground and the background colors separated by a "."
+		 */
+		log: (msg, colors = '') => {
+			Pretty(msg, colors, ADDONS.labelWColors);
+		},
+		/**
+		 * pretty question
+		 * @param {string} msg The message to write
+		 * @param {function} cb A callback function
+		 * @param {string} yn Options for answers; default: '(y/n)'
+		 */
+		ask: (msg, cb, yn = '(y/n)') => {
+			!ADDONS.noColor && process.stdout.write(`${ADDONS.labelWColors} ${Color.reset}`);
+			Scan(msg, yn, ans => {
+				cb(ans.toString().trim());
+			});
+		},
+		/**
+		 * Extends this module with additional functionalities
+		 * @param {string} k The addon; list of addons: ['quiet']
+		 * @param {string} v The value for the addon
+		 */
+		extend: (k, v) => {
+			if (Object.keys(ADDONS).includes(k)) {
+				ADDONS[k] = v;
+				return true;
+			}
+			return false;
+		},
+		/**
+		 * Defines a label with colors to prefix Print messages with
+		 * @param {string} cmdlabel The label used as prefix for messages
+		 * @param {string} colors Print colors for the label
+		 * @param {number} padLabel Number of spaces to pad the label with
+		 */
+		setPrettyLabel: (cmdlabel, colors, padLabel = 0) => {
 		// get foreground and background colors
-		const [fore, back] = colors.split('.');
-		// create the label with colors and possible padding
-		const labelWColors = Color(fore).fg
+			const [fore, back] = colors.split('.');
+			// create the label with colors and possible padding
+			const labelWColors = Color(fore).fg
 			+ Color(back).bg
 			+ String().padStart(padLabel)
 			+ String(cmdlabel)
 			+ String().padEnd(padLabel)
 			+ Color.reset;
-		ADDONS.labelWColors = labelWColors;
-		ADDONS.plainLabel = cmdlabel;
-	}
-});
+			ADDONS.labelWColors = labelWColors;
+			ADDONS.plainLabel = cmdlabel;
+		}
+	};
+};
 
 // Export default
 

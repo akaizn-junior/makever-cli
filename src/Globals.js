@@ -65,6 +65,6 @@ module.exports = {
 	module_root,
 	execOptions,
 	jsontab: 4,
-	printDisplayFreq: 4,
+	printOptions: { displayFrequency: { tip: 4, info: 2 } },
 	userRoot: getUserRoot(userRootErrCb)
 };
