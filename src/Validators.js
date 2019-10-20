@@ -1,3 +1,5 @@
+const semver = require('semver');
+
 const fs = require('fs');
 const path = require('path');
 const execute = require('util').promisify(require('child_process').exec);
@@ -113,13 +115,11 @@ function get_valid_pkg_version(pkg_obj) {
 	if (
 		pkg_obj // common sense
         && 'version' in pkg_obj // it may not exist in a package.json?
-        && typeof pkg_obj.version === 'string' // maybe redudant but hey!
-        && pkg_obj.version.split('.').length >= 3 // verify if version is valid semver
-        || pkg_obj.version.split('-').length >= 2 // in case the version has a prerelease attached to it
+        && semver.valid(pkg_obj.version)
 	) {
 		return pkg_obj.version.split('.');
 	} else {
-		Print.error('command Failed. Invalid package.json version');
+		Print.error('command Failed. Invalid version in package.json');
 		Print.tip('see https://docs.npmjs.com/files/package.json for help');
 		end();
 	}
