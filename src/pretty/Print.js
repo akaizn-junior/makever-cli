@@ -68,9 +68,9 @@ Color.reset = `\u001b[${COLOR_CODES.reset}m`;
  */
 function Pretty(msg, colors = 'white.black', label = '', type = 'log', displayFreq = 0) {
 	// get foreground and background colors
-	const [asFG, asBG] = colors.includes('.') ? colors.split('.') : ['', ''];
+	const [asFG, asBG] = colors.split('.');
 	// get correct colors with fg and bg or only fg
-	const fore = Color(asFG).fg || Color(colors).nobg || '';
+	const fore = Color(asFG).fg || Color(asFG).nobg || '';
 	const back = Color(asBG).bg || '';
 
 	// random number to compare to 'displayFreq'
@@ -201,11 +201,14 @@ const Print = opts => {
 		 * @param {number} padLabel Number of spaces to pad the label with
 		 */
 		setPrettyLabel: (cmdlabel, colors, padLabel = 0) => {
-		// get foreground and background colors
-			const [fore, back] = colors.split('.');
+			// get foreground and background colors
+			const [asFG, asBG] = colors.split('.');
+			// get correct colors with fg and bg or only fg
+			const fore = Color(asFG).fg || Color(asFG).nobg || '';
+			const back = Color(asBG).bg || Color.reset;
 			// create the label with colors and possible padding
-			const labelWColors = Color(fore).fg
-			+ Color(back).bg
+			const labelWColors = fore
+			+ back
 			+ String().padStart(padLabel)
 			+ String(cmdlabel)
 			+ String().padEnd(padLabel)

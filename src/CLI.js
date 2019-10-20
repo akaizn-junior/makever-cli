@@ -247,7 +247,7 @@ function run_dry(args) {
 	if (args['-v']) {
 		let release = replace_placeholders(args['-v'], { codename: contents.codename });
 		// get preid if it exists
-		const preid = release.includes('--preid=') ? release.split('--preid=')[1] : '';
+		const preid = release.split('--preid=')[1] || '';
 		// prerelease should only be the string 'prerelease'
 		release = release.includes('prerelease') ? 'prerelease' : release;
 
