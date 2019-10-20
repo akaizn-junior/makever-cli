@@ -17,22 +17,24 @@ const { cache, replace_placeholders, push_tag } = require('./Helpers');
  */
 function show_help() {
 	Print.log('[-c=codename]', 'yellow.black');
-	console.log('Basic:');
-	console.log('-c, --codename         Set the codename. The Codename must contain only letters, underscode and numbers');
-	console.log('-o, --output           The name of the version file. Pass only a name or name + ".json". Default "version.json"');
-	console.log('--tag                  Tags the last commit with the an annotated tag with the current version and codename');
-	console.log('-v, --version          [<newversion> | major | minor | patch | premajor |');
-	console.log('                         preminor | prepatch | prerelease [--preid=<prerelease-id>] | from-git]');
-	console.log('-m                     Tag message. Combine with --tag and -v\n');
-	console.log('                               see: https://docs.npmjs.com/cli/version');
-	console.log('\nOutput:');
-	console.log('--std                  Write to standard output instead of a file');
-	console.log('-d, --dump             Dump the version file contents to stdout');
-	console.log('-t, --dry-run          Test mode. Mock the command behaviour and output to stdout');
-	console.log('\nMisc:');
-	console.log('-h, --help             Show help');
-	console.log('-q, --quiet            "Shh mode" Silent run');
-	console.log('-f, --force            Force an action that would not otherwise run without this flag');
+	console.log([
+		'Basic:',
+		'-c, --codename         Set the codename. The Codename must contain only letters, underscode and numbers',
+		'-o, --output           The name of the version file. Pass only a name or name + ".json". Default "version.json"',
+		'--tag                  Tags the last commit with the an annotated tag with the current version and codename',
+		'-v, --version          [<newversion> | major | minor | patch | premajor |',
+		'                         preminor | prepatch | prerelease [--preid=<prerelease-id>] | from-git]',
+		'-m                     Tag message. Combine with --tag and -v',
+		'                               see: https://docs.npmjs.com/cli/version',
+		'\nOutput:',
+		'--std                  Write to standard output instead of a file',
+		'-d, --dump             Dump the version file contents to stdout',
+		'-t, --dry-run          Test mode. Mock the command behaviour and output to stdout',
+		'\nMisc:',
+		'-h, --help             Show help',
+		'-q, --quiet            "Shh mode" Silent run',
+		'-f, --force            Force an action that would not otherwise run without this flag'
+	].join('\n'));
 	Print.info('Get involved at https://github.com/verdebydesign/makever-cli');
 }
 
