@@ -37,17 +37,18 @@ function CAR(definedArgs, longFormArgs = [], failed = () => {}) {
  */
 function get_data_to_append(__args__) {
 	const appendOpIndex = __args__.indexOf(OPERATOR.append);
+	const empty = String();
 
 	if (appendOpIndex !== -1) {
-		return __args__.reduce((acc = '', value, i) => {
+		return __args__.reduce((acc = empty, value, i) => {
 			if (i > appendOpIndex) {
 				return `${acc} ${value}`;
 			}
-			return '';
+			return empty;
 		}).trim();
 	}
 
-	return '';
+	return empty;
 }
 
 /**
