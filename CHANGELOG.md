@@ -41,6 +41,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - placeholders for tag messages used by --tag and -v
 - -m option for --tag and -v
 - add --yes and --no arguments to readily accept or deny prompts
+- add options to print module
 
 ### Removed
 
