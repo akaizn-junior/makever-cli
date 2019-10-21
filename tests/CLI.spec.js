@@ -66,7 +66,7 @@ describe('makever cli tests', () => {
 		expect(fs.existsSync(customDir)).to.be.true;
 		const versionFile = JSON.parse(fs.readFileSync(customDir));
 		expect(versionFile.codename).to.equal('Testeros');
-		expect(versionFile).to.have.keys(['codename', 'branch', 'full', 'major', 'minor', 'patch', 'raw']);
+		expect(versionFile).to.contain.keys(['codename', 'branch', 'full', 'major', 'minor', 'patch', 'raw']);
 	});
 
 	it('should test tagging the repo (use -f to bypass a repo with current changes and -n to not actually tag)',
