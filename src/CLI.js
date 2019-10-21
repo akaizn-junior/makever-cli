@@ -196,6 +196,8 @@ async function run_npm_version(args) {
 	// if force flag is used add to npm version args
 	force_flag.length && script_args.push(force_flag);
 
+	console.log(script_args);
+
 	try {
 		const { stderr, stdout } = await execute('npm', script_args, execOptions);
 
