@@ -1,10 +1,10 @@
 {
-    "codename": "elderly-owner",
+    "codename": "frequent-seal",
     "branch": "",
-    "full": "11.8.11",
-    "raw": "v11.8.11",
+    "full": "11.12.2",
+    "raw": "v11.12.2",
     "major": "11",
-    "minor": "8",
-    "patch": "11",
-    "prerelease": ""
+    "minor": "12",
+    "patch": "2",
+    "prerelease": "vague-feast.0"
 }
