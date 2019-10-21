@@ -1,9 +1,10 @@
 {
-    "codename": "prime",
-    "branch": "x.0.0",
-    "full": "1.0.0",
-    "raw": "v1.0.0",
-    "major": "1",
-    "minor": "0",
-    "patch": "0"
+    "codename": "frequent-seal",
+    "branch": "",
+    "full": "11.12.2",
+    "raw": "v11.12.2",
+    "major": "11",
+    "minor": "12",
+    "patch": "2",
+    "prerelease": "vague-feast.0"
 }
