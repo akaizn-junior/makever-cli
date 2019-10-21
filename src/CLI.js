@@ -188,6 +188,8 @@ async function run_npm_version(args) {
 	const parsed = replace_placeholders(args['-v'], { codename: contents.codename });
 	const force_flag = args['-f'] ? '--force' : '';
 
+	console.log(parsed);
+
 	// run npm version with correct options
 	let script_args = parsed.includes('-m')
 		? ['version', parsed]
