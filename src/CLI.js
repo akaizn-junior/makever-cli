@@ -199,6 +199,9 @@ async function run_npm_version(args) {
 	try {
 		const { stderr, stdout } = await execute('npm', script_args, execOptions);
 
+		console.log(stderr);
+		console.log(stdout);
+
 		if (stderr.length && !stderr.includes('--force')) {
 			Print.error('\'npm version\' failed');
 			console.log(stderr);
@@ -230,6 +233,8 @@ async function run_npm_version(args) {
 		// generate version file
 		write_to(dir, file, contents, { dump: args['--std'], quiet: args['-q'] });
 	} catch (err) {
+		console.log(err);
+
 		const { cmd, stderr } = err || { cmd: '', stderr: '' };
 		Print.error(`"${cmd}" passed to underlying process has failed`);
 		console.error(stderr);
