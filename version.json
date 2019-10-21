@@ -1,9 +1,10 @@
 {
-    "codename": "prime",
-    "branch": "x.0.0",
-    "full": "v1.0.0",
-    "raw": "1.0.0",
-    "major": "1",
-    "minor": "0",
-    "patch": "0"
+    "codename": "clear-toy",
+    "branch": "",
+    "full": "v11.12.2-frequent-seal.0",
+    "raw": "11.12.2-frequent-seal.0",
+    "major": "11",
+    "minor": "12",
+    "patch": "2",
+    "prerelease": "frequent-seal.0"
 }
