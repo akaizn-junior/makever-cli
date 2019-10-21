@@ -40,8 +40,8 @@ makever # auto generates a codename
 | -h, --help | Show help |
 | -q, --quiet | Shh mode |
 | -f, --force | Force an action that would not otherwise run without this flag |
-| -y, --yes | Directly accept the operation another option is introducing |
-| -n, --no | Directly deny the operation another option is introducing |
+| -y, --yes | Directly accept an operation another option may be introducing |
+| -n, --no | Directly deny an operation another option may be introducing |
 
 ## More detail
 

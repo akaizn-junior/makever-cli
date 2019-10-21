@@ -33,7 +33,9 @@ function show_help() {
 		'\nMisc:',
 		'-h, --help             Show help',
 		'-q, --quiet            "Shh mode" Silent run',
-		'-f, --force            Force an action that would not otherwise run without this flag'
+		'-f, --force            Force an action that would not otherwise run without this flag',
+		'-y, --yes				Directly accept an operation another option may be introducing',
+		'-n, --no				Directly deny an operation another option may be introducing'
 	].join('\n'));
 	Print.info('Get involved at https://github.com/verdebydesign/makever-cli');
 }
