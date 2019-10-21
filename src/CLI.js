@@ -210,6 +210,9 @@ async function run_npm_version(args) {
 			end();
 		}
 
+		console.log(typeof semver.coerce(stdout));
+		console.log(semver.coerce(stdout));
+
 		const version_arr = semver.coerce(stdout).split('.');
 		const branch = infer_branch(version_arr);
 
