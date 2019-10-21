@@ -213,7 +213,7 @@ async function run_npm_version(args) {
 		console.log(typeof semver.coerce(stdout));
 		console.log(semver.coerce(stdout));
 
-		const version_arr = semver.coerce(stdout).split('.');
+		const version_arr = semver.coerce(stdout).version.split('.');
 		const branch = infer_branch(version_arr);
 
 		// correct patch?
