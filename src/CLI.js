@@ -196,13 +196,8 @@ async function run_npm_version(args) {
 	// if force flag is used add to npm version args
 	force_flag.length && script_args.push(force_flag);
 
-	console.log(script_args);
-
 	try {
 		const { stderr, stdout } = await execute('npm', script_args, execOptions);
-
-		console.log(stderr);
-		console.log(stdout);
 
 		if (stderr.length && !stderr.includes('--force')) {
 			Print.error('\'npm version\' failed');
@@ -211,9 +206,6 @@ async function run_npm_version(args) {
 			Print.tip('see https://docs.npmjs.com/cli/version');
 			end();
 		}
-
-		console.log(typeof semver.coerce(stdout));
-		console.log(semver.coerce(stdout));
 
 		const version_arr = semver.coerce(stdout).version.split('.');
 		const branch = infer_branch(version_arr);
@@ -238,8 +230,6 @@ async function run_npm_version(args) {
 		// generate version file
 		write_to(dir, file, contents, { dump: args['--std'], quiet: args['-q'] });
 	} catch (err) {
-		console.log(err);
-
 		const { cmd, stderr } = err || { cmd: '', stderr: '' };
 		Print.error(`"${cmd}" passed to underlying process has failed`);
 		console.error(stderr);
