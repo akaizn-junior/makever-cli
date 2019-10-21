@@ -218,8 +218,8 @@ async function run_npm_version(args) {
 		} = get_prerelease(version_arr, args['-v']);
 
 		// edit contents
-		contents.full = version_arr.join('.');
-		contents.raw = `v${contents.full}`;
+		contents.full = `v${version_arr.join('.')}`;
+		contents.raw = version_arr.join('.');
 		contents.major = version_arr[0];
 		contents.minor = version_arr[1];
 		contents.patch = patch;
@@ -273,8 +273,8 @@ function run_dry(args) {
 		} = get_prerelease(version_arr, args['-v']);
 
 		// build contents
-		contents.full = version;
-		contents.raw = `v${version}`;
+		contents.full = `v${version}`;
+		contents.raw = version;
 		contents.major = String(version_arr[0]);
 		contents.minor = String(version_arr[1]);
 		contents.branch = infer_branch(version_arr);

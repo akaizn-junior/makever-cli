@@ -163,7 +163,7 @@ function get_contents(args) {
 	const branch = infer_branch(semver);
 
 	// the version as a string
-	const full = semver.join('.');
+	const version_str = semver.join('.');
 
 	// correct patch?
 	const { patch, prerelease_value, prerelease_label } = get_prerelease(semver);
@@ -172,8 +172,8 @@ function get_contents(args) {
 	const contents = {
 		codename,
 		branch,
-		full,
-		raw: `v${full}`,
+		full: `v${version_str}`,
+		raw: version_str,
 		major: semver[0],
 		minor: semver[1],
 		patch
