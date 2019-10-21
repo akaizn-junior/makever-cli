@@ -1,10 +1,11 @@
 {
-    "codename": "clear-toy",
-    "branch": "",
-    "full": "v11.12.2-frequent-seal.0",
-    "raw": "11.12.2-frequent-seal.0",
-    "major": "11",
-    "minor": "12",
-    "patch": "2",
-    "prerelease": "frequent-seal.0"
+    "codename": "adamant-oak",
+    "branch": "x.0.0",
+    "full": "v12.0.0",
+    "raw": "12.0.0",
+    "major": "12",
+    "minor": "0",
+    "patch": "0",
+    "prerelease": "frequent-seal.0",
+    "premajor": true
 }
