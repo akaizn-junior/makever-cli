@@ -190,11 +190,14 @@ async function run_npm_version(args) {
 
 	// run npm version with correct options
 	let script_args = parsed.includes('-m')
-		? `version ${parsed} ${force_flag}`
-		: `version ${parsed} -m "${version_m}" ${force_flag}`;
+		? ['version', parsed]
+		: ['version', parsed, '-m', `"${version_m}"`];
+
+	// if force flag is used add to npm version args
+	force_flag.length && script_args.push(force_flag);
 
 	try {
-		const { stderr, stdout } = await execute('npm', script_args.split(' '), execOptions);
+		const { stderr, stdout } = await execute('npm', script_args, execOptions);
 
 		if (stderr.length && !stderr.includes('--force')) {
 			Print.error('\'npm version\' failed');
