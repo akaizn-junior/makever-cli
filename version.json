@@ -1,9 +1,11 @@
 {
-    "codename": "prime",
-    "branch": "x.0.0",
-    "full": "v1.0.0",
-    "raw": "1.0.0",
-    "major": "1",
-    "minor": "0",
-    "patch": "0"
+    "codename": "able-dry",
+    "branch": "",
+    "full": "v12.1.1-cooperative-fired.36",
+    "raw": "12.1.1-cooperative-fired.36",
+    "major": "12",
+    "minor": "1",
+    "patch": "1",
+    "prerelease": "cooperative-fired.36",
+    "premajor": true
 }
