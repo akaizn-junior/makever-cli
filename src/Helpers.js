@@ -2,6 +2,8 @@
 // Helpers
 // +++++++++++++++++++++++++++++++++++++
 
+const semver = require('semver');
+
 const fs = require('fs');
 const path = require('path');
 const execFile = require('child_process').execFile;
@@ -38,38 +40,19 @@ Store.init();
 function infer_branch(version) {
 	const cache_data = Store.read();
 	let [major, minor, patch] = version;
-	major = parseInt(major, 10);
-	minor = parseInt(minor, 10);
-	patch = parseInt(patch, 10);
 
-	// branches strings
-	const major_br = ['x', minor, patch].join('.');
-	const minor_br = [major, 'x', patch].join('.');
-	const patch_br = [major, minor, 'x'].join('.');
+	let v1 = semver.coerce(version.join('.'));
+	let v2 = semver.coerce(cache_data.version.join('.')) || v1;
+	let version_diff = semver.diff(v1, v2);
 
-	// if there is saved branch data
-	if (cache_data && cache_data.branch) {
-		let [mj, mi, pa] = cache_data.version;
-		mj = parseInt(mj, 10);
-		mi = parseInt(mi, 10);
-		pa = parseInt(pa, 10);
-
-		if (major > mj && minor === mi && patch === pa) return major_br;
-		if (minor > mi && major === mj && patch === pa) return minor_br;
-		if (patch > pa && major === mj && minor === mi) return patch_br;
-	} else {
-		if (minor === 0 && patch === 0) return major_br;
-		if (major === 0 && patch === 0) return minor_br;
-		if (major === 0 && minor === 0) return patch_br;
+	// infer branch
+	switch (true) {
+	case version_diff === 'major': return `x.${minor}.${patch}`;
+	case version_diff === 'minor': return `${major}.x.${patch}`;
+	case version_diff === 'patch': return `${major}.${minor}.x`;
+	case version_diff === null: return cache_data.branch || '';
+	default: return '';
 	}
-
-	// verify if current branch has not changed
-	if (cache_data.version && version.join('.') === cache_data.version.join('.')) {
-		return cache_data.branch;
-	}
-
-	// otherwise can't infer
-	return '';
 }
 
 /**
@@ -81,7 +64,7 @@ function infer_branch(version) {
  */
 function write_to(directory, filename, data, flags) {
 	const contents = JSON.stringify(data, null, jsontab);
-	const semver = data.full.split('.');
+	const version_arr = data.raw.split('.');
 	const { dump, quiet } = flags;
 
 	if (!dump) {
@@ -97,7 +80,7 @@ function write_to(directory, filename, data, flags) {
 			Store.add('codename', data.codename);
 			Store.add('directory', directory);
 			Store.add('filename', filename);
-			Store.add('version', semver);
+			Store.add('version', version_arr);
 			Store.add('branch', data.branch);
 			// add these values to the store if they exist
 			'prerelease' in data && Store.add('prerelease', data.prerelease);
@@ -157,16 +140,16 @@ function get_contents(args) {
 	let codename = is_valid_codename(args['-c']);
 
 	// the version as an array of its semver parts
-	const semver = get_valid_pkg_version(pkg) || cache_data && cache_data.version;
+	const version_arr = get_valid_pkg_version(pkg) || cache_data && cache_data.version;
 
 	// current version branch
-	const branch = infer_branch(semver);
+	const branch = infer_branch(version_arr);
 
 	// the version as a string
-	const version_str = semver.join('.');
+	const version_str = version_arr.join('.');
 
 	// correct patch?
-	const { patch, prerelease_value, prerelease_label } = get_prerelease(semver);
+	const { patch, prerelease_value, prerelease_label } = get_prerelease(version_arr);
 
 	// structure data
 	const contents = {
@@ -174,8 +157,8 @@ function get_contents(args) {
 		branch,
 		full: `v${version_str}`,
 		raw: version_str,
-		major: semver[0],
-		minor: semver[1],
+		major: version_arr[0],
+		minor: version_arr[1],
 		patch
 	};
 
@@ -270,12 +253,12 @@ function replace_placeholders(str, replacers = {}) {
 /**
  * Verifies if the -v argument includes prerelease options.
  * And separate the prerelease values from the regular semver value.
- * @param {array} semver The current semver version
+ * @param {array} version_arr The current semver version
  * @param {string} arg_v Value read for '-v' option
  */
-function get_prerelease(semver, arg_v = '') {
+function get_prerelease(version_arr, arg_v = '') {
 	const cache_data = Store.read();
-	let patch = semver[2];
+	let patch = version_arr[2];
 	let prerelease_label = '';
 	let prerelease_value = '';
 
@@ -286,7 +269,7 @@ function get_prerelease(semver, arg_v = '') {
 	arg_v.includes('premajor') && (prerelease_label = 'premajor');
 
 	// get the prerelease string on the version, by splitting just the first '-' char if it exisits
-	let possible_prerelease = semver[3] && (`${patch}.${semver[3]}`) || patch;
+	let possible_prerelease = version_arr[3] && (`${patch}.${version_arr[3]}`) || patch;
 	possible_prerelease = possible_prerelease && possible_prerelease.split(/-(.+)/);
 
 	if (possible_prerelease && possible_prerelease[1] && possible_prerelease[1].length) {
