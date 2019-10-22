@@ -1,11 +1,10 @@
 {
-    "codename": "zonked-lisa",
+    "codename": "classy-alligator",
     "branch": "",
-    "full": "v12.1.1-cooperative-fired.11",
-    "raw": "12.1.1-cooperative-fired.11",
+    "full": "v12.1.1",
+    "raw": "12.1.1",
     "major": "12",
     "minor": "1",
     "patch": "1",
-    "prerelease": "cooperative-fired.11",
-    "premajor": true
+    "prerelease": "cooperative-fired.11"
 }
