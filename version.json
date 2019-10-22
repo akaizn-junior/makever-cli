@@ -1,10 +1,11 @@
 {
-    "codename": "watery-botany",
+    "codename": "zonked-lisa",
     "branch": "",
-    "full": "v12.1.1",
-    "raw": "12.1.1",
+    "full": "v12.1.1-cooperative-fired.11",
+    "raw": "12.1.1-cooperative-fired.11",
     "major": "12",
     "minor": "1",
     "patch": "1",
-    "prerelease": "frequent-seal.0"
+    "prerelease": "cooperative-fired.11",
+    "premajor": true
 }
