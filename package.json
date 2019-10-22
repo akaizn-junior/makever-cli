@@ -1,6 +1,6 @@
 {
     "name": "makever",
-    "version": "12.1.1-cooperative-fired.35",
+    "version": "12.1.1-cooperative-fired.36",
     "description": "Creates a file with more descriptive information based on the version of your package",
     "main": "src/CLI.js",
     "scripts": {
