@@ -70,7 +70,8 @@ function tag_clean_repo(data) {
                     || `Codename ${codename}`
 				);
 
-				const { stdout, stderr } = await execute('git', ['tag', '-f', '-a', `"v${version}"`, '-m', `"${tag_msg}"`], execOptions);
+				const git_tag_args = ['tag', '-f', '-a', `"v${version}"`, '-m', `"${tag_msg}"`];
+				const { stdout, stderr } = await execute('git', git_tag_args, execOptions);
 
 				if (stderr.length) {
 					Print.log('Something went wrong. Could not tag the repo');
