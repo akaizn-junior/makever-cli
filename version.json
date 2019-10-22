@@ -1,11 +1,10 @@
 {
-    "codename": "adamant-oak",
-    "branch": "x.0.0",
-    "full": "v12.0.0",
-    "raw": "12.0.0",
+    "codename": "snotty-french",
+    "branch": "",
+    "full": "v12.1.1",
+    "raw": "12.1.1",
     "major": "12",
-    "minor": "0",
-    "patch": "0",
-    "prerelease": "frequent-seal.0",
-    "premajor": true
+    "minor": "1",
+    "patch": "1",
+    "prerelease": "frequent-seal.0"
 }
