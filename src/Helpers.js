@@ -263,7 +263,7 @@ function replace_placeholders(str, replacers = {}) {
 		.replace(/%codename/g, codename)
 		.replace(/%c/g, codename)
 		.replace(/%v/g, version)
-		.replace(/%version/, version);
+		.replace(/%version/g, version);
 	return parsed;
 }
 

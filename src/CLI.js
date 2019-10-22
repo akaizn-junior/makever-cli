@@ -196,6 +196,11 @@ async function run_npm_version(args) {
 	// if force flag is used add to npm version args
 	force_flag.length && script_args.push(force_flag);
 
+	if (!['major', 'premajor', 'minor', 'preminor', 'patch', 'prepatch', 'prerelease'].includes(script_args[1])) {
+		Print.error(`not a valid version release: "${script_args[1]}"`);
+		end();
+	}
+
 	try {
 		const { stderr, stdout } = await execute('npm', script_args, execOptions);
 
