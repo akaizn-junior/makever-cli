@@ -1,6 +1,6 @@
 {
     "name": "makever",
-    "version": "15.1.0-0",
+    "version": "15.2.0-0",
     "description": "Creates a file with more descriptive information based on the version of your package",
     "main": "src/CLI.js",
     "scripts": {
