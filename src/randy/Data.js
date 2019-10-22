@@ -78,7 +78,7 @@ const nouns = ['accelerator', 'accordion', 'account', 'accountant', 'acknowledgm
 	'half-sister', 'halibut', 'hall', 'hallway', 'hamburger', 'hammer', 'hamster', 'hand', 'handball', 'handicap', 'handle', 'handsaw',
 	'harbor', 'hardboard', 'hardcover', 'hardhat', 'hardware', 'harmonica', 'harmony', 'harp', 'hat', 'hate', 'hawk', 'head', 'headlight',
 	'headline', 'health', 'hearing', 'heart', 'heat', 'heaven', 'hedge', 'height', 'helen', 'helicopter', 'helium', 'hell', 'helmet', 'help',
-	'hemp', 'hen', 'heron', 'herring', 'hexagon', 'hill', 'himalayan', 'hip', 'hippopotamus', 'history', 'hobbies', 'hockey', 'hoe', 'hole',
+	'hemp', 'hen', 'heron', 'herring', 'hexagon', 'hill', 'himalayan', 'hip', 'hippopotamus', 'history', 'hobbies', 'hockey', 'hole',
 	'holiday', 'home', 'honey', 'hood', 'hook', 'hope', 'horn', 'horse', 'hose', 'hospital', 'hot', 'hour', 'hourglass', 'house',
 	'hovercraft', 'hub', 'hubcap', 'humidity', 'humor', 'hurricane', 'hyacinth', 'hydrant', 'hydrofoil', 'hydrogen', 'hyena', 'hygienic',
 	'ice', 'icebreaker', 'icicle', 'icon', 'idea', 'ikebana', 'illegal', 'imprisonment', 'improvement', 'impulse', 'inch', 'income',
