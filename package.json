@@ -1,6 +1,6 @@
 {
     "name": "makever",
-    "version": "19.0.0-delightful-jaw.0",
+    "version": "19.0.0-delightful-jaw.1",
     "description": "Creates a file with more descriptive information based on the version of your package",
     "main": "src/CLI.js",
     "scripts": {
