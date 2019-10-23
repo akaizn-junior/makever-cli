@@ -43,7 +43,7 @@ function infer_branch(version) {
 	let [major, minor, patch] = version;
 
 	let v1 = semver.coerce(version.join('.'));
-	let v2 = semver.coerce(cache_data.version.join('.')) || v1;
+	let v2 = cache_data && semver.coerce(cache_data.version.join('.')) || v1;
 	let version_diff = semver.diff(v1, v2);
 
 	// infer branch
@@ -108,8 +108,8 @@ function get_current_version_file(cache_data) {
 	try {
 		return (
 			cache_data
-            && cache_data.filename
-            && require(path.join(userRoot, cache_data.directory, cache_data.filename))
+			&& cache_data.filename
+			&& require(path.join(userRoot, cache_data.directory, cache_data.filename))
 		);
 	} catch {
 		return {};
@@ -140,7 +140,7 @@ function get_contents(args) {
 	let filename = is_valid_filename(
 		args,
 		cache_data && cache_data.filename
-        || 'version.json'
+		|| 'version.json'
 	);
 
 	// blows up if codename is invalid
@@ -197,22 +197,22 @@ function dry_run_messages(args, data) {
 	// verifies if the output is not quiet and data is not being dumped to stdout
 	// to mock a version file has been written
 	!args['-q'] && !args['--std']
-        && Print.log('Successfully written a new version file');
+		&& Print.log('Successfully written a new version file');
 
 	// verifies if the output is not quiet and data is being dumped to stdout
 	// to mock dumping generated data to stdout instead of writing a version file
 	!args['-q'] && args['--std']
-        && Print.log('Do not write a version file. Output data to stdout by "--std"');
+		&& Print.log('Do not write a version file. Output data to stdout by "--std"');
 
 	// verifies if the output is not quiet, data is not being dumped to stdout
 	// and a file has be provided to mock writing a version file by a custom name
 	!args['-q'] && !args['--std'] && args['-o']
-        && Print.log(`The file "${file}" was written to the ${curr_dir}`);
+		&& Print.log(`The file "${file}" was written to the ${curr_dir}`);
 
 	// verifies if the output is not quiet, data is not being dumped to stdout and not custom file is given
 	// to mock writing a version file on the current directory with a default name
 	!args['-q'] && !args['--std'] && !args['-o']
-        && Print.log(`The file "${file}" was written to the current directory`);
+		&& Print.log(`The file "${file}" was written to the current directory`);
 
 	// verifies that the output is quiet to mock running in Shh mode
 	args['-q'] && Print.log('Ran in "Shh mode". The command runs silently');
@@ -234,7 +234,7 @@ function dry_run_messages(args, data) {
 
 	// verifies that the output is not quiet and mock using force option
 	!args['-q'] && args['-f']
-        && Print.log('Force ran this command. "-f" will only force certain operations,\notherwise it is ignored');
+		&& Print.log('Force ran this command. "-f" will only force certain operations,\notherwise it is ignored');
 }
 
 /**
