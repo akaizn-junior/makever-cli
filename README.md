@@ -138,6 +138,10 @@ I recommend using [npx](https://www.npmjs.com/package/npx) instead. npx will use
 
 [![Dev Build Status](https://travis-ci.org/verdebydesign/makever-cli.svg?branch=develop)](https://travis-ci.org/verdebydesign/makever-cli)
 
+## Voilà
+
+[![CLI example](./makever-cli-ex.gif)](./makever-cli-ex.gif)
+
 ## License
 
 ISC License [ISC](https://opensource.org/licenses/ISC)
