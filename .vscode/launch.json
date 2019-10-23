@@ -34,9 +34,9 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "makever -v",
+            "name": "makever -v help",
             "program": "${workspaceFolder}/src/CLI.js",
-            "args": ["-f", "-v", "prerelease --preid=%c", "-m", "Codename %c for Version %v"],
+            "args": ["-v", "help"],
             "console": "integratedTerminal",
             "trace": true
         }
