@@ -224,18 +224,10 @@ function dry_run_messages(args, data) {
 	!args['-q'] && args['-m'] && args['-v']
 		&& Print.log(
 			`npm version will tag the version with the message "${
-<<<<<<< Updated upstream
 				replace_placeholders(args['-m'], {
 					codename: contents.codename,
 					version: contents.raw
 				})
-=======
-				replace_placeholders(
-					args['-m'], {
-						codename: contents.codename,
-						version: contents.full
-					})
->>>>>>> Stashed changes
 			}"`
 		);
 

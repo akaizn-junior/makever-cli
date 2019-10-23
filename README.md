@@ -29,7 +29,7 @@ makever # auto generates a codename
 | Config | |
 | -c, --codename   | Set the codename. The Codename must contain only letters, underscode and numbers |
 | -o, --output | The name of the version file. Supports for '.json' file only |
-| --tag | Enable git annotated tagging |
+| --tag, -r | Enable git annotated tagging |
 | -v, --version | same options as npm version |
 | -m | Tag message. Combine with --tag and -v |
 | Output | |

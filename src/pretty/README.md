@@ -4,7 +4,7 @@
 
 ## Supports
 
-- Browser
+- Browser (in development)
 - Node
 
 ## License
