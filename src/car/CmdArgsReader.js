@@ -4,13 +4,15 @@
  * (c) 2019 Verdexdesign
  */
 
-const { errors, done, end } = require('../Globals');
+const { done, end } = require('../Utils');
 const ARGUMENTS_DATA = {};
 const OPERATOR = {
 	equal: '=',
 	append: '--',
 	arg_indicator: '-'
 };
+
+const HELP_OPTIONS = ['--help', 'help', '-h'];
 
 // Interface
 
@@ -80,6 +82,10 @@ function validate_args(__args__, definedArgs, longFormArgs, failed) {
 		let combine = getValueOrDefault(definedArgs[actual_arg], 'combine', true);
 		// run this callback if this argument is valid
 		let success = getValueOrDefault(definedArgs[actual_arg], 'cb', function() { });
+		// does this option have help data
+		let help = getValueOrDefault(definedArgs[actual_arg], 'help', function() { });
+		// does this option have its own set help option
+		let helpOptionValue = getValueOrDefault(definedArgs[actual_arg], 'helpOption', HELP_OPTIONS);
 
 		if (actual_arg && definedArgs[actual_arg]) {
 			switch (true) {
@@ -88,12 +94,20 @@ function validate_args(__args__, definedArgs, longFormArgs, failed) {
 				// get the default value
 				const default_value = getValueOrDefault(definedArgs[actual_arg], 'default', undefined);
 				if (!data_to_append.length) {
-					read_value(__args__, i, possible_value, default_value, longFormArgs, success, failed);
+					read_value(
+						{ args: __args__, i, longform: longFormArgs[__args__[i]] },
+						{ possible_value, default_value, helpOptionValue },
+						success, failed, help
+					);
 					// skip the index of a possible value if 'var' is not assigned using OPERATOR.equal
 					// eslint-disable-next-line max-depth
 					if (!possible_value) i++;
 				} else {
-					read_value(__args__, i, data_to_append, default_value, longFormArgs, success, failed);
+					read_value(
+						{ args: __args__, i, longform: longFormArgs[__args__[i]] },
+						{ possible_value: data_to_append, default_value, helpOptionValue },
+						success, failed, help
+					);
 					// end loop
 					i = len;
 				}
@@ -108,7 +122,7 @@ function validate_args(__args__, definedArgs, longFormArgs, failed) {
 				break;
 			}
 		} else if (actual_arg !== OPERATOR.append) {
-			failed(errors.und_arg.concat(' "', __args__[i], '"'));
+			failed('invalid argument'.concat(' "', __args__[i], '"'));
 			end();
 		}
 	}
@@ -116,28 +130,31 @@ function validate_args(__args__, definedArgs, longFormArgs, failed) {
 
 /**
  * Reads the value passed to an argument read as a 'var'
- * @param {array} args A list of command line arguments
- * @param {number} i An index on the arguments list
- * @param {string} possible_value The possible value for an argument 'var'
- * @param {string} default_value The default value for an argument 'var'
- * @param {array} longFormArgs A list of long form arguments to match an arg and translate to short form
+ * @param {object} args_data A list of argument data to read an option's value
+ * @param {object} values All possible values to read for an options
  * @param {function} success The callback for when the value was read successfully
  * @param {function} failed The callback for when reading the value fails
+ * @param {function} help The callback for when showing help for an option
  * @returns {void}
  */
-function read_value(args, i, possible_value, default_value, longFormArgs, success, failed) {
+function read_value(args_data, values, success, failed, help) {
+	let { args, i, longform } = args_data;
+	let { possible_value, default_value, helpOptionValue } = values;
+
 	let arg = args[i].split(OPERATOR.equal)[0];
 	// translate long form arg if read
-	arg = longFormArgs[arg] || arg;
+	arg = longform || arg;
 
 	// verify if value already exists to avoid double declaration
 	if (!ARGUMENTS_DATA[arg]) {
 		// try input values first
 		if (possible_value) {
+			run_help(arg, possible_value, helpOptionValue, help);
 			return add_arg(arg, possible_value, success);
 		} else if (i + 1 < args.length) {
 			// get a valid value on the next index or the default value
-			let value = get_valid_value(args[++i], default_value, arg, failed);
+			let value = get_valid_value({ val: args[++i], default_value, helpOptionValue }, arg, failed);
+			run_help(arg, value, helpOptionValue, help);
 			return add_arg(arg, value, success);
 		} else {
 			// no valid value to read
@@ -154,17 +171,25 @@ function read_value(args, i, possible_value, default_value, longFormArgs, succes
 /**
  * Validates the value read, return it if its a valid value,
  * otherwise return the default value
- * @param {string} val The value to read
- * @param {string} default_value The default value for an argument 'var'
+ * @param {object} values Values to validate
  * @param {string} arg The option being validated
  * @param {function} failed The callback for when the argument value is invalid
  * @returns {string|void} A valid argument value or void
  */
-function get_valid_value(val, default_value, arg, failed) {
+function get_valid_value(values, arg, failed) {
+	const { val, default_value, helpOptionValue } = values;
+
 	if (val && !val.startsWith(OPERATOR.arg_indicator) && val !== OPERATOR.equal) {
 		return val;
 	} else if (default_value !== undefined) {
 		return default_value;
+	} else if (
+		HELP_OPTIONS.includes(val)
+		|| HELP_OPTIONS.includes(default_value)
+		|| helpOptionValue === val
+		|| helpOptionValue === default_value
+	) {
+		return val || default_value;
 	} else {
 		// invalid arg value, maybe another arg or OPERATOR.equal
 		failed(`invalid value "${val}" for option "${arg}"`);
@@ -183,6 +208,21 @@ function add_arg(arg, value = '', success) {
 	ARGUMENTS_DATA[arg] = value;
 	success(ARGUMENTS_DATA);
 	return;
+}
+
+/**
+ * Read a value matching an option that triggers showing help for a specific option/command.
+ * Runs the option help or simply continue.
+ * @param {string} arg The command line arguemnt
+ * @param {string} value The value read
+ * @param {string} helpOptionValue The value set to trigger help for a specific option
+ * @param {funtion} call The function to run to show help
+ */
+function run_help(arg, value, helpOptionValue, call) {
+	if (HELP_OPTIONS.includes(value) || helpOptionValue === value) {
+		call(arg);
+		done();
+	}
 }
 
 /**
