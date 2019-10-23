@@ -56,14 +56,40 @@ function init(cache_dir = '') {
 }
 
 /**
- * Adds data to the cache for a new key.
- * Updates data for an existing key.
+ * Adds data to the cache with a new key.
  * @param {string} k A key to add to the cache
  * @param {string} v The value of the key
  */
-function upsert(k, v) {
-	CACHE[k] = v;
-	write(CACHE);
+function add(k, v) {
+	if (v) {
+		CACHE[k] = v;
+		write(CACHE);
+	}
+	return;
+}
+
+/**
+ * Updates data for an existing key if key exits.
+ * @param {string} k A key to add to the cache
+ * @param {string} v The value of the key
+ */
+function update(k, v) {
+	if (CACHE[k]) {
+		CACHE[k] = v;
+		write(CACHE);
+	}
+	return;
+}
+
+/**
+ * Deletes data for an existing key if key exits.
+ * @param {string} k A key to add to the cache
+ */
+function del(k) {
+	if (CACHE[k]) {
+		delete CACHE[k];
+		write(CACHE);
+	}
 	return;
 }
 
@@ -75,4 +101,14 @@ function read() {
 	return res && JSON.parse(res);
 }
 
-module.exports = { init, add: upsert, read };
+module.exports = {
+	init,
+	c: add,
+	add,
+	r: read,
+	read,
+	u: update,
+	update,
+	d: del,
+	del
+};

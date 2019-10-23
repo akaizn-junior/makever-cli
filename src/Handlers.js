@@ -44,7 +44,7 @@ function show_help() {
  * @description Dumps the version file contents to stdout
  */
 function dump_contents() {
-	const cache_data = cache.read();
+	const cache_data = cache.r();
 	if (cache_data && cache_data.filename) {
 		let res = fs.readFileSync(path.join(userRoot, cache_data.directory, cache_data.filename), 'utf8');
 		res && console.log(res);

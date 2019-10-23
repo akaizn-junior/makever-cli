@@ -143,7 +143,7 @@ function run(args) {
  * @param {object} args Data from arguments read from the command line
  */
 function run_tag(args) {
-	const cache_data = cache.read();
+	const cache_data = cache.r();
 	const version = (
 		cache_data
         && cache_data.version.join('.')
@@ -224,7 +224,7 @@ async function run_npm_version(args) {
 
 		// edit contents
 		contents.full = `v${version_arr.join('.')}`;
-		contents.raw = version_arr.join('.');
+		contents.raw = semver.coerce(version_arr.join('.')).raw;
 		contents.major = version_arr[0];
 		contents.minor = version_arr[1];
 		contents.patch = patch;
@@ -279,7 +279,7 @@ function run_dry(args) {
 
 		// build contents
 		contents.full = `v${version}`;
-		contents.raw = version;
+		contents.raw = semver.coerce(version).raw;
 		contents.major = String(version_arr[0]);
 		contents.minor = String(version_arr[1]);
 		contents.branch = infer_branch(version_arr);

@@ -38,7 +38,7 @@ Store.init();
  * @param {array} version The current version as an array of numbers
  */
 function infer_branch(version) {
-	const cache_data = Store.read();
+	const cache_data = Store.r();
 	let [major, minor, patch] = version;
 
 	let v1 = semver.coerce(version.join('.'));
@@ -77,16 +77,22 @@ function write_to(directory, filename, data, flags) {
 			}
 
 			// store relevant data for makever
-			Store.add('codename', data.codename);
-			Store.add('directory', directory);
-			Store.add('filename', filename);
-			Store.add('version', version_arr);
-			Store.add('branch', data.branch);
+			Store.c('codename', data.codename);
+			Store.c('directory', directory);
+			Store.c('filename', filename);
+			Store.c('version', version_arr);
+			Store.c('branch', data.branch);
 			// add these values to the store if they exist
-			'prerelease' in data && Store.add('prerelease', data.prerelease);
-			'premajor' in data && Store.add('premajor', data.premajor);
-			'preminor' in data && Store.add('preminor', data.preminor);
-			'prepatch' in data && Store.add('premajor', data.prepatch);
+			'prerelease' in data && Store.c('prerelease', data.prerelease);
+			// find an specifc pre-release key in the current data
+			const keyWithPrePrefix = Object.keys(data).filter(key => key.indexOf('pre') === 0 && key !== 'prerelease')
+				.pop();
+
+			// delete the following keys if they do not match key being updated
+			keyWithPrePrefix !== 'premajor' && Store.d('premajor');
+			keyWithPrePrefix !== 'preminor' && Store.d('preminor');
+			keyWithPrePrefix !== 'prepatch' && Store.d('prepatch');
+			Store.c(keyWithPrePrefix, data[keyWithPrePrefix]);
 		});
 	} else {
 		!quiet && console.log(contents);
@@ -115,7 +121,7 @@ function get_current_version_file(cache_data) {
  */
 function get_contents(args) {
 	// read cache data
-	const cache_data = Store.read();
+	const cache_data = Store.r();
 
 	// is 'input' output same to current file?
 	const is_same_o = is_existing_file(args, cache_data);
@@ -156,7 +162,7 @@ function get_contents(args) {
 		codename,
 		branch,
 		full: `v${version_str}`,
-		raw: version_str,
+		raw: semver.coerce(version_str).raw,
 		major: version_arr[0],
 		minor: version_arr[1],
 		patch
@@ -218,10 +224,18 @@ function dry_run_messages(args, data) {
 	!args['-q'] && args['-m'] && args['-v']
 		&& Print.log(
 			`npm version will tag the version with the message "${
+<<<<<<< Updated upstream
 				replace_placeholders(args['-m'], {
 					codename: contents.codename,
 					version: contents.raw
 				})
+=======
+				replace_placeholders(
+					args['-m'], {
+						codename: contents.codename,
+						version: contents.full
+					})
+>>>>>>> Stashed changes
 			}"`
 		);
 
@@ -256,7 +270,7 @@ function replace_placeholders(str, replacers = {}) {
  * @param {string} arg_v Value read for '-v' option
  */
 function get_prerelease(version_arr, arg_v = '') {
-	const cache_data = Store.read();
+	const cache_data = Store.r();
 	let patch = version_arr[2];
 	let prerelease_label = '';
 	let prerelease_value = '';
