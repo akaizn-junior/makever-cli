@@ -1,6 +1,6 @@
 {
     "name": "makever",
-    "version": "22.1.1-wiggly-tin.0",
+    "version": "22.1.1-ill-informed-heaven.0",
     "description": "Creates a file with more descriptive information based on the version of your package",
     "main": "src/CLI.js",
     "scripts": {
