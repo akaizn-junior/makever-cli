@@ -205,7 +205,7 @@
 		"quotes": [2, "single", { "avoidEscape": true }],
 		"require-jsdoc": 0,
 		"semi-spacing": 2,
-		"sort-imports": 0,
+		"sort-imports": 2,
 		"semi": 2,
 		"sort-vars": 0,
 		"space-before-blocks": 2,
