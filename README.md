@@ -11,7 +11,7 @@ Uses "npm version [options]" to perform any update you need to your version dire
 [![NPM](https://nodei.co/npm/makever.png)](https://nodei.co/npm/makever/)
 
 ```js
-npm i -D makever
+npm i -D @verdebydesign/makever
 ```
 
 ## Synopsis
@@ -119,9 +119,20 @@ I recommend using [npx](https://www.npmjs.com/package/npx) instead. npx will use
 * ```npm run test:w``` watch test files
 * ```npm run test:f``` watch specific test file by RegExp, example: ```npm run test:f -- Print``` will run and watch the file Print.test.js
 
-## Man page
+## Manual
 
-To read the man page run ```man ./makever.1```
+* Run ```man makever``` to read the command's manual
+* ```makever --help``` for quick help
+* ```makever [option] [--help | help | -h]``` to show help for a specific option
+
+## Development setup
+
+* Clone the repository from [github](https://github.com/verdebydesign/makever-cli)
+* Checkout develop branch ```git checkout develop```
+* Instal ```npm i```
+* Test ```npm run test```
+* Link command for local usage ```npm link```
+* Verify command was linked successfully ```makever -h```
 
 ## Build Status
 
