@@ -46,11 +46,21 @@ function infer_branch(version) {
 	let v2 = cache_data && semver.coerce(cache_data.version.join('.')) || v1;
 	let version_diff = semver.diff(v1, v2);
 
+	major = parseInt(major, 10);
+	minor = parseInt(minor, 10);
+	patch = parseInt(patch, 10);
+
 	// infer branch
 	switch (true) {
-	case version_diff === 'major': return `x.${minor}.${patch}`;
-	case version_diff === 'minor': return `${major}.x.${patch}`;
-	case version_diff === 'patch': return `${major}.${minor}.x`;
+	case version_diff === 'major':
+	case major > 0 && minor === 0 && patch === 0:
+		return `x.${minor}.${patch}`;
+	case version_diff === 'minor':
+	case major === 0 && minor > 0 && patch === 0:
+		return `${major}.x.${patch}`;
+	case version_diff === 'patch':
+	case major === 0 && minor === 0 && patch > 0:
+		return `${major}.${minor}.x`;
 	case version_diff === null: return cache_data.branch || '';
 	default: return '';
 	}
@@ -86,7 +96,8 @@ function write_to(directory, filename, data, flags) {
 			// add these values to the store if they exist
 			'prerelease' in data && Store.c('prerelease', data.prerelease);
 			// find an specifc pre-release key in the current data
-			const keyWithPrePrefix = Object.keys(data).filter(key => key.indexOf('pre') === 0 && key !== 'prerelease')
+			const keyWithPrePrefix = Object.keys(data)
+				.filter(key => key.indexOf('pre') === 0 && key !== 'prerelease')
 				.pop();
 
 			// delete the following keys if they do not match key being updated
