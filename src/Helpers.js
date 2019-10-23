@@ -9,7 +9,8 @@ const path = require('path');
 const execFile = require('child_process').execFile;
 
 // local
-const { userRoot, printOptions, jsontab, done, end, execOptions } = require('./Globals');
+const { done, end } = require('./Utils');
+const { userRoot, printOptions, jsontab, execOptions } = require('./Globals');
 const Store = require('./Store');
 const Print = require('./pretty/Print')(printOptions);
 

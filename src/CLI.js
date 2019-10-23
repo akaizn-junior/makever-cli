@@ -11,7 +11,8 @@ const semver = require('semver');
 const execute = require('util').promisify(require('child_process').execFile);
 
 // local
-const { printOptions, end, execOptions } = require('./Globals');
+const { end } = require('./Utils');
+const { printOptions, execOptions } = require('./Globals');
 const CAR = require('./car/CmdArgsReader'); // 🚗
 
 const Print = require('./pretty/Print')(printOptions);
@@ -25,7 +26,8 @@ const {
 const {
 	show_help,
 	tag_clean_repo,
-	dump_contents
+	dump_contents,
+	option_help
 } = require('./Handlers');
 
 const {
@@ -51,7 +53,8 @@ const DEFINED_ARGS = {
 		var: true
 	},
 	'-v': {
-		var: true
+		var: true,
+		help: option_help
 	},
 	'-q': {
 		flag: true

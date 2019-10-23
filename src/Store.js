@@ -1,7 +1,8 @@
 const fs = require('fs');
 const path = require('path');
 // globals
-const { module_root, end, jsontab } = require('./Globals');
+const { end } = require('./Utils');
+const { module_root, jsontab } = require('./Globals');
 
 const CACHE_NAME = '.store';
 let CACHE = {};

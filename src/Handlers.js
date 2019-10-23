@@ -4,9 +4,11 @@
 
 const fs = require('fs');
 const path = require('path');
+const execFileSync = require('child_process').execFileSync;
 const execute = require('util').promisify(require('child_process').execFile);
 
-const { userRoot, printOptions, done, end, execOptions } = require('./Globals');
+const { done, end } = require('./Utils');
+const { userRoot, printOptions, execOptions } = require('./Globals');
 const Print = require('./pretty/Print')(printOptions);
 
 // import Helpers for initialized cache
@@ -22,23 +24,36 @@ function show_help() {
 		'-c, --codename         Set the codename. The Codename must contain only letters, underscode and numbers',
 		'-o, --output           The name of the version file. Pass only a name or name + ".json". Default "version.json"',
 		'--tag, -r              Tags the last commit with the an annotated tag with the current version and codename',
-		'-v, --version          [<newversion> | major | minor | patch | premajor | preminor | prepatch',
-		'                         prerelease [--preid=<prerelease-id>] | from-git]',
-		'',
-		'-m                     Tag message. Combine with --tag and -v options',
-		'                               see: https://docs.npmjs.com/cli/version',
+		'-v, --version          [<newversion> | major | minor | patch | premajor | preminor | prepatch | prerelease [--preid=<prerelease-id>] | from-git]',
+		'                       See: https://docs.npmjs.com/cli/version',
+		'\n-m                     Tag message. Combine with --tag and -v options',
 		'\nOutput:',
 		'--std                  Write to standard output instead of a file',
 		'-d, --dump             Dump the version file contents to stdout',
 		'-t, --dry-run          Test mode. Mock the command behaviour and output to stdout',
 		'\nMisc:',
-		'-h, --help             Show help',
+		'-h, --help             Show help for the command or for a specific option',
 		'-q, --quiet            "Shh mode" Silent run',
 		'-f, --force            Force an action that would not otherwise run without this flag',
 		'-y, --yes              Directly accept an operation another option may be introducing',
 		'-n, --no               Directly deny an operation another option may be introducing'
 	].join('\n'));
 	Print.info('Get involved at https://github.com/verdebydesign/makever-cli');
+}
+
+/**
+ * @description Show help for a specific option
+ */
+function option_help(option) {
+	Print.log(`help for "${option}" option`, 'yellow.black');
+	switch (option) {
+	case '-v':
+		let stdout = execFileSync('npm', ['version', '--help']);
+		console.log(stdout.toString().trim());
+		Print.tip('more at https://docs.npmjs.com/cli/version');
+		break;
+	default: done();
+	}
 }
 
 /**
@@ -134,5 +149,6 @@ function tag_clean_repo(data) {
 module.exports = {
 	show_help,
 	dump_contents,
-	tag_clean_repo
+	tag_clean_repo,
+	option_help
 };

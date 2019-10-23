@@ -4,7 +4,7 @@
 
 const path = require('path');
 
-const { getUserRoot } = require('./Utils');
+const { getUserRoot, done, end } = require('./Utils');
 
 /**
  * Main project errors
@@ -14,26 +14,6 @@ const errors = {
 	und_codename: (data = '') => `invalid codename: "${data}" please provide a valid codename`,
 	bad_filename: 'output file must be a valid name and a json file',
 	bad_codename: 'codename must be a valid value, an argument passed'
-};
-
-/**
- * Call when something succeeds
- */
-const done = () => {
-	// eslintrc will complain about process.exit
-	// ignore it here, do not allow it anywhere else
-	// eslint-disable-next-line
-	process.exit(0);
-};
-
-/**
- * Call when something fails
- */
-const end = () => {
-	// eslintrc will complain about process.exit
-	// ignore it here, do not allow it anywhere else
-	// eslint-disable-next-line
-	process.exit(1);
 };
 
 /**

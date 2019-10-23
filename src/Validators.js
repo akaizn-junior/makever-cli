@@ -4,7 +4,8 @@ const fs = require('fs');
 const path = require('path');
 const execute = require('util').promisify(require('child_process').exec);
 
-const { userRoot, printOptions, errors, end } = require('./Globals');
+const { end } = require('./Utils');
+const { userRoot, printOptions, errors } = require('./Globals');
 const Randy = require('./randy/Randy');
 const Print = require('./pretty/Print')(printOptions);
 
