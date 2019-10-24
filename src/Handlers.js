@@ -86,7 +86,7 @@ function tag_clean_repo(data) {
                     || `Codename ${codename}`
 				);
 
-				const git_tag_args = ['tag', '---zz', '-a', `"v${version}"`, '-m', `"${tag_msg}"`];
+				const git_tag_args = ['tag', '-f', '-a', `"v${version}"`, '-m', `"${tag_msg}"`];
 				const { stdout, stderr } = await execute('git', git_tag_args, execOptions);
 
 				if (stderr.length) {
