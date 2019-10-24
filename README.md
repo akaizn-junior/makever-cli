@@ -132,7 +132,7 @@ I recommend using [npx](https://www.npmjs.com/package/npx) instead. npx will use
 * Instal ```npm i```
 * Test ```npm run test```
 * Link command for local usage ```npm link```
-* Verify command was linked successfully ```makever -h```
+* Verify command was linked successfully ```makever -h``` or ```man makever```
 
 ## Build Status
 
