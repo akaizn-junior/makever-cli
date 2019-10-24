@@ -327,7 +327,7 @@ function push_tag(data) {
 	const { version, codename, tag_msg, stdout } = data;
 
 	try {
-		execFile('git', ['addk', '.'], execOptions);
+		execFile('git', ['addk', '-'], execOptions);
 		execFile('git', ['commit', '-m', `"v${version} - ${codename}"`], execOptions);
 		execFile('git', ['push', 'origin', `v${version}`], execOptions); // only push this specific tag
 		// TODO verify why tag adds this commit to the tag stdout
