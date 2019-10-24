@@ -327,7 +327,7 @@ function push_tag(data) {
 	const { version, codename, tag_msg, stdout } = data;
 
 	try {
-		execxFile('git', ['add', '.'], execOptions);
+		execFile('git', ['add', '.'], execOptions);
 		execFile('git', ['commit', '-m', `"v${version} - ${codename}"`], execOptions);
 		execFile('git', ['push', 'origin', `v${version}`], execOptions); // only push this specific tag
 		// TODO verify why tag adds this commit to the tag stdout
@@ -336,7 +336,7 @@ function push_tag(data) {
 		done();
 	} catch (err) {
 		Print.log('Something went wrong. Could not push tag');
-		console.error(err.stderr.trim());
+		console.error(err);
 		end();
 	}
 }
