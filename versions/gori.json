@@ -1,9 +1,9 @@
 {
-    "codename": "goriz",
-    "branch": "x.0.0",
-    "full": "v1.0.0",
-    "raw": "1.0.0",
+    "codename": "disastrous-robin",
+    "branch": "1.0.x",
+    "full": "v1.0.11",
+    "raw": "1.0.11",
     "major": "1",
     "minor": "0",
-    "patch": "0"
+    "patch": "11"
 }
