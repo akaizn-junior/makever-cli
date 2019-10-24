@@ -190,7 +190,7 @@ function get_contents(args) {
 	const file = path.basename(filename) || '';
 
 	// get the correct dir even if path has nested directories
-	const dir = path.dirname(filename) || '';
+	const dir = path.dirname(filename) || cache_data && cache_data.directory || '';
 
 	return { dir, file, contents };
 }
