@@ -122,7 +122,7 @@ function tag_clean_repo(data) {
 				}
 			} catch (err) {
 				Print.log('Something went wrong. Could not tag the repo');
-				console.error(err.trim());
+				console.error(err);
 				end();
 			}
 		}
