@@ -142,6 +142,13 @@ I recommend using [npx](https://www.npmjs.com/package/npx) instead. npx will use
 
 [![CLI example](./cli-example.gif)](./cli-example.gif)
 
+## CONTRIBUTE
+
+* See CONTRIBUTING.md for Rules of conduct
+
+[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v1.4%20adopted-ff69b4.svg)](code-of-conduct.md)
+
+
 ## License
 
 ISC License [ISC](https://opensource.org/licenses/ISC)
