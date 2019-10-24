@@ -326,6 +326,7 @@ function push_tag(data) {
 		execFile('git', ['commit', '-m', `"v${version} - ${codename}"`], execOptions);
 		execFile('git', ['push', 'origin', `v${version}`], execOptions); // only push this specific tag
 		// TODO verify why tag adds this commit to the tag stdout
+		console.log(stdout);
 		const commit = stdout.split('was')[1].trim();
 		Print.log(`annotated tag "v${version}" was pushed with message "${tag_msg}" (commit ${commit}`);
 		done();
