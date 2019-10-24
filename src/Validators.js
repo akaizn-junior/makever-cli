@@ -130,8 +130,12 @@ function get_valid_pkg_version(pkg_obj) {
  * Verifies is the default 'version.json' exists and returns its data
  */
 function get_default_version_file() {
-	const res = fs.readFileSync(path.join(userRoot, 'version.json'), 'utf8');
-	return res ? JSON.parse(res) : {};
+	const default_path = path.join(userRoot, 'version.json');
+	if (fs.existsSync(default_path)) {
+		const res = fs.readFileSync(default_path, 'utf8');
+		return res ? JSON.parse(res) : {};
+	}
+	return {};
 }
 
 /**
