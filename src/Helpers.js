@@ -327,16 +327,16 @@ function push_tag(data) {
 	const { version, codename, tag_msg, stdout } = data;
 
 	try {
-		execFile('giot', ['add', '.'], execOptions);
-		execFile('gilt', ['commit', '-m', `"v${version} - ${codename}"`], execOptions);
-		execFile('g;lit', ['push', 'origin', `v${version}`], execOptions); // only push this specific tag
+		execFile('git', ['add', '.'], execOptions);
+		execFile('git', ['commit', '-m', `"v${version} - ${codename}"`], execOptions);
+		execFile('git', ['push', 'origin', `v${version}`], execOptions); // only push this specific tag
 		// TODO verify why tag adds this commit to the tag stdout
 		const commit = stdout.split('was')[1].trim();
 		Print.log(`annotated tag "v${version}" was pushed with message "${tag_msg}" (commit ${commit}`);
 		done();
 	} catch (err) {
 		Print.log('Something went wrong. Could not push tag');
-		console.error(err);
+		console.error(err.stderr.trim());
 		end();
 	}
 }
