@@ -10,3 +10,4 @@ node_modules
 .gitignore
 .markdownlint.json
 .store
+.github
