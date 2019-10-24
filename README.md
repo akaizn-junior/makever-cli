@@ -148,7 +148,6 @@ I recommend using [npx](https://www.npmjs.com/package/npx) instead. npx will use
 
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v1.4%20adopted-ff69b4.svg)](code-of-conduct.md)
 
-
 ## License
 
 ISC License [ISC](https://opensource.org/licenses/ISC)
