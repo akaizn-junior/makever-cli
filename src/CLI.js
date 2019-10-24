@@ -161,7 +161,7 @@ function run_tag(args) {
 	);
 
 	// if it gets here without a codename, no version file exists, exit
-	if (codename.length) {
+	if (!codename.length) {
 		Print.log('cannot tag. It seems like you do not have a version file');
 		Print.tip('run "makever -c=<codename>" then tag');
 		done();
