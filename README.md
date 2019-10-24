@@ -144,9 +144,9 @@ I recommend using [npx](https://www.npmjs.com/package/npx) instead. npx will use
 
 ## CONTRIBUTE
 
-* See CONTRIBUTING.md for Rules of conduct
+* Follow CONTRIBUTING.md
 
-[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v1.4%20adopted-ff69b4.svg)](code-of-conduct.md)
+* Rules of Conduct [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v1.4%20adopted-ff69b4.svg)](CODE-OF-CONDUCT.md)
 
 ## License
 
