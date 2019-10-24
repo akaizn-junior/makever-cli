@@ -11,7 +11,7 @@ const semver = require('semver');
 const execute = require('util').promisify(require('child_process').execFile);
 
 // local
-const { end } = require('./Utils');
+const { end, done } = require('./Utils');
 const { printOptions, execOptions } = require('./Globals');
 const CAR = require('./car/CmdArgsReader'); // 🚗
 
@@ -38,7 +38,8 @@ const {
 	dry_run_messages,
 	valid_pkg_version,
 	replace_placeholders,
-	get_prerelease
+	get_prerelease,
+	default_file
 } = require('./Helpers');
 
 //++++++++++++++++++++++++++++++++++++++++++++++++
@@ -150,14 +151,21 @@ function run_tag(args) {
 	const version = (
 		cache_data
         && cache_data.version.join('.')
-        || valid_pkg_version
+		|| valid_pkg_version
 	);
 
 	const codename = (
 		!args['-c']
-			? cache_data && cache_data.codename
+			? cache_data && cache_data.codename || default_file.codename || ''
 			: is_valid_codename(args['-c'])
 	);
+
+	// if it gets here without a codename, no version file exists, exit
+	if (codename.length) {
+		Print.log('cannot tag. It seems like you do not have a version file');
+		Print.tip('run "makever -c=<codename>" then tag');
+		done();
+	}
 
 	// verify if the current repo has a clean tree
 	is_clean_repo(tag_clean_repo({

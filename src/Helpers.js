@@ -23,7 +23,8 @@ const {
 	is_valid_codename,
 	is_valid_version_file,
 	is_existing_file,
-	get_valid_pkg_version
+	get_valid_pkg_version,
+	get_default_version_file
 } = require('./Validators');
 
 // +++++++++++++++++++++++++++++++++++++++++
@@ -158,7 +159,7 @@ function get_contents(args) {
 	let codename = is_valid_codename(args['-c']);
 
 	// the version as an array of its semver parts
-	const version_arr = get_valid_pkg_version(pkg) || cache_data && cache_data.version;
+	const version_arr = get_valid_pkg_version(pkg).split('.') || cache_data && cache_data.version;
 
 	// current version branch
 	const branch = infer_branch(version_arr);
@@ -330,9 +331,8 @@ function push_tag(data) {
 		execFile('git', ['add', '.'], execOptions);
 		execFile('git', ['commit', '-m', `"v${version} - ${codename}"`], execOptions);
 		execFile('git', ['push', 'origin', `v${version}`], execOptions); // only push this specific tag
-		// TODO verify why tag adds this commit to the tag stdout
 		const commit = stdout.split('was')[1].trim();
-		Print.log(`annotated tag "v${version}" was pushed with message "${tag_msg}" (commit ${commit}`);
+		Print.log(`annotated tag "v${version}" was pushed with message "${tag_msg}" (was ${commit}`);
 		done();
 	} catch (err) {
 		Print.log('Something went wrong. Could not push tag');
@@ -350,5 +350,6 @@ module.exports = {
 	get_prerelease,
 	push_tag,
 	cache: Store,
-	valid_pkg_version: get_valid_pkg_version(pkg)
+	valid_pkg_version: get_valid_pkg_version(pkg),
+	default_file: get_default_version_file()
 };

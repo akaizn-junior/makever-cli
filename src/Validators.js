@@ -118,12 +118,20 @@ function get_valid_pkg_version(pkg_obj) {
         && 'version' in pkg_obj // it may not exist in a package.json?
         && semver.valid(pkg_obj.version)
 	) {
-		return pkg_obj.version.split('.');
+		return pkg_obj.version;
 	} else {
 		Print.error('command Failed. Invalid version in package.json');
 		Print.tip('see https://docs.npmjs.com/files/package.json for help');
 		end();
 	}
+}
+
+/**
+ * Verifies is the default 'version.json' exists and returns its data
+ */
+function get_default_version_file() {
+	const res = fs.readFileSync(path.join(userRoot, 'version.json'), 'utf8');
+	return res ? JSON.parse(res) : {};
 }
 
 /**
@@ -157,5 +165,6 @@ module.exports = {
 	is_valid_version_file,
 	is_existing_file,
 	get_valid_pkg_version,
+	get_default_version_file,
 	is_clean_repo
 };
