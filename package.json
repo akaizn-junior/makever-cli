@@ -1,6 +1,6 @@
 {
 	"name": "@verdebydesign/makever",
-	"version": "22.99.0-4",
+	"version": "23.0.0-0",
 	"description": "Creates a file with more descriptive information based on the version of your package",
 	"main": "src/CLI.js",
 	"scripts": {
