@@ -259,11 +259,12 @@ function replace_placeholders(str, replacers = {}) {
 	const version = replacers && replacers.version || '%s';
 	const codename = replacers && replacers.codename || '';
 	// replace version placeholders with '%s' and let npm version do the rest
+	// try to replace longform first, order matters
 	let parsed = str
+		.replace(/%version/g, version)
 		.replace(/%codename/g, codename)
 		.replace(/%c/g, codename)
-		.replace(/%v/g, version)
-		.replace(/%version/g, version);
+		.replace(/%v/g, version);
 	return parsed;
 }
 
