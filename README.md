@@ -140,7 +140,7 @@ I recommend using [npx](https://www.npmjs.com/package/npx) instead. npx will use
 
 ## Voilà
 
-[![CLI example](./makever-cli-ex.gif)](./makever-cli-ex.gif)
+[![CLI example](./cli-example.gif)](./cli-example.gif)
 
 ## License
 
