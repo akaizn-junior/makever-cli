@@ -190,7 +190,11 @@ function get_contents(args) {
 	const file = path.basename(filename) || '';
 
 	// get the correct dir even if path has nested directories
-	const dir = path.dirname(filename) || cache_data && cache_data.directory || '';
+	let dir = path.dirname(filename) || '';
+	// if no new output dir given verify if the cache has one
+	if (dir === '.' && !args['-o']) {
+		dir = cache_data && cache_data.directory;
+	}
 
 	return { dir, file, contents };
 }
