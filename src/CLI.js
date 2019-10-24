@@ -209,7 +209,7 @@ async function run_npm_version(args) {
 
 		if (stderr.length && !stderr.includes('--force')) {
 			Print.error('\'npm version\' failed');
-			console.log(stderr);
+			console.log(stderr.trim());
 			Print.tip('see "makever -h"');
 			Print.tip('see https://docs.npmjs.com/cli/version');
 			end();
@@ -240,7 +240,7 @@ async function run_npm_version(args) {
 	} catch (err) {
 		const { cmd, stderr } = err || { cmd: '', stderr: '' };
 		Print.error(`"${cmd}" passed to underlying process has failed`);
-		console.error(stderr);
+		console.error(stderr.trim());
 		Print.tip('see "makever -h"');
 		Print.tip('see https://docs.npmjs.com/cli/version');
 		end();

@@ -91,7 +91,7 @@ function tag_clean_repo(data) {
 
 				if (stderr.length) {
 					Print.log('Something went wrong. Could not tag the repo');
-					console.error(stderr);
+					console.error(stderr.trim());
 					end();
 				}
 
@@ -122,7 +122,7 @@ function tag_clean_repo(data) {
 				}
 			} catch (err) {
 				Print.log('Something went wrong. Could not tag the repo');
-				console.error(err);
+				console.error(err.stderr.trim());
 				end();
 			}
 		}
@@ -134,7 +134,7 @@ function tag_clean_repo(data) {
 
 		if (result && result.stderr.length) {
 			Print.log('Something went wrong. Could not tag repo');
-			console.error(result.stderr);
+			console.error(result.stderr.trim());
 			end();
 		}
 
