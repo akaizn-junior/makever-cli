@@ -71,7 +71,7 @@ function Pretty(msg, colors = 'white.black', label = '', type = 'log', displayFr
 	const [asFG, asBG] = colors.split('.');
 	// get correct colors with fg and bg or only fg
 	const fore = Color(asFG).fg || Color(asFG).nobg || ' ';
-	const back = Color(asBG).bg || Color.reset;
+	const back = Color(asBG).bg || '';
 
 	// random number to compare to 'displayFreq'
 	// a smaller number of course will hit more often than a larger number
