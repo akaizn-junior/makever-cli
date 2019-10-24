@@ -21,7 +21,7 @@
 		"lines": 50,
 		"statements": 50,
 		"functions": 50,
-		"branches": 50,
+		"branches": 40,
 		"reporter": [
 			"html",
 			"text-summary"
