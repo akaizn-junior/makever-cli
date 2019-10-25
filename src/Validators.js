@@ -104,7 +104,7 @@ function is_existing_file(args, cache_data) {
 		cache_data && cache_data.filename
         || 'version.json'
 	);
-	const saved_o = cache_data && path.join(cache_data.directory, cache_data.filename);
+	const saved_o = cache_data && path.join(cache_data.directory || '.', cache_data.filename) || false;
 	return input_o && saved_o && input_o === saved_o;
 }
 
