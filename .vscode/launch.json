@@ -39,6 +39,15 @@
             "args": ["-v", "help"],
             "console": "integratedTerminal",
             "trace": true
+		},
+		{
+            "type": "node",
+            "request": "launch",
+            "name": "makever -v patch",
+            "program": "${workspaceFolder}/src/CLI.js",
+            "args": ["-v", "patch", "-f"],
+            "console": "integratedTerminal",
+            "trace": true
         }
     ]
 }

@@ -99,7 +99,7 @@ function del(k) {
  */
 function read() {
 	const res = fs.readFileSync(path.join(CACHE_DIR, CACHE_NAME), 'utf8');
-	return res ? JSON.parse(res) : {};
+	return res && JSON.parse(res);
 }
 
 module.exports = {
