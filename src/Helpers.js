@@ -62,7 +62,8 @@ function infer_branch(version) {
 	case version_diff === 'patch':
 	case major === 0 && minor === 0 && patch > 0:
 		return `${major}.${minor}.x`;
-	case version_diff === null: return cache_data.branch || '';
+	case version_diff === null:
+		return cache_data.branch || '';
 	default: return '';
 	}
 }
