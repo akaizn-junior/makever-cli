@@ -3,51 +3,71 @@
 // +++++++++++++++++++++++++++++++++++++
 
 const fs = require('fs');
-const exec = require('child_process').exec;
-const execute = require('util').promisify(exec);
+const path = require('path');
+const execFileSync = require('child_process').execFileSync;
+const execute = require('util').promisify(require('child_process').execFile);
 
-const { labelWColors, printDisplayFreq, done, end } = require('./Globals');
-const Print = require('./Print')(labelWColors, printDisplayFreq);
+const { done, end } = require('./Utils');
+const { userRoot, printOptions, execOptions } = require('./Globals');
+const Print = require('./pretty/Print')(printOptions);
 
 // import Helpers for initialized cache
-const { cache, replace_placeholders } = require('./Helpers');
+const { cache, replace_placeholders, push_tag } = require('./Helpers');
 
 /**
  * @description Help
  */
 function show_help() {
-    Print.log('makever -c=<codename>', 'yellow.black');
-    console.log('Basic:');
-    console.log('-c, --codename         Set the codename. The Codename must contain only letters, underscode and numbers');
-    console.log('-o, --output           The name of the version file. Pass only a name or name + ".json". Default "version.json"');
-    console.log('--tag                  Tags the last commit with the an annotated tag with the current version and codename');
-    console.log('-v, --version          [<newversion> | major | minor | patch | premajor |');
-    console.log('                         preminor | prepatch | prerelease [--preid=<prerelease-id>] | from-git]');
-    console.log('-m                     Tag message. Combine with --tag and -v\n');
-    console.log('                               see: https://docs.npmjs.com/cli/version');
-    console.log('\nOutput:');
-    console.log('--std                  Write to standard output instead of a file');
-    console.log('-d, --dump             Dump the version file contents to stdout');
-    console.log('-t, --dry-run          Test mode. Mock the command behaviour and output to stdout');
-    console.log('\nMisc:');
-    console.log('-h, --help             Show help');
-    console.log('-q, --quiet            "Shh mode" Silent run');
-    console.log('-f, --force            Force an action that would not otherwise run without this flag');
-    Print.info('Get involved at https://github.com/verdebydesign/makever-cli');
+	Print.log('[-c=codename]', 'yellow.black');
+	console.log([
+		'Basic:',
+		'-c, --codename         Set the codename. The Codename must contain only letters, underscode and numbers',
+		'-o, --output           The name of the version file. Pass only a name or name + ".json". Default "version.json"',
+		'--tag, -r              Tags the last commit with the an annotated tag with the current version and codename',
+		'-v, --version          [<newversion> | major | minor | patch | premajor | preminor | prepatch | prerelease [--preid=<prerelease-id>] | from-git]',
+		'                       See: https://docs.npmjs.com/cli/version',
+		'\n-m                     Tag message. Combine with --tag and -v options',
+		'\nOutput:',
+		'--std                  Write to standard output instead of a file',
+		'-d, --dump             Dump the version file contents to stdout',
+		'-t, --dry-run          Test mode. Mock the command behaviour and output to stdout',
+		'\nMisc:',
+		'-h, --help             Show help for the command or for a specific option',
+		'-q, --quiet            "Shh mode" Silent run',
+		'-f, --force            Force an action that would not otherwise run without this flag',
+		'-y, --yes              Directly accept an operation another option may be introducing',
+		'-n, --no               Directly deny an operation another option may be introducing'
+	].join('\n'));
+	Print.info('Get involved at https://github.com/verdebydesign/makever-cli');
+}
+
+/**
+ * @description Show help for a specific option
+ */
+function option_help(option) {
+	Print.log(`help for "${option}" option`, 'yellow.black');
+	switch (option) {
+	case '-v':
+		let stdout = execFileSync('npm', ['version', '--help']);
+		console.log(stdout.toString().trim());
+		Print.tip('more at https://docs.npmjs.com/cli/version');
+		break;
+	default: done();
+	}
 }
 
 /**
  * @description Dumps the version file contents to stdout
  */
 function dump_contents() {
-    const cache_data = cache.read();
-    if (cache_data && cache_data.filename) {
-        let res = fs.readFileSync(path.join(process.env.PWD, cache_data.directory, cache_data.filename), 'utf8');
-        res && console.log(res);
-    } else {
-        Print.info('No contents to dump');
-        Print.tip('"makever -h"');
-    }
+	const cache_data = cache.r();
+	if (cache_data && cache_data.filename) {
+		let res = fs.readFileSync(path.join(userRoot, cache_data.directory, cache_data.filename), 'utf8');
+		res && console.log(res);
+	} else {
+		Print.info('No contents to dump');
+		Print.tip('"makever -h"');
+	}
 }
 
 /**
@@ -56,69 +76,79 @@ function dump_contents() {
  * @param {object} data Generated data needed by the handler
  */
 function tag_clean_repo(data) {
-    const { version, codename, tag_m } = data;
+	const { version, codename, tag_m, flags } = data;
 
-    return async (result) => {
-        if (result && !result.stderr.length && !result.stdout.length) {
-            try {
-                const tag_msg = (
-                    replace_placeholders(tag_m, { codename, version })
+	return async result => {
+		if (result && !result.stderr.length && !result.stdout.length || flags.force) {
+			try {
+				const tag_msg = (
+					replace_placeholders(tag_m, { codename, version })
                     || `Codename ${codename}`
-                );
-                const { stdout, stderr } = await execute(`git tag -f -a "v${version}" -m "${tag_msg}"`);
+				);
 
-                if (stderr.length) {
-                    Print.log('Something went wrong. Could not tag the repo');
-                    console.error(stderr);
-                    end();
-                }
+				const git_tag_args = ['tag', '-f', '-a', `"v${version}"`, '-m', `"${tag_msg}"`];
+				const { stdout, stderr } = await execute('git', git_tag_args, execOptions);
 
-                Print.ask('commit and push annonated tag', ans => {
-                    if (ans === 'Y' || ans === 'y') {
-                        try {
-                            exec('git add .');
-                            exec(`git commit -m "v${version} - ${codename}"`);
-                            exec('git push origin ' + 'v' + version); // only push this specific tag
-                            Print.log('annotated tag "v' + version + '" was pushed with message "' + tag_msg + '"');
-                            done();
-                        } catch (err) {
-                            Print.log('Something went wrong. Could not push tag');
-                            console.error(err);
-                            end();
-                        }
-                    } else {
-                        Print.log('Tag not pushed');
-                        done();
-                    }
-                }, '(Y/n)');
-            } catch (err) {
-                Print.log('Something went wrong. Could not tag the repo');
-                console.error(err);
-                end();
-            }
-        }
+				if (stderr.length) {
+					Print.log('Something went wrong. Could not tag the repo');
+					console.error(stderr.trim());
+					end();
+				}
 
-        if (!result) {
-            Print.log('Not a repository. Didn\'t tag');
-            done();
-        }
+				const answers = '[Y/n]';
 
-        if (result && result.stderr.length) {
-            Print.log('Something went wrong. Could not tag last commit');
-            console.error(result.stderr);
-            end();
-        }
+				// do not ask if these flags are used
+				if (!flags.yes && !flags.no) {
+					Print.ask('commit and push annonated tag', ans => {
+						if (['Y', 'y', 'yes'].includes(ans)) {
+							push_tag({ version, codename, tag_msg, stdout });
+						} else if (['N', 'n', 'no'].includes(ans)) {
+							Print.log('Tag not pushed');
+							done();
+						} else {
+							Print.log(`Invalid answer. Plese choose one of the following ${answers}`);
+							end();
+						}
+					}, answers);
+				}
 
-        if (result && result.stdout.length) {
-            Print.log('Cannot tag a repo with current changes');
-            Print.log('Please commit or stash your current changes before tagging');
-            done();
-        }
-    }
+				if (flags.yes) {
+					push_tag({ version, codename, tag_msg, stdout });
+				}
+
+				if (flags.no) {
+					Print.log('Tag not pushed');
+					done();
+				}
+			} catch (err) {
+				Print.log('Something went wrong. Could not tag the repo');
+				console.error(err.stderr.trim());
+				end();
+			}
+		}
+
+		if (!result) {
+			Print.log('Not a repository. Didn\'t tag');
+			done();
+		}
+
+		if (result && result.stderr.length) {
+			Print.log('Something went wrong. Could not tag repo');
+			console.error(result.stderr.trim());
+			end();
+		}
+
+		if (result && result.stdout.length && !flags.force) {
+			Print.log('Cannot tag a repo with current changes');
+			Print.log('Please commit or stash your current changes before tagging');
+			done();
+		}
+	};
 }
 
 module.exports = {
-    show_help,
-    dump_contents,
-    tag_clean_repo
+	show_help,
+	dump_contents,
+	tag_clean_repo,
+	option_help
 };

@@ -1,25 +1,74 @@
 {
-    "name": "makever",
-    "version": "1.0.0",
-    "description": "Creates a file with more descriptive information based on the version of your package",
-    "main": "src/CLI.js",
-    "bin": {
-        "makever": "src/CLI.js"
-    },
-    "author": {
-        "name": "Simao Nziaka",
-        "email": "sdnziaka@gmail.com"
-    },
-    "license": "ISC",
-    "keywords": [
-        "make",
-        "version",
-        "package.json",
-        "package",
-        "file",
-        "codename",
-        "tag",
-        "git",
-        "makever"
-    ]
+	"name": "@verdebydesign/makever",
+	"version": "1.0.1",
+	"description": "Creates a file with more descriptive information based on the version of your package",
+	"main": "src/CLI.js",
+	"scripts": {
+		"test": "nyc mocha tests/*.spec.js",
+		"test:w": "nodemon --exec 'npm run test'",
+		"test:f": "nodemon --exec 'nyc mocha tests/*.spec.js --grep'",
+		"lint": "eslint .",
+		"lint:w": "nodemon --exec 'npm run lint'"
+	},
+	"bin": {
+		"makever": "src/CLI.js"
+	},
+	"man": "./makever.1",
+	"author": "Simao Nziaka <sdnziaka@gmail.com>",
+	"nyc": {
+		"check-coverage": true,
+		"per-file": false,
+		"lines": 50,
+		"statements": 50,
+		"functions": 50,
+		"branches": 40,
+		"reporter": [
+			"html",
+			"text-summary"
+		],
+		"exclude": [
+			"**/*.spec.js"
+		],
+		"extension": [
+			".spec.js"
+		],
+		"cache": true,
+		"all": false
+	},
+	"license": "ISC",
+	"keywords": [
+		"make",
+		"version",
+		"package.json",
+		"package",
+		"file",
+		"codename",
+		"tag",
+		"git",
+		"makever"
+	],
+	"devDependencies": {
+		"babel-eslint": "^10.0.3",
+		"chai": "^4.2.0",
+		"eslint": "^6.5.1",
+		"mocha": "^6.2.1",
+		"nodemon": "^1.19.3",
+		"nyc": "^14.1.1",
+		"sinon": "^7.5.0"
+	},
+	"dependencies": {
+		"semver": "^6.3.0"
+	},
+	"directories": {
+		"test": "tests",
+		"lib": "src"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/verdebydesign/makever-cli.git"
+	},
+	"bugs": {
+		"url": "https://github.com/verdebydesign/makever-cli/issues"
+	},
+	"homepage": "https://github.com/verdebydesign/makever-cli#readme"
 }

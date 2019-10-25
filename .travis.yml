@@ -1,0 +1,28 @@
+language: node_js
+node_js:
+    - "lts/*"
+
+cache:
+    directories:
+      - "node_modules"
+
+stages:
+    - lint
+    - test
+
+jobs:
+    include:
+      - stage: lint
+        name: "Lint codebase"
+        script:
+          - npm ci
+          - npm run lint
+      - stage: test
+        name: "Unit and coverage tests"
+        script:
+          - npm ci
+          - npm run test
+
+notifications:
+    email:
+      - sdnziaka@gmail.com

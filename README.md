@@ -1,4 +1,4 @@
-# Makever
+# Makever - makever(1)
 
 ## Creates a file with more descriptive information based on the version of your package
 
@@ -8,15 +8,13 @@ Uses "npm version [options]" to perform any update you need to your version dire
 
 ## Install
 
-[![NPM](https://nodei.co/npm/makever.png)](https://nodei.co/npm/makever/)
-
 ```js
-npm i -D makever
+npm i -D @verdebydesign/makever
 ```
 
 ## Synopsis
 
-makever [-h] [--dump] [-c=codename] [-o=file] [-v=npm-version-options] [-m=tag-message] [--std] [--tag] [--dry-run] [--quiet] [--force]
+makever [-h] [--dump] [-c=codename] [-o=file] [-v=npm-version-options] [-m=tag-message] [--std] [--tag] [--dry-run] [--quiet] [--force] [--yes] [--no]
 
 ## Quick use
 
@@ -29,7 +27,7 @@ makever # auto generates a codename
 | Config | |
 | -c, --codename   | Set the codename. The Codename must contain only letters, underscode and numbers |
 | -o, --output | The name of the version file. Supports for '.json' file only |
-| --tag | Enable git annotated tagging |
+| --tag, -r | Enable git annotated tagging |
 | -v, --version | same options as npm version |
 | -m | Tag message. Combine with --tag and -v |
 | Output | |
@@ -40,6 +38,8 @@ makever # auto generates a codename
 | -h, --help | Show help |
 | -q, --quiet | Shh mode |
 | -f, --force | Force an action that would not otherwise run without this flag |
+| -y, --yes | Directly accept an operation another option may be introducing |
+| -n, --no | Directly deny an operation another option may be introducing |
 
 ## More detail
 
@@ -75,9 +75,15 @@ For makever ```--tag``` a default message of 'Codename %c' is used if no message
 
 Verifies if the current project is a git repository with a clean tree, tags and pushes an annotated tag.
 
+* ```makever -c=<codename> --tag [-y | -n]```
+
+Before tagging the repo, the user is prompted to accept or deny the tag and push it.
+The prompt may be skipped by accepting or denying the operation with the ```-y``` or ```-n``` options respectively.
+
 * ```makever -c=<codename> --dry-run ...```
 
 Take makever for a test drive. Run with no side effects before committing to generating an actual version file.
+Dry run is an evolving feature, may not cover all cases the command itself covers.
 
 * ```makever -c=<codename> -o=<file> --quiet```
 
@@ -87,7 +93,7 @@ Run in Shh mode, and perform a silent run.
 
 This operations will fail if a version file already exists. option ```-f``` may be used to run the command dangerously, by overwriting the current version file. ```-f``` may be used for other operations but it will silently be ignored everytime is does not apply.
 
-### Placeholders
+## Placeholders
 
 ```makever``` uses placeholders for generated values to create proper messages
 
@@ -95,7 +101,7 @@ This operations will fail if a version file already exists. option ```-f``` may 
 
 * ```%c, %codename``` for the generated codename
 
-### Run
+## Run
 
 After installing makever you could access the command by
 
@@ -105,9 +111,40 @@ I recommend using [npx](https://www.npmjs.com/package/npx) instead. npx will use
 
 * ```npx makever [options] :)```
 
-## Man page
+## Tests
 
-To read the man page run ```man ./makever.1```
+* ```npm run test``` run entire test suite with coverage report
+* ```npm run test:w``` watch test files
+* ```npm run test:f``` watch specific test file by RegExp, example: ```npm run test:f -- Print``` will run and watch the file Print.test.js
+
+## Manual
+
+* Run ```man makever``` to read the command's manual
+* ```makever --help``` for quick help
+* ```makever [option] [--help | help | -h]``` to show help for a specific option
+
+## Development setup
+
+* Clone the repository from [github](https://github.com/verdebydesign/makever-cli)
+* Checkout develop branch ```git checkout develop```
+* Instal ```npm i```
+* Test ```npm run test```
+* Link command for local usage ```npm link```
+* Verify command was linked successfully ```makever -h``` or ```man makever```
+
+## Build Status
+
+[![Dev Build Status](https://travis-ci.org/verdebydesign/makever-cli.svg?branch=develop)](https://travis-ci.org/verdebydesign/makever-cli)
+
+## Voilà
+
+[![CLI example](./cli-example.gif)](./cli-example.gif)
+
+## CONTRIBUTE
+
+* Follow CONTRIBUTING.md
+
+* Rules of Conduct [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v1.4%20adopted-ff69b4.svg)](./CODE_OF_CONDUCT.md)
 
 ## License
 

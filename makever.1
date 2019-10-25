@@ -1,6 +1,6 @@
 .\" Manpage for makever.
 .\" Contact simao.nziaka@outlook.com to correct errors or typos.
-.TH makever 1 "05 Oct 2019" "v1.0.0" "Makever Manual"
+.TH makever 1 "13 Oct 2019" "v1.0.0" "Makever Manual"
 
 .SH NAME
 .B   makever
@@ -52,6 +52,12 @@ Mock the behaviour of the command wihtout side effects
 \-f, \-\-force
 Force certain operations to run "dangerously"
 
+\-y, \-\-yes
+Directly accept the operation another option is introducing
+
+\-n, \-\-no
+Directly deny the operation another option is introducing
+
 .SH MORE DETAILS
 1.
 .B  makever
@@ -70,7 +76,7 @@ Input to \-c must be more than 3 characters.
 \-o <file> \-c <codename>
 
 The version file will be created using the filename given by \-o with a custom codename. The extension of the filename can me omitted, it defaults to .json.
-\-o can read just the following: 'filename', 'file.json', 'path/to/file', 'path/file.json'. Input to \-o must be more than 3 characters.
+\-o can read just the following: 'filename', 'file.json', 'path/to/file', 'path/file.json'.
 
 4.
 .B  makever
@@ -108,6 +114,7 @@ See: (https://docs.npmjs.com/cli/version).
 
 \-\-tag allows tagging changes made my makever. For example, when a new codename is generated \-\-tag can be use to create an annotaded tag with the current version and the codename.
 Combine \-\-tag with \-m for a tag message. The default tag message for \-\-tag is 'Codename %c'.
+\-\-tag will prompt you to accept or deny tagging and pushing the tag. Use \-y or \-n to directly accept or deny the operation.
 
 9.
 .B makever

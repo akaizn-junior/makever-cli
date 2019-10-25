@@ -1,0 +1,13 @@
+tests
+.vscode
+.editorconfig
+.eslintrc
+.travis.yml
+package-lock.json
+coverage
+.nyc_output
+node_modules
+.gitignore
+.markdownlint.json
+.store
+.github
