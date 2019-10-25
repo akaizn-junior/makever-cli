@@ -29,14 +29,14 @@ function getUserRoot(failed = () => {}) {
 	const node_project_entry = 'package.json';
 	const is_win32 = os.platform() === 'win32';
 	const test_1 = path.join(process.cwd(), node_project_entry);
-	const test_2 = path.join(process.env.PWD, node_project_entry); // POSIX only
+	const test_2 = path.join(process.env.PWD || '.', node_project_entry); // POSIX only
 	const test_3 = path.join(path.dirname(__dirname), node_project_entry);
 
 	// test available paths
 	if (fs.existsSync(test_1)) {
 		return process.cwd();
 	} else if (!is_win32 && fs.existsSync(test_2)) {
-		return process.env.PWD;
+		return process.env.PWD || '.';
 	} else if (fs.existsSync(test_2)) {
 		return test_3;
 	} else {
