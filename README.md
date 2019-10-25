@@ -8,8 +8,6 @@ Uses "npm version [options]" to perform any update you need to your version dire
 
 ## Install
 
-[![NPM](https://nodei.co/npm/makever.png)](https://nodei.co/npm/makever/)
-
 ```js
 npm i -D @verdebydesign/makever
 ```
