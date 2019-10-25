@@ -62,7 +62,8 @@ function infer_branch(version) {
 	case version_diff === 'patch':
 	case major === 0 && minor === 0 && patch > 0:
 		return `${major}.${minor}.x`;
-	case version_diff === null: return cache_data.branch || '';
+	case version_diff === null:
+		return cache_data.branch || '';
 	default: return '';
 	}
 }
@@ -191,10 +192,10 @@ function get_contents(args) {
 	const file = path.basename(filename) || '';
 
 	// get the correct dir even if path has nested directories
-	let dir = path.dirname(filename) || __dirname || '.';
+	let dir = path.dirname(filename) || '.';
 	// if no new output dir given verify if the cache has one
 	if (dir === '.' && !args['-o']) {
-		dir = cache_data && cache_data.directory || __dirname || '.';
+		dir = cache_data && cache_data.directory || '.';
 	}
 
 	return { dir, file, contents };
