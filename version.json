@@ -1,9 +1,9 @@
 {
-    "codename": "Primo",
+    "codename": "Prima",
     "branch": "1.0.x",
-    "full": "v1.0.1",
-    "raw": "1.0.1",
+    "full": "v1.0.2",
+    "raw": "1.0.2",
     "major": "1",
     "minor": "0",
-    "patch": "1"
+    "patch": "2"
 }
