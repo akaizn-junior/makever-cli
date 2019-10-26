@@ -6,7 +6,7 @@ const execute = require('util').promisify(require('child_process').exec);
 
 const { end } = require('./Utils');
 const { userRoot, printOptions, errors } = require('./Globals');
-const Randy = require('./randy/Randy');
+const Randi = require('./randi/Randi');
 const Print = require('./pretty/Print')(printOptions);
 
 /**
@@ -55,7 +55,7 @@ function is_valid_codename(codename) {
 
 	if (!codename) {
 		Print.info('Makever will generate a Random codename if none provided');
-		return Randy('-');
+		return Randi('-');
 	}
 
 	if (test.test(codename)) {

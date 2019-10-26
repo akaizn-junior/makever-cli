@@ -1,4 +1,4 @@
-# Randy
+# Randi
 
 ## Random Names Generator
 

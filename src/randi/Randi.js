@@ -11,7 +11,7 @@ const { nouns, adjectives } = require('./Data');
  * Generates a name from random adjectives and nouns
  * @param {string} separator A character other than white-space to use as separator
  */
-function Randy(separator = ' ') {
+function Randi(separator = ' ') {
 	let randomAjective = adjectives[getRandomInt(0, adjectives.length)];
 	let randomNoun = nouns[getRandomInt(0, nouns.length)];
 	randomAjective = randomAjective.trim().replace(/\s/g, separator);
@@ -19,4 +19,4 @@ function Randy(separator = ' ') {
 	return randomAjective.concat(separator, randomNoun);
 }
 
-module.exports = Randy;
+module.exports = Randi;
