@@ -140,7 +140,7 @@ I recommend using [npx](https://www.npmjs.com/package/npx) instead. npx will use
 
 [![CLI example](./cli-example.gif)](./cli-example.gif)
 
-## CONTRIBUTE
+## Contribute
 
 * Follow CONTRIBUTING.md
 
